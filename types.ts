@@ -68,3 +68,16 @@ type color =
     'brown' |
     'golden' |
     'silver'
+
+type saveObj = {
+    content: content,
+    place: place 
+}
+
+type content = 
+    pdf |
+    json
+
+type place = 
+    'dropbox' |
+    'google'
