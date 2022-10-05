@@ -1,16 +1,16 @@
 // загрузкы, выгрузка
 
-function download(): slidesGroup
+function download(): PresentationMaker
 {
 
 }
 
-function convertSlidesGroupToJson(slidesGroup: slidesGroup): json
+function convertPresentationMakerToJson(presentationMaker: PresentationMaker): json
 {
 
 }
 
-function convertJsonToSlidesGroup(json: json): slidesGroup
+function convertJsonToPresentationMaker(json: json): PresentationMaker
 {
 
 }
@@ -20,71 +20,80 @@ function save(obj: saveObj): void
 
 }
 
-function convertPdf(slidesGroup: slidesGroup): pdf
+function convertPdf(PresentationMaker: PresentationMaker): pdf
 {
 
 }
 
 // работа с массивом слайдов
 
-function addSlide(group: slidesGroup, newSlide: slide): slidesGroup
+function addSlide(presentationMaker: PresentationMaker, newSlide: Slide): PresentationMaker
+{
+    return {
+        [
+            ...presentationMaker.localHistory,
+            presentationMaker.slidesGroup
+        ],
+        {
+            ...presentationMaker.slidesGroup.slides,
+            newSlide
+        }
+    }
+}
+
+function deleteSlide(presentationMaker: PresentationMaker, id: number): PresentationMaker
 {
 
 }
 
-function deleteSlide(group: slidesGroup, id: number): slidesGroup
+function updateSlide(presentationMaker: PresentationMaker, slide: Slide): PresentationMaker
 {
 
 }
 
-function updateSlide(group: slidesGroup, id: number): slidesGroup
+function selectSlide(presentationMaker: PresentationMaker, id: number): PresentationMaker
 {
 
 }
 
-function selectSlide(group: slidesGroup, id: number): slidesGroup
+function moveSlide(presentationMaker: PresentationMaker, id: number, position: number): PresentationMaker
 {
 
 }
 
-function moveSlide(group: slidesGroup, id: number, position: number): slidesGroup
-{
-
-}
-
-function presentationPrewiev(slidesGroup: slidesGroup): void
+function presentationPrewiev(presentationMaker: PresentationMaker): void
 {
     
 }
 
-function drawSlidesGroup(group: slidesGroup): void
+function drawSlidesGroup(presentationMaker: PresentationMaker): void
 {
 
 }
 
 // работа с слайдом
 
-function changeBackgroundColorToSlide(group: slidesGroup, backgroundColor: color, id: number): slide
+function changeBackgroundColorToSlide(presentationMaker: PresentationMaker, backgroundColor: Color, id: number): PresentationMaker
 {
 
 }
 
-function changeBackgroundImageToSlide(group: slidesGroup, img: image, id: number, position: number): slide
+function changeBackgroundImageToSlide(presentationMaker: PresentationMaker, img: Image, id: number, position: number): PresentationMaker
 {
 
 }
 
-function addArea(group: slidesGroup, id: number, slide: slide, content: areaContent): slide
+function addArea(presentationMaker: PresentationMaker, id: number, content: Area): PresentationMaker
 {
 
 }
 
-function deleteArea(slide: slide, id: number, content: areaContent): slide
+function deleteArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number): PresentationMaker
 {
 
 }
 
-function selectArea(slide: slide, id: number, content: areaContent): slide
+function selectArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number): PresentationMaker
 {
 
 }
@@ -96,53 +105,53 @@ function drawSlide(slide: Slide): void
 
 // работа с областью
 
-function moveArea(slide: slide, id: number, content: areaContent): area
+function moveArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number): PresentationMaker
 {
 
 }
 
-function changeZIndexArea(slide: slide, id: number, content: areaContent): area
+function changeZIndexArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number, zIndex: number): PresentationMaker
 {
 
 }
 
-function updateArea(slide: slide, id: number, content: areaContent): area
+function updateArea(presentationMaker: PresentationMaker, area: Area, idSlide: number, idArea: number): PresentationMaker
 {
 
 }
 
-function drawArea(area: area): void
+function drawArea(area: Area): PresentationMaker
 {
 
 }
 
 // работа с текстом
 
-function updateText(prevText: text, parameter: unknown): text
+function updateText(prevText: Text, newText: Text): PresentationMaker
 {
 
 }
 
-function createText(font: string, color: color, borderColor: color, weight: string): text
+function createText(font: string, color: Color, borderColor: Color, weight: string): Text
 {
 
 }
 
 // работа с картинкой
 
-function createImage(path: string): image
+function createImage(path: string): Image
 {
 
 }
 
 // работа с графическим примитивом
 
-function updateGraphicPrimitive(prevGraphicPrimitive: text, parameter: unknown): graphicPrimitive
+function updateGraphicPrimitive(prevGraphicPrimitive: text, parameter: unknown): GraphicPrimitive
 {
 
 }
 
-function createGraphicPrimitive(type: primitive): graphicPrimitive
+function createGraphicPrimitive(type: Primitive): GraphicPrimitive
 {
 
 }

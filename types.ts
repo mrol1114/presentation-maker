@@ -1,60 +1,68 @@
-type presentationMaker = {
-    localHistory: [],
-    slidesGroup: slidesGroup,
+type PresentationMaker = {
+    localHistory: SlidesGroup[],
+    slidesGroup: SlidesGroup,
+    name: string
 }
 
-type slidesGroup = {
-    slides: slide[],
-    selectedId: number,
+type SlidesGroup = {
+    slides: Slide[],
+    currentId: number,
+    selectedIds: number[],
 }
 
-type slide = {
+type Slide = {
     id: number,
-    areas: area[],
-    backgroundColor: color,
+    areas: Area[],
+    selectedAreaIds: number[],
+    currentAreaId: number[],
+    backgroundColor: Color,
     backgroundImage: string,
     slideWidth: number,
     slideHeight: number,
 }
 
-type area = {
+type Area = {
     id: number,
     x: number,
     y: number,
     width: number,
     height: number,
     zIndex: number,
-    contains: areaContent,
+    contains: AreaContent,
 }
 
-type text = {
-    color: color,
-    borderColor: color,
-    font: number,
+type TextContent = {
+    type: 'text',
+    color: Color,
+    borderColor: Color,
+    fontSize: number,
+    font: string,
     weight: number,
 }
 
-type image = {
+type Image = {
+    type: 'image',
     path: string,
 }
 
-type graphicPrimitive = {
-    color: color,
-    borderColor: color,
-    primitive: primitive,
+type GraphicPrimitive = {
+    type: 'primitive',
+    color: Color,
+    borderColor: Color,
+    primitive: Primitive,
 }
 
-type areaContent =
-    text |
-    image |
-    graphicPrimitive
+type AreaContent =
+    TextContent |
+    Image |
+    GraphicPrimitive
 
-type primitive =
+type Primitive =
     'circle' |
     'triangle' |
     'rectangle'
 
-type color =
+type Color =
     'white' |
     'gray' |
     'black' |
@@ -69,15 +77,15 @@ type color =
     'golden' |
     'silver'
 
-type saveObj = {
-    content: content,
-    place: place 
+type SaveObj = {
+    content: Content,
+    place: Place 
 }
 
-type content = 
-    pdf |
-    json
+type Content = 
+    Pdf |
+    Json
 
-type place = 
+type Place = 
     'dropbox' |
     'google'
