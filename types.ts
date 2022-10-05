@@ -1,7 +1,7 @@
 type PresentationMaker = {
     localHistory: SlidesGroup[],
     slidesGroup: SlidesGroup,
-    name: string
+    name: string,
 }
 
 type SlidesGroup = {
@@ -14,11 +14,11 @@ type Slide = {
     id: number,
     areas: Area[],
     selectedAreaIds: number[],
-    currentAreaId: number[],
+    currentAreaId: number,
     backgroundColor: Color,
-    backgroundImage: string,
-    slideWidth: number,
-    slideHeight: number,
+    backgroundImage: ImageInfo,
+    width: number,
+    height: number,
 }
 
 type Area = {
@@ -31,21 +31,23 @@ type Area = {
     contains: AreaContent,
 }
 
-type TextContent = {
+type TextInfo = {
     type: 'text',
     color: Color,
     borderColor: Color,
     fontSize: number,
     font: string,
     weight: number,
+    text: string,
 }
 
-type Image = {
+type ImageInfo = {
     type: 'image',
     path: string,
+    image64: string,
 }
 
-type GraphicPrimitive = {
+type GraphicPrimitiveInfo = {
     type: 'primitive',
     color: Color,
     borderColor: Color,
@@ -53,9 +55,9 @@ type GraphicPrimitive = {
 }
 
 type AreaContent =
-    TextContent |
-    Image |
-    GraphicPrimitive
+    TextInfo |
+    ImageInfo |
+    GraphicPrimitiveInfo
 
 type Primitive =
     'circle' |
@@ -82,9 +84,13 @@ type SaveObj = {
     place: Place 
 }
 
+type Pdf = {
+
+}
+
 type Content = 
     Pdf |
-    Json
+    JSON
 
 type Place = 
     'dropbox' |
