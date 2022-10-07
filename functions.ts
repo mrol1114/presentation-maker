@@ -179,25 +179,38 @@ function drawSlide(slide: Slide): void
 }
 
 // работа с областью
-
-function moveArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number): PresentationMaker
-{
-
-}
-
-function changeZIndexArea(presentationMaker: PresentationMaker, idSlide: number, idArea: number, zIndex: number): PresentationMaker
-{
-
-}
-
 function updateArea(presentationMaker: PresentationMaker, area: Area, idSlide: number, idArea: number): PresentationMaker
 {
+    const newSlide: Slide = {
+        ...presentationMaker.slidesGroup.slides[idSlide],
+        areas: [...presentationMaker.slidesGroup.slides[idSlide].areas.map((value, index) => {
+            if (index === idArea) {
+                value = area
+            }
+            return value
+            })
+        ]    
+    }
 
-}
+    const newSlidesGroup: SlidesGroup = {
+        ...presentationMaker.slidesGroup,
+        slides: [...presentationMaker.slidesGroup.slides.map((value, index) => {
+            if (index === idSlide) {
+                value = newSlide
+            }
+            return value
+            })
+        ]
+    }
 
-function drawArea(presentationMaker: PresentationMaker, area: Area): PresentationMaker
-{
-
+    return {
+        ...presentationMaker,
+        localHistory: [
+            ...presentationMaker.localHistory,
+            newSlidesGroup,
+        ],
+        slidesGroup: newSlidesGroup,
+    }
 }
 
 // работа с текстом
