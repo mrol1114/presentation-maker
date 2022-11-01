@@ -148,7 +148,7 @@ function selectSlides(presentationMaker: types.PresentationMaker, selectedSlides
         return presentationMaker;
     }
 
-    const slidesIndexes: number[] = [...selectedSlides];
+    const slidesIndexes: number[] = [...selectedSlides.sort((int1: number, int2: number) => int2 - int1).filter((value, index) => selectedSlides[index - 1] !== value)];
     if (presentationMaker.slidesGroup.length <= selectedSlides.sort((int1: number, int2: number) => int2 - int1)[0] || slidesIndexes.find((int: number) => int < 0))
     {
         return presentationMaker;
@@ -156,7 +156,12 @@ function selectSlides(presentationMaker: types.PresentationMaker, selectedSlides
 
     return {
         ...presentationMaker,
-        selectedSlidesIndexes: [...presentationMaker.selectedSlidesIndexes, ...slidesIndexes]
+        selectedSlidesIndexes: [
+            ...presentationMaker.selectedSlidesIndexes, 
+            ...slidesIndexes.map(value => !presentationMaker.selectedSlidesIndexes.includes(value) ? value : -1).filter(value => value !== -1)
+        ],
+        selectedAreasIndexes: [],
+        currentAreaIndex: consts.notSelectedIndex
     };
 }
 
@@ -175,7 +180,7 @@ function unselectSlides(presentationMaker: types.PresentationMaker, unselectedSl
 
     return {
         ...presentationMaker,
-        selectedSlidesIndexes: presentationMaker.selectedSlidesIndexes.filter((index: number) => !unselectedSlides.includes(index))
+        selectedSlidesIndexes: presentationMaker.selectedSlidesIndexes.filter((index: number) => !slidesIndexes.includes(index))
     };
 }
 
