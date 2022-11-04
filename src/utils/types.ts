@@ -1,8 +1,12 @@
 type PresentationMaker = {
     name: string,
-    localHistory: Slide[][],
+    localHistory: PresentationElements[],
+    presentationElements: PresentationElements,
+    currentPresentationElements: number
+}
+
+type PresentationElements = {
     slidesGroup: Slide[],
-    currentSlidesGroupIndex: number,
     currentSlideIndex: number,
     selectedSlidesIndexes: number[],
     selectedAreasIndexes: number[],
@@ -113,6 +117,7 @@ type Place =
 
 export type {
     PresentationMaker,
+    PresentationElements,
     Slide,
     UpdatedSlide,
     Area,
