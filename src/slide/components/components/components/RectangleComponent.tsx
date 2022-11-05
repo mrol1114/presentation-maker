@@ -1,7 +1,7 @@
 import React from "react";
 import type * as types from '../../../../utils/types';
 
-function TriangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo}): JSX.Element
+function RectangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo}): JSX.Element
 {
     const style = {
 
@@ -14,4 +14,4 @@ function TriangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiv
     );
 }
 
-export default TriangleComponent;
+export default RectangleComponent;
