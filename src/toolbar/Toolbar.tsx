@@ -1,10 +1,10 @@
 import React from "react";
 
-function Toolbar()
+function Toolbar(): JSX.Element
 {
     return (
         <div>
-
+            toolBar
         </div>
     );
 }

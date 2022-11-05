@@ -1,10 +1,10 @@
 import React from "react";
 
-function ControlPanel()
+function ControlPanel(): JSX.Element
 {
     return (
         <div>
-
+            controlPanel
         </div>
     );
 }

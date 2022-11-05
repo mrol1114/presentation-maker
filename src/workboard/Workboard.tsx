@@ -1,10 +1,10 @@
 import React from "react";
 
-function Workboard()
+function Workboard(): JSX.Element
 {
     return (
         <div>
-
+            workboard
         </div>
     );
 }

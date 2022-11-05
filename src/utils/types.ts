@@ -94,7 +94,7 @@ type AreaContent =
     GraphicPrimitiveInfo
 
 type Primitive =
-    'ellipse' |
+    'elipse' |
     'triangle' |
     'rectangle'
 

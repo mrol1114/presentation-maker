@@ -2,6 +2,51 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
+const presentationSlidesGroup: types.Slide[] = [
+    {
+        id: 1,
+        areas: [
+            {
+                id: 1,
+                x: 100,
+                y: 100,
+                width: 100,
+                height: 100,
+                zIndex: 1,
+                contains: {
+                    type: 'text',
+                    color: '',
+                    borderColor: '',
+                    fontSize: 1,
+                    font: '',
+                    weight: 1,
+                    text: 'qwerty1',
+                },
+            }
+        ],
+        backgroundColor: '',
+        backgroundImage: {
+            type: 'imageUrl',
+            path: '',
+        },
+    }
+];
+
+const defaultPresentationElements: types.PresentationElements = {
+    slidesGroup: presentationSlidesGroup,
+    currentSlideIndex: notSelectedIndex,
+    selectedSlidesIndexes: [],
+    selectedAreasIndexes: [],
+    currentAreaIndex: notSelectedIndex,
+};
+
+const presentationMaker: types.PresentationMaker = {
+    name: '',
+    localHistory: [],
+    presentationElements: defaultPresentationElements,
+    currentPresentationElements: 0,
+};
+
 const emptySlide: types.UpdatedSlide = {
     backgroundColor: undefined,
     backgroundImage: undefined,
@@ -74,5 +119,6 @@ export {
     defaultSlideValues,
     defaultAreaValues,
     defaultTextInfo,
-    defaultGraphicPrimitiveInfo
+    defaultGraphicPrimitiveInfo,
+    presentationMaker
 };
