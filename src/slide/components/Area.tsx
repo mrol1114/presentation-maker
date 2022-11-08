@@ -22,7 +22,7 @@ function Area(prop: {areaElement: types.Area}): JSX.Element
             }
 
             { prop.areaElement.contains.type === "primitive" && 
-                <GraphicPrimitiveComponent graphicPrimitiveElement={prop.areaElement.contains}/>
+                <GraphicPrimitiveComponent areaElement={prop.areaElement}/>
             }
 
             { (prop.areaElement.contains.type === "imageUrl" || prop.areaElement.contains.type === "imageBase64") && 

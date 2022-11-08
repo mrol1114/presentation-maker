@@ -1,15 +1,15 @@
 import React from "react";
 import type * as types from '../../../../utils/types';
 
-function RectangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo}): JSX.Element
+function RectangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo, width: number, height: number}): JSX.Element
 {
     const style = {
-
+        
     };
 
     return (
-        <svg>
-            
+        <svg style={style}>
+            <rect width={prop.width} height={prop.height}/>
         </svg>
     );
 }
