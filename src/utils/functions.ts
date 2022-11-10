@@ -747,4 +747,6 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
     };
 }
 
-export {};
+export {
+    addSlide
+};
