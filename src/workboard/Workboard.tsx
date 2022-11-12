@@ -1,14 +1,14 @@
 import React from "react";
-import { presentationMaker } from "../utils/consts";
+import { presentationState } from "../utils/consts";
 import Slide from "../slide/Slide";
 
 function Workboard(): JSX.Element
 {
-    const currSlideIndex = presentationMaker.presentationElements.currentSlideIndex;
+    const currSlideIndex = presentationState.curPresentationState.presentationElements.currentSlideIndex;
 
     return (
         <div className="workboard">
-            <Slide slideIndex={currSlideIndex}/>
+            <Slide slideIndex={currSlideIndex} />
         </div>
     );
 }

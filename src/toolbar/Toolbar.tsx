@@ -1,5 +1,5 @@
 import React from "react";
-import AddSlideButtonComponent from "./components/AddSlideButtonComponent";
+import {publish} from "../common/event";
 import UndoComponent from "./components/UndoButtonComponent";
 import RedoComponent from "./components/RedoButtonComponent";
 import BackgroundImageButtonComponent from "./components/BackgroundImageButtonComponent";
@@ -16,18 +16,24 @@ import styles from "./styles/styles.module.css";
 
 function Toolbar(): JSX.Element
 {
+    const addSlideHandler = () => {
+        consts.presentationState.curPresentationState = functions.addSlide(consts.presentationState.curPresentationState);
+        publish("add", {});
+    };
+
     return (
         <div className="toolbar">
-            <Button additinalClass={styles["add-slide"]} onClick={() => {functions.addSlide(consts.presentationMaker)}}/>
-            <UndoComponent/>
-            <RedoComponent/>
-            <BackgroundImageButtonComponent/>
-            <BackgroundColorButtonComponent/>
-            <TextButtonComponent/>
-            <ImageButtonComponent/>
-            <RectangleButtonComponent/>
-            <TriangleButtonComponent/>
-            <EllipseButtonComponent/>
+            <Button additinalClass={styles["add-slide"]} 
+                onClick={addSlideHandler} />
+            <UndoComponent />
+            <RedoComponent />
+            <BackgroundImageButtonComponent />
+            <BackgroundColorButtonComponent />
+            <TextButtonComponent />
+            <ImageButtonComponent />
+            <RectangleButtonComponent />
+            <TriangleButtonComponent />
+            <EllipseButtonComponent />
         </div>
     );
 }

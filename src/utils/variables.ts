@@ -1,5 +1,5 @@
 const Ids = {
-    lastSlideId: 0
+    lastSlideId: 1
 };
 
 export { Ids };

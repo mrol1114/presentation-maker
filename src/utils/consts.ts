@@ -44,6 +44,11 @@ const presentationMaker: types.PresentationMaker = {
     currentPresentationElements: 0,
 };
 
+const presentationState = 
+{
+    curPresentationState: presentationMaker
+};
+
 const emptySlide: types.UpdatedSlide = {
     backgroundColor: undefined,
     backgroundImage: undefined,
@@ -117,5 +122,6 @@ export {
     defaultAreaValues,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
-    presentationMaker
+    presentationMaker,
+    presentationState
 };
