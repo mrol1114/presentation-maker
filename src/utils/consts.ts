@@ -16,7 +16,8 @@ const presentationSlidesGroup: types.Slide[] = [
                 contains: {
                     type: 'primitive',
                     color: 'black',
-                    borderColor: 'gray',
+                    strokeColor: 'red',
+                    strokeWidth: 1,
                     primitive: 'triangle',
                 },
             }
@@ -74,7 +75,8 @@ const emptyTextInfo: types.UpdatedTextInfo = {
 
 const emptyGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo = {
     color: undefined,
-    borderColor: undefined,
+    strokeColor: undefined,
+    strokeWidth: undefined,
     primitive: undefined,
 };
 
@@ -108,7 +110,8 @@ const defaultTextInfo: types.TextInfo = {
 const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
     type: 'primitive',
     color: 'white',
-    borderColor: 'black',
+    strokeColor: 'black',
+    strokeWidth: 1,
     primitive: 'rectangle',
 };
 
