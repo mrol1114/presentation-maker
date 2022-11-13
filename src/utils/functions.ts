@@ -680,7 +680,8 @@ function updateGraphicPrimitive(
     const newGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
         type: areaContentInfo.type,
         color: updatedGraphicPrimitiveInfo.color ?? areaContentInfo.color,
-        borderColor: updatedGraphicPrimitiveInfo.borderColor ?? areaContentInfo.borderColor,
+        strokeColor: updatedGraphicPrimitiveInfo.strokeColor ?? areaContentInfo.strokeColor,
+        strokeWidth: updatedGraphicPrimitiveInfo.strokeWidth ?? areaContentInfo.strokeWidth,
         primitive: updatedGraphicPrimitiveInfo.primitive ?? areaContentInfo.primitive
     };
 
