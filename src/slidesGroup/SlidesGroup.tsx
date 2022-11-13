@@ -9,12 +9,84 @@ function SlidesGroup(): JSX.Element
     const [slideElements, setSlideElements] = useState(presentationState.curPresentationState.presentationElements.slidesGroup);
 
     useEffect(() => {
-        subscribe("add", () => {
+        subscribe("addSlide", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
         
         return () => {
-            unsubscribe("add", () => {
+            unsubscribe("addSlide", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("undo", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("undo", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("redo", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("redo", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("text", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("text", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("elipse", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("elipse", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("rectangle", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("rectangle", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        subscribe("triangle", () => {
+            setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+        });
+        
+        return () => {
+            unsubscribe("triangle", () => {
                 setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
             });
         }
