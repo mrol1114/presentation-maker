@@ -7,6 +7,7 @@ function Button(props: {additinalClass: string, onClick: Function}): JSX.Element
         event.preventDefault();
         props.onClick();
     };
+    console.log(props.additinalClass);
 
     return (
         <button className={styles['button'] + " " + props.additinalClass} onClick={buttonHandler}>

@@ -126,7 +126,7 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
     };
 }
 
-function moveSlide(presentationMaker: types.PresentationMaker, insertPos: number): types.PresentationMaker
+function moveSlides(presentationMaker: types.PresentationMaker, insertPos: number): types.PresentationMaker
 {
     if (insertPos < 0 || insertPos > presentationMaker.presentationElements.slidesGroup.length)
     {
@@ -761,5 +761,24 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
 }
 
 export {
-    addSlide
+    undo,
+    redo,
+    addSlide,
+    moveSlides,
+    deleteSlides,
+    selectSlides,
+    unselectSlides,
+    assignSlideIndex,
+    addArea,
+    deleteAreas,
+    selectAreas,
+    unselectAreas,
+    assignAreaIndex,
+    updateSlideProperty,
+    updateArea,
+    updateText,
+    createText,
+    createImage,
+    createGraphicPrimitive,
+    updateGraphicPrimitive,
 };

@@ -1,14 +1,5 @@
 import React from "react";
 import {publish} from "../common/event";
-import UndoComponent from "./components/UndoButtonComponent";
-import RedoComponent from "./components/RedoButtonComponent";
-import BackgroundImageButtonComponent from "./components/BackgroundImageButtonComponent";
-import BackgroundColorButtonComponent from "./components/BackgroundColorButtonComponent";
-import TextButtonComponent from "./components/TextButtonComponent";
-import ImageButtonComponent from "./components/ImageButtonComponent";
-import RectangleButtonComponent from "./components/RectangleButtonComponent";
-import TriangleButtonComponent from "./components/TriangleButtonComponent";
-import EllipseButtonComponent from "./components/EllipseButtonComponent";
 import Button from "./components/Button";
 import * as functions from "./../utils/functions";
 import * as consts from "./../utils/consts";
@@ -21,19 +12,74 @@ function Toolbar(): JSX.Element
         publish("add", {});
     };
 
+    const undoHandler = () => {
+        consts.presentationState.curPresentationState = functions.undo(consts.presentationState.curPresentationState);
+        publish("add", {});
+    }
+
+    const redoHandler = () => {
+        consts.presentationState.curPresentationState = functions.redo(consts.presentationState.curPresentationState);
+        publish("add", {});
+    }
+
+    const backgroundImageHandler = () => {
+        
+    }
+
+    const backgroundColorHandler = () => {
+        
+    }
+
+    const textHandler = () => {
+        consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
+        consts.presentationState.curPresentationState = functions.createText(consts.presentationState.curPresentationState);
+        publish("add", {});
+    }
+
+    const imageHandler = () => {
+        
+    }
+
+    const elipseHandler = () => {
+        consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
+        consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'elipse');
+        publish("add", {});
+    }
+
+    const rectangleHandler = () => {
+        consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
+        consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'rectangle');
+        publish("add", {});
+    }
+
+    const triangleHandler = () => {
+        consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
+        consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'triangle');
+        publish("add", {});
+    }
+
     return (
         <div className="toolbar">
-            <Button additinalClass={styles["add-slide"]} 
+            <Button additinalClass={styles["add-slide"] + " " + styles["icon"]} 
                 onClick={addSlideHandler} />
-            <UndoComponent />
-            <RedoComponent />
-            <BackgroundImageButtonComponent />
-            <BackgroundColorButtonComponent />
-            <TextButtonComponent />
-            <ImageButtonComponent />
-            <RectangleButtonComponent />
-            <TriangleButtonComponent />
-            <EllipseButtonComponent />
+            <Button additinalClass={styles["undo"] + " " + styles["icon"]}
+                onClick={undoHandler} />
+            <Button additinalClass={styles["redo"] + " " + styles["icon"]}
+                onClick={redoHandler} />
+            <Button additinalClass={styles["background-image"] + " " + styles["icon"]}
+                onClick={backgroundImageHandler} />
+            <Button additinalClass={styles["background-color"] + " " + styles["icon"]}
+                onClick={backgroundColorHandler} />
+            <Button additinalClass={styles["text"] + " " + styles["icon"]}
+                onClick={textHandler} />
+            <Button additinalClass={styles["image"] + " " + styles["icon"]}
+                onClick={imageHandler} />
+            <Button additinalClass={styles["elipse"] + " " + styles["icon"]}
+                onClick={elipseHandler} />
+            <Button additinalClass={styles["rectangle"] + " " + styles["icon"]}
+                onClick={rectangleHandler} />
+            <Button additinalClass={styles["triangle"] + " " + styles["icon"]}
+                onClick={triangleHandler} />
         </div>
     );
 }

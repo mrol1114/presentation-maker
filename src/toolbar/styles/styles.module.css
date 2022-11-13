@@ -1,4 +1,55 @@
+.icon
+{
+   background-repeat: no-repeat;
+   background-position: center;
+}
+
 .add-slide
 {
-   background: url("./../images/addSlide.svg"); 
+   background-image: url("./../images/addSlide.svg");
+}
+
+.undo
+{
+   background-image: url("./../images/undo.svg");
+}
+
+.redo
+{
+   background-image: url("./../images/redo.svg");
+}
+
+.background-image
+{
+   background-image: url("./../images/backgroundImage.svg");
+}
+
+.background-color
+{
+   background-image: url("./../images/backgroundColor.svg");
+}
+
+.text
+{
+   background-image: url("./../images/text.svg");
+}
+
+.image
+{
+   background-image: url("./../images/image.svg");
+}
+
+.elipse
+{
+   background-image: url("./../images/elipse.svg");
+}
+
+.rectangle
+{
+   background-image: url("./../images/rectangle.svg");
+}
+
+.triangle
+{
+   background-image: url("./../images/triangle.svg");
 }
