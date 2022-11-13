@@ -17,7 +17,7 @@ const presentationSlidesGroup: types.Slide[] = [
                     type: 'primitive',
                     color: 'black',
                     strokeColor: 'red',
-                    strokeWidth: 1,
+                    strokeWidth: 5,
                     primitive: 'triangle',
                 },
             }

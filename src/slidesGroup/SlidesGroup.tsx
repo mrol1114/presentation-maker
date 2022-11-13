@@ -12,80 +12,56 @@ function SlidesGroup(): JSX.Element
         subscribe("addSlide", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("addSlide", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("undo", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("undo", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("redo", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("redo", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("text", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("text", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("elipse", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("elipse", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("rectangle", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
-        
-        return () => {
-            unsubscribe("rectangle", () => {
-                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
-            });
-        }
-    }, []);
 
-    useEffect(() => {
         subscribe("triangle", () => {
             setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
         });
         
         return () => {
+            unsubscribe("addSlide", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
+            unsubscribe("undo", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
+            unsubscribe("redo", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
+            unsubscribe("text", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
+            unsubscribe("elipse", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
+            unsubscribe("rectangle", () => {
+                setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
+            });
+
             unsubscribe("triangle", () => {
                 setSlideElements(presentationState.curPresentationState.presentationElements.slidesGroup);
             });
