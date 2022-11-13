@@ -9,17 +9,17 @@ function Toolbar(): JSX.Element
 {
     const addSlideHandler = () => {
         consts.presentationState.curPresentationState = functions.addSlide(consts.presentationState.curPresentationState);
-        publish("add", {});
+        publish("addSlide", {});
     };
 
     const undoHandler = () => {
         consts.presentationState.curPresentationState = functions.undo(consts.presentationState.curPresentationState);
-        publish("add", {});
+        publish("undo", {});
     }
 
     const redoHandler = () => {
         consts.presentationState.curPresentationState = functions.redo(consts.presentationState.curPresentationState);
-        publish("add", {});
+        publish("redo", {});
     }
 
     const backgroundImageHandler = () => {
@@ -33,7 +33,7 @@ function Toolbar(): JSX.Element
     const textHandler = () => {
         consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
         consts.presentationState.curPresentationState = functions.createText(consts.presentationState.curPresentationState);
-        publish("add", {});
+        publish("text", {});
     }
 
     const imageHandler = () => {
@@ -43,19 +43,19 @@ function Toolbar(): JSX.Element
     const elipseHandler = () => {
         consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
         consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'elipse');
-        publish("add", {});
+        publish("elipse", {});
     }
 
     const rectangleHandler = () => {
         consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
         consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'rectangle');
-        publish("add", {});
+        publish("rectangle", {});
     }
 
     const triangleHandler = () => {
         consts.presentationState.curPresentationState = functions.addArea(consts.presentationState.curPresentationState);
         consts.presentationState.curPresentationState = functions.createGraphicPrimitive(consts.presentationState.curPresentationState, 'triangle');
-        publish("add", {});
+        publish("triangle", {});
     }
 
     return (

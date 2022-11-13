@@ -9,7 +9,7 @@ function Slide(prop: {slideIndex: number}): JSX.Element
     const areaComponents = areaElements.map((area: types.Area) => {
         return (
             <Area areaElement={area} key={area.id} />
-        );        
+        );
     });
 
     return (
