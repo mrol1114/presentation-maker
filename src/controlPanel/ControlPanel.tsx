@@ -1,5 +1,5 @@
 import React from "react";
-import ControlButton from "./components/ControlButton";
+import Button from "./components/Button";
 
 function ControlPanel(): JSX.Element
 {
@@ -16,11 +16,11 @@ function ControlPanel(): JSX.Element
 
     return (
         <div className="controlPanel">
-            <ControlButton onClick={fileHandler} actionName={"Файл"}/>
-            <ControlButton onClick={editHandler} actionName={"Правка"}/>
-            <ControlButton onClick={viewHandler} actionName={"Вид"}/>
-            <ControlButton onClick={insertHandler} actionName={"Вставка"}/>
-            <ControlButton onClick={slideHandler} actionName={"Слайд"}/>
+            <Button onClick={fileHandler} actionName={"Файл"}/>
+            <Button onClick={editHandler} actionName={"Правка"}/>
+            <Button onClick={viewHandler} actionName={"Вид"}/>
+            <Button onClick={insertHandler} actionName={"Вставка"}/>
+            <Button onClick={slideHandler} actionName={"Слайд"}/>
         </div>
     );
 }

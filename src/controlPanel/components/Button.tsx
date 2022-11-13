@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./styles/control-button.module.css";
+import styles from "./styles/button.module.css";
 
-function ControlButton(props: {onClick: Function, actionName: string}): JSX.Element
+function Button(props: {onClick: Function, actionName: string}): JSX.Element
 {
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -15,4 +15,4 @@ function ControlButton(props: {onClick: Function, actionName: string}): JSX.Elem
     );
 }
 
-export default ControlButton;
+export default Button;
