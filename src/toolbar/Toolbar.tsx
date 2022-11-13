@@ -60,25 +60,25 @@ function Toolbar(): JSX.Element
 
     return (
         <div className="toolbar">
-            <Button additinalClass={styles["add-slide"] + " " + styles["icon"]} 
+            <Button additionalClass={styles["add-slide"] + " " + styles["icon"]}
                 onClick={addSlideHandler} />
-            <Button additinalClass={styles["undo"] + " " + styles["icon"]}
+            <Button additionalClass={styles["undo"] + " " + styles["icon"]}
                 onClick={undoHandler} />
-            <Button additinalClass={styles["redo"] + " " + styles["icon"]}
+            <Button additionalClass={styles["redo"] + " " + styles["icon"]}
                 onClick={redoHandler} />
-            <Button additinalClass={styles["background-image"] + " " + styles["icon"]}
+            <Button additionalClass={styles["background-image"] + " " + styles["icon"]}
                 onClick={backgroundImageHandler} />
-            <Button additinalClass={styles["background-color"] + " " + styles["icon"]}
+            <Button additionalClass={styles["background-color"] + " " + styles["icon"]}
                 onClick={backgroundColorHandler} />
-            <Button additinalClass={styles["text"] + " " + styles["icon"]}
+            <Button additionalClass={styles["text"] + " " + styles["icon"]}
                 onClick={textHandler} />
-            <Button additinalClass={styles["image"] + " " + styles["icon"]}
+            <Button additionalClass={styles["image"] + " " + styles["icon"]}
                 onClick={imageHandler} />
-            <Button additinalClass={styles["elipse"] + " " + styles["icon"]}
+            <Button additionalClass={styles["elipse"] + " " + styles["icon"]}
                 onClick={elipseHandler} />
-            <Button additinalClass={styles["rectangle"] + " " + styles["icon"]}
+            <Button additionalClass={styles["rectangle"] + " " + styles["icon"]}
                 onClick={rectangleHandler} />
-            <Button additinalClass={styles["triangle"] + " " + styles["icon"]}
+            <Button additionalClass={styles["triangle"] + " " + styles["icon"]}
                 onClick={triangleHandler} />
         </div>
     );
