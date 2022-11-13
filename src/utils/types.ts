@@ -78,13 +78,15 @@ type ImageInfo = ImageBase64 | ImageUrl
 type GraphicPrimitiveInfo = {
     type: 'primitive',
     color: string,
-    borderColor: string,
+    strokeColor: string,
+    strokeWidth: number,
     primitive: Primitive,
 }
 
 type UpdatedGraphicPrimitiveInfo = {
     color: string|undefined,
-    borderColor: string|undefined,
+    strokeColor: string|undefined,
+    strokeWidth: number|undefined,
     primitive: Primitive|undefined,
 }
 

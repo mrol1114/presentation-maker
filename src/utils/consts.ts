@@ -4,23 +4,20 @@ const notSelectedIndex = -1;
 
 const presentationSlidesGroup: types.Slide[] = [
     {
-        id: 1,
+        id: 0,
         areas: [
             {
-                id: 1,
+                id: 0,
                 x: 100,
                 y: 100,
-                width: 100,
-                height: 100,
+                width: 200,
+                height: 200,
                 zIndex: 1,
                 contains: {
-                    type: 'text',
-                    color: '',
-                    borderColor: '',
-                    fontSize: 1,
-                    font: '',
-                    weight: 1,
-                    text: 'qwerty1',
+                    type: 'primitive',
+                    color: 'black',
+                    borderColor: 'gray',
+                    primitive: 'triangle',
                 },
             }
         ],
@@ -34,10 +31,10 @@ const presentationSlidesGroup: types.Slide[] = [
 
 const defaultPresentationElements: types.PresentationElements = {
     slidesGroup: presentationSlidesGroup,
-    currentSlideIndex: notSelectedIndex,
+    currentSlideIndex: 0,
     selectedSlidesIndexes: [],
     selectedAreasIndexes: [],
-    currentAreaIndex: notSelectedIndex,
+    currentAreaIndex: 0,
 };
 
 const presentationMaker: types.PresentationMaker = {
@@ -45,6 +42,11 @@ const presentationMaker: types.PresentationMaker = {
     localHistory: [],
     presentationElements: defaultPresentationElements,
     currentPresentationElements: 0,
+};
+
+const presentationState = 
+{
+    curPresentationState: presentationMaker
 };
 
 const emptySlide: types.UpdatedSlide = {
@@ -120,5 +122,6 @@ export {
     defaultAreaValues,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
-    presentationMaker
+    presentationMaker,
+    presentationState
 };
