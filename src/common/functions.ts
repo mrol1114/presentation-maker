@@ -284,7 +284,7 @@ function updateSlideProperty(presentationMaker: types.PresentationMaker, propert
     };
 }
 
-function addArea(presentationMaker: types.PresentationMaker): types.PresentationMaker
+function addArea(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker
 {
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     if (currentSlideIndex === consts.notSelectedIndex)
@@ -293,13 +293,9 @@ function addArea(presentationMaker: types.PresentationMaker): types.Presentation
     }
 
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currentSlideIndex];
-    const lastArea: types.Area|undefined = curSlide.areas.length > 0 ? curSlide.areas[curSlide.areas.length - 1] : undefined;
 
-    const newArea: types.Area = {
-        ...consts.defaultAreaValues,
-        id: lastArea ? lastArea.id + 1 : 0,
-        zIndex: lastArea ? lastArea.zIndex + 1 : 0 
-    };
+    const areaContent = createElement.createAreaContent(properties);
+    const newArea: types.Area = createElement.createArea(areaContent, curSlide.areas.length); 
 
     const newSlide: types.Slide = {
         ...curSlide,
@@ -460,7 +456,7 @@ function assignAreaIndex(presentationMaker: types.PresentationMaker, areaIndex: 
 
 // работа с областью
 
-function updateArea(presentationMaker: types.PresentationMaker, updatedArea: types.UpdatedArea): types.PresentationMaker
+function updateArea(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker
 {
     const currIdSlide: number = presentationMaker.presentationElements.currentSlideIndex;
     const currIdArea: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -473,14 +469,7 @@ function updateArea(presentationMaker: types.PresentationMaker, updatedArea: typ
     const currentSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currIdSlide];
     const currentArea: types.Area = currentSlide.areas[currIdArea];
 
-    const newArea: types.Area = {
-        ...currentArea,
-        x: updatedArea.x ?? currentArea.x,
-        y: updatedArea.y ?? currentArea.y,
-        width: updatedArea.width ?? currentArea.width,
-        height: updatedArea.height ?? currentArea.height,
-        zIndex: updatedArea.zIndex ?? currentArea.zIndex
-    };
+    const newArea: types.Area = updateElement.updateArea(currentArea, properties);
 
     const newSlide: types.Slide = {
         ...currentSlide,

@@ -2,15 +2,6 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
-const emptyArea: types.UpdatedArea = {
-    id: undefined,
-    x: undefined,
-    y: undefined,
-    width: undefined,
-    height: undefined,
-    zIndex: undefined,
-};
-
 const emptyTextInfo: types.UpdatedTextInfo = {
     color: undefined,
     borderColor: undefined,
@@ -25,16 +16,6 @@ const emptyGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo = {
     strokeColor: undefined,
     strokeWidth: undefined,
     primitive: undefined,
-};
-
-const defaultAreaValues: types.Area = {
-    id: 0,
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 100,
-    zIndex: 0,
-    contains: undefined,
 };
 
 const defaultTextInfo: types.TextInfo = {
@@ -57,10 +38,8 @@ const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
 
 export {
     notSelectedIndex,
-    emptyArea, 
     emptyTextInfo, 
     emptyGraphicPrimitiveInfo,
-    defaultAreaValues,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
 };

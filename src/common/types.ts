@@ -21,22 +21,13 @@ type Slide = {
 }
 
 type Area = {
-    id: number,
+    id: string,
     x: number,
     y: number,
     width: number,
     height: number,
     zIndex: number,
     contains: AreaContent|undefined,
-}
-
-type UpdatedArea = {
-    id: number|undefined,
-    x: number|undefined,
-    y: number|undefined,
-    width: number|undefined,
-    height: number|undefined,
-    zIndex: number|undefined,
 }
 
 type TextInfo = {
@@ -59,12 +50,12 @@ type UpdatedTextInfo = {
 }
 
 type ImageBase64 = {
-    type: 'imageBase64',
+    type: "imageBase64",
     base64: string,
 }
 
 type ImageUrl = {
-    type: 'imageUrl',
+    type: "imageUrl",
     path: string,
 }
 
@@ -91,9 +82,9 @@ type AreaContent =
     GraphicPrimitiveInfo
 
 type Primitive =
-    'elipse' |
-    'triangle' |
-    'rectangle'
+    "ellipse" |
+    "triangle" |
+    "rectangle"
 
 type SaveObj = {
     content: Content,
@@ -117,7 +108,6 @@ export type {
     PresentationElements,
     Slide,
     Area,
-    UpdatedArea,
     TextInfo,
     UpdatedTextInfo,
     ImageBase64,

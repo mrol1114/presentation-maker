@@ -32,29 +32,29 @@ function Toolbar(): JSX.Element
         dispatch(functions.addSlide, {});
     }
 
-    const textHandler = () => 
+    const addTextHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.addArea, {areaType: "text"});
     }
 
-    const imageHandler = () => 
+    const addImageHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.addArea, {areaType: "image"});
     }
 
-    const elipseHandler = () => 
+    const addElipseHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "ellipse"});
     }
 
-    const rectangleHandler = () => 
+    const addRectangleHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "rectangle"});
     }
 
-    const triangleHandler = () => 
+    const addTriangleHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "triangle"});
     }
 
     return (
@@ -70,15 +70,15 @@ function Toolbar(): JSX.Element
             <Button additionalClass={styles["background-color"] + " " + styles["icon"]}
                 onClick={backgroundColorHandler} />
             <Button additionalClass={styles["text"] + " " + styles["icon"]}
-                onClick={textHandler} />
+                onClick={addTextHandler} />
             <Button additionalClass={styles["image"] + " " + styles["icon"]}
-                onClick={imageHandler} />
+                onClick={addImageHandler} />
             <Button additionalClass={styles["elipse"] + " " + styles["icon"]}
-                onClick={elipseHandler} />
+                onClick={addElipseHandler} />
             <Button additionalClass={styles["rectangle"] + " " + styles["icon"]}
-                onClick={rectangleHandler} />
+                onClick={addRectangleHandler} />
             <Button additionalClass={styles["triangle"] + " " + styles["icon"]}
-                onClick={triangleHandler} />
+                onClick={addTriangleHandler} />
         </div>
     );
 }

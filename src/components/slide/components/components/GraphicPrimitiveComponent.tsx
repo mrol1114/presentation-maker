@@ -4,40 +4,40 @@ import TriangleComponent from "./components/TriangleComponent";
 import RectangleComponent from "./components/RectangleComponent";
 import EllipseComponent from "./components/EllipseComponent";
 
-function GraphicPrimitiveComponent(prop: {areaElement: types.Area}): JSX.Element
+function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Element
 {
     const style = {
 
     };
-
-    if (!prop.areaElement.contains || prop.areaElement.contains.type !== 'primitive')
+    console.log(props.areaElement);
+    if (!props.areaElement.contains || props.areaElement.contains.type !== 'primitive')
     {
         return <></>;
     }
 
     return (
         <div className="graphic-primitive" style={style}>
-            { prop.areaElement.contains.primitive === 'elipse' && 
+            { props.areaElement.contains.primitive === 'ellipse' && 
                 <EllipseComponent 
-                    graphicPrimitiveElement={prop.areaElement.contains} 
-                    width={prop.areaElement.width} 
-                    height={prop.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains} 
+                    width={props.areaElement.width} 
+                    height={props.areaElement.height} 
                 /> 
             }
 
-            { prop.areaElement.contains.primitive === 'triangle' && 
+            { props.areaElement.contains.primitive === 'triangle' && 
                 <TriangleComponent 
-                    graphicPrimitiveElement={prop.areaElement.contains} 
-                    width={prop.areaElement.width} 
-                    height={prop.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains} 
+                    width={props.areaElement.width} 
+                    height={props.areaElement.height} 
                 /> 
             }
 
-            { prop.areaElement.contains.primitive === 'rectangle' && 
+            { props.areaElement.contains.primitive === 'rectangle' && 
                 <RectangleComponent 
-                    graphicPrimitiveElement={prop.areaElement.contains} 
-                    width={prop.areaElement.width} 
-                    height={prop.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains} 
+                    width={props.areaElement.width} 
+                    height={props.areaElement.height} 
                 /> 
             }
         </div>
