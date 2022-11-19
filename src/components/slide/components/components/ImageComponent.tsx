@@ -1,5 +1,5 @@
 import React from "react";
-import type * as types from '../../../utils/types';
+import type * as types from '../../../../common/types';
 
 function ImageComponent(prop: {imageElement: types.ImageInfo}): JSX.Element
 {

@@ -2,7 +2,7 @@ type PresentationMaker = {
     name: string,
     localHistory: PresentationElements[],
     presentationElements: PresentationElements,
-    currentPresentationElements: number
+    currentPresentationElementsIndex: number
 }
 
 type PresentationElements = {

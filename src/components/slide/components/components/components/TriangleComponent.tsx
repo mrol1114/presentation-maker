@@ -1,5 +1,5 @@
 import React from "react";
-import type * as types from '../../../../utils/types';
+import type * as types from "../../../../../common/types";
 
 function TriangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo, width: number, height: number}): JSX.Element
 {

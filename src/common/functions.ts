@@ -33,37 +33,37 @@ function convertPdf(presentationMaker: PresentationMaker): Pdf
 
 function undo(presentationMaker: types.PresentationMaker): types.PresentationMaker
 {
-    if (presentationMaker.currentPresentationElements <= 0)
+    if (presentationMaker.currentPresentationElementsIndex <= 0)
     {
         return presentationMaker;
     }
 
-    const newPresentationElements: number = presentationMaker.currentPresentationElements - 1;
+    const newPresentationElements: number = presentationMaker.currentPresentationElementsIndex - 1;
 
     return {
         ...presentationMaker,
         presentationElements: {
             ...presentationMaker.localHistory[newPresentationElements]
         },
-        currentPresentationElements: newPresentationElements
+        currentPresentationElementsIndex: newPresentationElements
     };
 }
 
 function redo(presentationMaker: types.PresentationMaker): types.PresentationMaker
 {
-    if (presentationMaker.currentPresentationElements === presentationMaker.localHistory.length - 1)
+    if (presentationMaker.currentPresentationElementsIndex === presentationMaker.localHistory.length - 1)
     {
         return presentationMaker;
     }
 
-    const newPresentationElements: number = presentationMaker.currentPresentationElements + 1;
+    const newPresentationElements: number = presentationMaker.currentPresentationElementsIndex + 1;
     
     return {
         ...presentationMaker,
         presentationElements: {
             ...presentationMaker.localHistory[newPresentationElements]
         },
-        currentPresentationElements: newPresentationElements
+        currentPresentationElementsIndex: newPresentationElements
     };
 }
 
@@ -95,7 +95,7 @@ function addSlide(presentationMaker: types.PresentationMaker): types.Presentatio
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -122,7 +122,7 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -157,7 +157,7 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -194,7 +194,7 @@ function selectSlides(presentationMaker: types.PresentationMaker, selectedSlides
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -227,7 +227,7 @@ function unselectSlides(presentationMaker: types.PresentationMaker, unselectedSl
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -250,7 +250,7 @@ function assignSlideIndex(presentationMaker: types.PresentationMaker, slideIndex
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -283,11 +283,11 @@ function updateSlideProperty(presentationMaker: types.PresentationMaker, updated
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElements + 1),
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -325,11 +325,11 @@ function addArea(presentationMaker: types.PresentationMaker): types.Presentation
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElements + 1),
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -360,11 +360,11 @@ function deleteAreas(presentationMaker: types.PresentationMaker): types.Presenta
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElements + 1),
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -399,7 +399,7 @@ function selectAreas(presentationMaker: types.PresentationMaker, selectedAreas: 
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -433,7 +433,7 @@ function unselectAreas(presentationMaker: types.PresentationMaker, selectedAreas
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -461,7 +461,7 @@ function assignAreaIndex(presentationMaker: types.PresentationMaker, areaIndex: 
     return {
         ...presentationMaker,
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -509,7 +509,7 @@ function updateArea(presentationMaker: types.PresentationMaker, updatedArea: typ
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -568,7 +568,7 @@ function updateText(presentationMaker: types.PresentationMaker, updatedText: typ
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -609,7 +609,7 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -652,7 +652,7 @@ function createImage(presentationMaker: types.PresentationMaker, imageInfo: type
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -711,7 +711,7 @@ function updateGraphicPrimitive(
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 
@@ -757,7 +757,7 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElements: presentationMaker.currentPresentationElements + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
     };
 }
 

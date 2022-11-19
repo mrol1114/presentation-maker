@@ -2,54 +2,6 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
-const presentationSlidesGroup: types.Slide[] = [
-    {
-        id: 0,
-        areas: [
-            {
-                id: 0,
-                x: 100,
-                y: 100,
-                width: 200,
-                height: 200,
-                zIndex: 1,
-                contains: {
-                    type: 'primitive',
-                    color: 'black',
-                    strokeColor: 'red',
-                    strokeWidth: 5,
-                    primitive: 'triangle',
-                },
-            }
-        ],
-        backgroundColor: '',
-        backgroundImage: {
-            type: 'imageUrl',
-            path: '',
-        },
-    }
-];
-
-const defaultPresentationElements: types.PresentationElements = {
-    slidesGroup: presentationSlidesGroup,
-    currentSlideIndex: 0,
-    selectedSlidesIndexes: [],
-    selectedAreasIndexes: [],
-    currentAreaIndex: 0,
-};
-
-const presentationMaker: types.PresentationMaker = {
-    name: '',
-    localHistory: [],
-    presentationElements: defaultPresentationElements,
-    currentPresentationElements: 0,
-};
-
-const presentationState = 
-{
-    curPresentationState: presentationMaker
-};
-
 const emptySlide: types.UpdatedSlide = {
     backgroundColor: undefined,
     backgroundImage: undefined,
@@ -125,6 +77,4 @@ export {
     defaultAreaValues,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
-    presentationMaker,
-    presentationState
 };

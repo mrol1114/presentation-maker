@@ -2,7 +2,7 @@ import React from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
-import type * as types from "../../utils/types";
+import type * as types from "../../../common/types";
 
 function Area(prop: {areaElement: types.Area}): JSX.Element
 {
