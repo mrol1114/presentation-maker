@@ -1,6 +1,7 @@
-import type * as types from './types';
-import * as consts from './consts';
-import { Ids } from './variables';
+import type * as types from "./types";
+import * as consts from "./consts";
+import * as createElement from "./model/createElement";
+import * as updateElement from "./model/updateElement";
 
 // загрузка, выгрузка
 
@@ -71,10 +72,7 @@ function redo(presentationMaker: types.PresentationMaker): types.PresentationMak
 
 function addSlide(presentationMaker: types.PresentationMaker): types.PresentationMaker
 {
-    const newSlide: types.Slide = {
-        ...consts.defaultSlideValues,
-        id: Ids.lastSlideId++
-    };
+    const newSlide: types.Slide = createElement.createSlide();
 
     const newSlidesGroup: types.Slide[] = [
         ...presentationMaker.presentationElements.slidesGroup,
@@ -84,8 +82,7 @@ function addSlide(presentationMaker: types.PresentationMaker): types.Presentatio
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup,
-        currentSlideIndex: presentationMaker.presentationElements.currentSlideIndex >= 0 
-            ? presentationMaker.presentationElements.currentSlideIndex + 1 : 0
+        currentSlideIndex: newSlidesGroup.length - 1
     }
 
     return {
@@ -256,7 +253,7 @@ function assignSlideIndex(presentationMaker: types.PresentationMaker, slideIndex
 
 // работа с слайдом
 
-function updateSlideProperty(presentationMaker: types.PresentationMaker, updatedSlide: types.UpdatedSlide): types.PresentationMaker
+function updateSlideProperty(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker
 {
     if (presentationMaker.presentationElements.slidesGroup.length === 0)
     {
@@ -266,11 +263,7 @@ function updateSlideProperty(presentationMaker: types.PresentationMaker, updated
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currentSlideIndex];
 
-    const newSlide: types.Slide = {
-        ...currentSlide,
-        backgroundColor: updatedSlide.backgroundColor ?? currentSlide.backgroundColor,
-        backgroundImage: updatedSlide.backgroundImage ?? currentSlide.backgroundImage
-    };
+    const newSlide: types.Slide = updateElement.updateSlide(currentSlide, properties);
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
         (slide, index) => index === currentSlideIndex ? newSlide : slide);

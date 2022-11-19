@@ -14,15 +14,10 @@ type PresentationElements = {
 }
 
 type Slide = {
-    id: number,
+    id: string,
     areas: Area[],
     backgroundColor: string,
     backgroundImage: ImageInfo,
-}
-
-type UpdatedSlide = {
-    backgroundColor: string|undefined,
-    backgroundImage: ImageInfo|undefined,
 }
 
 type Area = {
@@ -121,7 +116,6 @@ export type {
     PresentationMaker,
     PresentationElements,
     Slide,
-    UpdatedSlide,
     Area,
     UpdatedArea,
     TextInfo,

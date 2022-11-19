@@ -2,11 +2,6 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
-const emptySlide: types.UpdatedSlide = {
-    backgroundColor: undefined,
-    backgroundImage: undefined,
-};
-
 const emptyArea: types.UpdatedArea = {
     id: undefined,
     x: undefined,
@@ -30,13 +25,6 @@ const emptyGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo = {
     strokeColor: undefined,
     strokeWidth: undefined,
     primitive: undefined,
-};
-
-const defaultSlideValues: types.Slide = {
-    id: 0,
-    areas: [],
-    backgroundColor: 'white',
-    backgroundImage: {type: 'imageUrl', path: ''},
 };
 
 const defaultAreaValues: types.Area = {
@@ -68,12 +56,10 @@ const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
 };
 
 export {
-    notSelectedIndex, 
-    emptySlide, 
+    notSelectedIndex,
     emptyArea, 
     emptyTextInfo, 
-    emptyGraphicPrimitiveInfo, 
-    defaultSlideValues,
+    emptyGraphicPrimitiveInfo,
     defaultAreaValues,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
