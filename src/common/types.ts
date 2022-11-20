@@ -40,15 +40,6 @@ type TextInfo = {
     text: string,
 }
 
-type UpdatedTextInfo = {
-    color: string|undefined,
-    borderColor: string|undefined,
-    fontSize: number|undefined,
-    font: string|undefined,
-    weight: number|undefined,
-    text: string|undefined,
-}
-
 type ImageBase64 = {
     type: "imageBase64",
     base64: string,
@@ -109,7 +100,6 @@ export type {
     Slide,
     Area,
     TextInfo,
-    UpdatedTextInfo,
     ImageBase64,
     ImageUrl,
     ImageInfo,

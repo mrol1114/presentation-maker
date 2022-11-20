@@ -14,12 +14,12 @@ function Toolbar(): JSX.Element
 
     const undoHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.undo, {});
     }
 
     const redoHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        dispatch(functions.redo, {});
     }
 
     const backgroundImageHandler = () => 

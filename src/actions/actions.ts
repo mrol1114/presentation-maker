@@ -5,12 +5,12 @@ let presentationMaker: types.PresentationMaker = {
     localHistory: [],
     presentationElements: {
         slidesGroup: [],
-        currentSlideIndex: 0,
+        currentSlideIndex: -1,
         selectedSlidesIndexes: [],
         selectedAreasIndexes: [],
-        currentAreaIndex: 0,
+        currentAreaIndex: -1,
     },
-    currentPresentationElementsIndex: 0,
+    currentPresentationElementsIndex: -1,
 };
 
 let onChangeStateHandler: Function = () => {};

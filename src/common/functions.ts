@@ -497,7 +497,7 @@ function updateArea(presentationMaker: types.PresentationMaker, properties: Obje
 
 // работа с текстом
 
-function updateText(presentationMaker: types.PresentationMaker, updatedText: types.UpdatedTextInfo): types.PresentationMaker
+function updateText(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker
 {
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -514,19 +514,9 @@ function updateText(presentationMaker: types.PresentationMaker, updatedText: typ
         return presentationMaker;
     }
 
-    const textInfo: types.TextInfo = {
-        ...currentAreaInfo,
-        color: updatedText.color ?? currentAreaInfo.color,
-        borderColor: updatedText.borderColor ?? currentAreaInfo.borderColor,
-        fontSize: updatedText.fontSize ?? currentAreaInfo.fontSize,
-        font: updatedText.font ?? currentAreaInfo.font,
-        weight: updatedText.weight ?? currentAreaInfo.weight,
-        text: updatedText.text ?? currentAreaInfo.text
-    };
-
     const newArea: types.Area = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex],
-        contains: textInfo
+        contains: updateElement.updateText(currentAreaInfo, properties),
     }
 
     const newSlide: types.Slide = {
@@ -567,7 +557,7 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
 
     const newArea: types.Area = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex],
-        contains: {...consts.defaultTextInfo}
+        contains: {...consts.defaultTextInfo},
     }
 
     const newSlide: types.Slide = {
