@@ -39,7 +39,23 @@ function Toolbar(): JSX.Element
 
     const addImageHandler = () => 
     {
-        dispatch(functions.addArea, {areaType: "image"});
+        
+    }
+
+    const addImageBaseHandler = event =>
+    {
+        const fileReader = new FileReader();
+
+        fileReader.onload = () => {
+            dispatch(functions.addArea, {areaType: "imageBase64", path: fileReader.result});
+        }
+        fileReader.readAsDataURL(event.target.files[0]);
+    }
+
+    const addImageUrlHandler = () =>
+    {
+        const url: string = document.getElementsByTagName("input")[1].value;
+        dispatch(functions.addArea, {areaType: "imageUrl", path: url});
     }
 
     const addElipseHandler = () => 
@@ -73,6 +89,9 @@ function Toolbar(): JSX.Element
                 onClick={addTextHandler} />
             <Button additionalClass={styles["image"] + " " + styles["icon"]}
                 onClick={addImageHandler} />
+            <input className={styles["image-base"]} type="file" accept=".jpg, .jpeg, .png" onChange={addImageBaseHandler} />
+            <input className={styles["image-url"]} type="url" />
+            <button className={styles['button']} type="submit" onClick={addImageUrlHandler}>Добавить</button>
             <Button additionalClass={styles["elipse"] + " " + styles["icon"]}
                 onClick={addElipseHandler} />
             <Button additionalClass={styles["rectangle"] + " " + styles["icon"]}
