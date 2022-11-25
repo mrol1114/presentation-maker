@@ -1,7 +1,9 @@
 import React from "react";
 import Button from "./components/Button";
+import PresentationName from "./components/PresentationName";
+import styles from "./components/styles/control-panel.module.css";
 
-function controlPanel(): JSX.Element
+function ControlPanel(props: {name: string}): JSX.Element
 {
     const renameHandler = () => {
     };
@@ -19,8 +21,9 @@ function controlPanel(): JSX.Element
     };
 
     return (
-        <div className="controlPanel">
-            <Button onClick={renameHandler} actionName={"Изменить название презентации"}/>
+        <div className = {styles["control-panel"]}>
+            <PresentationName name="Моя презентация"/>
+            <Button onClick={renameHandler} actionName={"Изменить название"}/>
             <Button onClick={uploadFromCloudHandler} actionName={"Загрузить из облака"}/>
             <Button onClick={saveInCloudHandler} actionName={"Сохранить в облакe"}/>
             <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"}/>
@@ -31,4 +34,4 @@ function controlPanel(): JSX.Element
     );
 }
 
-export default controlPanel;
+export default ControlPanel;

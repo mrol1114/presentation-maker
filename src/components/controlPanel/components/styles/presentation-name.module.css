@@ -1,0 +1,22 @@
+.presentation-name
+{
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 18px;
+    height: 20px;
+    line-height: 22px;
+    min-width: 1px;
+    padding: 2px 7px;
+    margin: 0 0 10px 10px;
+    font-family: inherit;
+}
+
+.presentation-name-label
+{
+    flex: 1 0 100%;
+}
+
+.presentation-name:hover
+{
+    background-color:rgb(74, 227, 32);
+}

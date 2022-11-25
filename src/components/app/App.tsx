@@ -10,13 +10,14 @@ import "./App.css";
 function App(): JSX.Element 
 {
     const presentationMaker: types.PresentationMaker = getState();
+    const presentationName: string = presentationMaker.name;
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
     return (
         <div className="App">
             <div>
-                <ControlPanel />
+                <ControlPanel name={presentationName}/>
                 <Toolbar />
             </div>
 
