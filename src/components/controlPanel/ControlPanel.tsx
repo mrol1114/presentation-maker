@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./components/Button";
 
-function ControlPanel(): JSX.Element
+function controlPanel(): JSX.Element
 {
     const renameHandler = () => {
     };
@@ -31,4 +31,4 @@ function ControlPanel(): JSX.Element
     );
 }
 
-export default ControlPanel;
+export default controlPanel;

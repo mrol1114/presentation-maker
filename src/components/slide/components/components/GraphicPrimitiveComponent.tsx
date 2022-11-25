@@ -9,7 +9,7 @@ function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Elemen
     const style = {
 
     };
-    console.log(props.areaElement);
+    
     if (!props.areaElement.contains || props.areaElement.contains.type !== 'primitive')
     {
         return <></>;
