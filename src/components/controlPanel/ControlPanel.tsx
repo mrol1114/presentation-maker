@@ -1,28 +1,34 @@
 import React from "react";
 import Button from "./components/Button";
 
-function ControlPanel(): JSX.Element
+function controlPanel(): JSX.Element
 {
-    const fileHandler = () => {
+    const renameHandler = () => {
     };
-    const editHandler = () => {
+    const uploadFromCloudHandler = () => {
     };
-    const viewHandler = () => {
+    const saveInCloudHandler = () => {
     };
-    const insertHandler = () => {
+    const uploadFromMyComputerHandler = () => {
     };
-    const slideHandler = () => {
+    const saveInMyComputerHandler = () => {
+    };
+    const exportHandler = () => {
+    };
+    const previewHandler = () => {
     };
 
     return (
         <div className="controlPanel">
-            <Button onClick={fileHandler} actionName={"Файл"}/>
-            <Button onClick={editHandler} actionName={"Правка"}/>
-            <Button onClick={viewHandler} actionName={"Вид"}/>
-            <Button onClick={insertHandler} actionName={"Вставка"}/>
-            <Button onClick={slideHandler} actionName={"Слайд"}/>
+            <Button onClick={renameHandler} actionName={"Изменить название презентации"}/>
+            <Button onClick={uploadFromCloudHandler} actionName={"Загрузить из облака"}/>
+            <Button onClick={saveInCloudHandler} actionName={"Сохранить в облакe"}/>
+            <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"}/>
+            <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"}/>
+            <Button onClick={exportHandler} actionName={"Экспорт"}/>
+            <Button onClick={previewHandler} actionName={"Предпросмотр"}/>
         </div>
     );
 }
 
-export default ControlPanel;
+export default controlPanel;
