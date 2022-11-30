@@ -31,7 +31,7 @@ function setState(newPresentationMaker: types.PresentationMaker): void
     onChangeStateHandler();
 }
 
-function addOnChngeStateHandler(handler: Function): void
+function addOnChangeStateHandler(handler: Function): void
 {
     onChangeStateHandler = handler;
 }
@@ -40,5 +40,5 @@ export
 {
     getState,
     dispatch,
-    addOnChngeStateHandler,
+    addOnChangeStateHandler,
 }
