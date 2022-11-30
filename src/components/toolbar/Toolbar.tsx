@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "./components/Button";
+import ImageSelector from "./components/ImageSelector";
 import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import styles from "./styles/styles.module.css";
@@ -37,27 +38,6 @@ function Toolbar(): JSX.Element
         dispatch(functions.addArea, {areaType: "text"});
     }
 
-    const addImageHandler = () => 
-    {
-        
-    }
-
-    const addImageBaseHandler = event =>
-    {
-        const fileReader = new FileReader();
-
-        fileReader.onload = () => {
-            dispatch(functions.addArea, {areaType: "imageBase64", path: fileReader.result});
-        }
-        fileReader.readAsDataURL(event.target.files[0]);
-    }
-
-    const addImageUrlHandler = () =>
-    {
-        const url: string = document.getElementsByTagName("input")[1].value;
-        dispatch(functions.addArea, {areaType: "imageUrl", path: url});
-    }
-
     const addElipseHandler = () => 
     {
         dispatch(functions.addArea, {areaType: "primitive", primitiveType: "ellipse"});
@@ -71,6 +51,12 @@ function Toolbar(): JSX.Element
     const addTriangleHandler = () => 
     {
         dispatch(functions.addArea, {areaType: "primitive", primitiveType: "triangle"});
+    }
+
+    const openImageSelectorHandler = () => 
+    {
+        let selector = document.getElementById("image-selector");
+        selector?.classList.add(styles["active"]);
     }
 
     return (
@@ -88,10 +74,8 @@ function Toolbar(): JSX.Element
             <Button additionalClass={styles["text"] + " " + styles["icon"]}
                 onClick={addTextHandler} />
             <Button additionalClass={styles["image"] + " " + styles["icon"]}
-                onClick={addImageHandler} />
-            <input className={styles["image-base"]} type="file" accept=".jpg, .jpeg, .png" onChange={addImageBaseHandler} />
-            <input className={styles["image-url"]} type="url" />
-            <button className={styles['button']} type="submit" onClick={addImageUrlHandler}>Добавить</button>
+                onClick={openImageSelectorHandler} />
+            <ImageSelector />
             <Button additionalClass={styles["elipse"] + " " + styles["icon"]}
                 onClick={addElipseHandler} />
             <Button additionalClass={styles["rectangle"] + " " + styles["icon"]}

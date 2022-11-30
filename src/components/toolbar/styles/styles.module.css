@@ -53,3 +53,8 @@
 {
    background-image: url("./../images/triangle.svg");
 }
+
+.active
+{
+   display: block;
+}
