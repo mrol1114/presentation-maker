@@ -5,7 +5,8 @@ import Workboard from "../workboard/Workboard";
 import ControlPanel from "../controlPanel/ControlPanel";
 import { getState } from "../../actions/actions";
 import * as types from "../../common/types";
-import "./App.css";
+import appStyles from "./styles/app.module.css";
+import "./styles/commonStyles.css";
 
 function App(): JSX.Element 
 {
@@ -15,13 +16,13 @@ function App(): JSX.Element
     const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
     return (
-        <div className="App">
+        <div className={appStyles["app"]}>
             <div>
                 <ControlPanel name={presentationName}/>
                 <Toolbar />
             </div>
 
-            <div className="workspace">
+            <div className={appStyles["workspace"]}>
                 <SlidesGroup slideElements={slideElements} />
                 <Workboard slideElements={slideElements} currentSlideIndex={currentSlideIndex} />
             </div>

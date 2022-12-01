@@ -1,8 +1,7 @@
 .workboard
 {
-    margin: 10px auto 20px;
-    padding: 50px;
-    width: 100%;
-    height: 950px;
-    border: 40px solid silver;
+    padding: 20px;
+    height: 100%;
+    flex: 1 1 70%;
+    border: 1px solid black;
 }
