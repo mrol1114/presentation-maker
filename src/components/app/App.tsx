@@ -21,7 +21,7 @@ function App(): JSX.Element
                 <Toolbar />
             </div>
 
-            <div>
+            <div className="workspace">
                 <SlidesGroup slideElements={slideElements} />
                 <Workboard slideElements={slideElements} currentSlideIndex={currentSlideIndex} />
             </div>

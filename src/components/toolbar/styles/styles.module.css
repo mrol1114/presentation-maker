@@ -2,10 +2,12 @@
 {
    background-repeat: no-repeat;
    background-position: center;
+   background-color: white;
 }
 
 .add-slide
 {
+   margin-left: 30px;
    background-image: url("./../images/addSlide.svg");
 }
 
@@ -22,39 +24,56 @@
 .background-image
 {
    background-image: url("./../images/backgroundImage.svg");
+   background-size: 63%;
 }
 
 .background-color
 {
    background-image: url("./../images/backgroundColor.svg");
+   background-size: 70%;
 }
 
 .text
 {
    background-image: url("./../images/text.svg");
+   background-size: 70%;
 }
 
 .image
 {
    background-image: url("./../images/image.svg");
+   background-size: 70%;
 }
 
 .elipse
 {
    background-image: url("./../images/elipse.svg");
+   background-size: 72%;
 }
 
 .rectangle
 {
    background-image: url("./../images/rectangle.svg");
+   background-size: 72%;
 }
 
 .triangle
 {
    background-image: url("./../images/triangle.svg");
+   background-size: 72%;
 }
 
 .active
 {
    display: block;
+}
+
+.toolbar
+{
+   display: flex;
+   flex-wrap: wrap;
+   padding: 10px;
+   border: 0px solid silver;
+   border-bottom-width: 1px;
+   border-top-width: 1px;
 }

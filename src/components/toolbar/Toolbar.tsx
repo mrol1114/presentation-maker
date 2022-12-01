@@ -60,7 +60,7 @@ function Toolbar(): JSX.Element
     }
 
     return (
-        <div className="toolbar">
+        <div className={styles["toolbar"]}>
             <Button additionalClass={styles["add-slide"] + " " + styles["icon"]}
                 onClick={addSlideHandler} />
             <Button additionalClass={styles["undo"] + " " + styles["icon"]}
