@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Button from "./components/Button";
 import ImageSelector from "./components/ImageSelector";
 import { dispatch } from "../../actions/actions";
@@ -8,6 +8,8 @@ import styles from "./styles/styles.module.css";
 
 function Toolbar(): JSX.Element
 {
+    const [active, setActive] = useState(false);
+
     const addSlideHandler = () => 
     {
         dispatch(functions.addSlide, {});
@@ -56,11 +58,11 @@ function Toolbar(): JSX.Element
     const openImageSelectorHandler = () => 
     {
         let selector = document.getElementById("image-selector");
-        selector?.classList.add(styles["active"]);
+        selector?.classList.add(styles["selector-active"]);
     }
 
     return (
-        <div className={styles["toolbar"]}>
+        <div id="toolbar" className={styles["toolbar"]}>
             <Button additionalClass={styles["add-slide"] + " " + styles["icon"]}
                 onClick={addSlideHandler} />
             <Button additionalClass={styles["undo"] + " " + styles["icon"]}

@@ -63,9 +63,9 @@
    background-size: 72%;
 }
 
-.active
+.selector-active
 {
-   display: block;
+   display: flex;
 }
 
 .toolbar

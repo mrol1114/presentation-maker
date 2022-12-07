@@ -13,5 +13,5 @@
 
 .button:active
 {
-    background-color: gold;
+    background-color: rgba(56, 118, 252, 0.5);
 }
