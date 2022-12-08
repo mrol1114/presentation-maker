@@ -1,7 +1,9 @@
 import React from "react";
 import Button from "./components/Button";
+import Font from "./components/Font";
 import ImageSelector from "./components/ImageSelector";
 import FontSize from "./components/FontSize";
+import StrokeWidth from "./components/StrokeWidth";
 import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import styles from "./styles/styles.module.css";
@@ -54,6 +56,11 @@ function Toolbar(): JSX.Element
         dispatch(functions.addArea, {areaType: "primitive", primitiveType: "triangle"});
     }
 
+    const changeTextFontHandler = () =>
+    {
+
+    }
+
     const reduceFontSizeHandler = () =>
     {
         
@@ -82,6 +89,11 @@ function Toolbar(): JSX.Element
     const textUnderlinedHandler = () =>
     {
         
+    }
+
+    const changeTextStrokeColorHandler = () =>
+    {
+
     }
 
     const openImageSelectorHandler = () => 
@@ -118,6 +130,9 @@ function Toolbar(): JSX.Element
                     onClick={addTriangleHandler} />
             </div>
             <div className={textTools ? styles["toolbar__text-tools-active"] : styles["toolbar__text-tools-inactive"]}>
+                <Font />
+                <Button additionalClass={styles["font"] + " " + styles["icon"]}
+                    onClick={changeTextFontHandler} />
                 <Button additionalClass={styles["increase-font-size"] + " " + styles["icon"]}
                     onClick={increaseFontSizeHandler} />
                 <FontSize />
@@ -131,6 +146,9 @@ function Toolbar(): JSX.Element
                     onClick={textItalicHandler} />
                 <Button additionalClass={styles["underlined"] + " " + styles["icon"]}
                     onClick={textUnderlinedHandler} />
+                <Button additionalClass={styles["text-stroke-color"] + " " + styles["icon"]}
+                    onClick={changeTextStrokeColorHandler} />
+                <StrokeWidth />
             </div>
         </div>
     );
