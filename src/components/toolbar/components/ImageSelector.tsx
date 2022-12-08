@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { dispatch } from "../../../actions/actions";
 import * as functions from "../../../common/functions";
 import styles from "./styles/styles.module.css";

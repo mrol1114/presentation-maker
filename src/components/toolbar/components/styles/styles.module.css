@@ -126,3 +126,14 @@
 {
     background-color: rgb(81, 132, 242);
 }
+
+.text-font-size
+{
+    text-align: center;
+    width: 100%;
+    max-width: 55px;
+    height: 28px;
+    border: 0px solid silver;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
