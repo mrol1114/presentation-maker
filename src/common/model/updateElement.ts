@@ -43,18 +43,27 @@ function updateText(text: types.TextInfo, properties: Object): types.TextInfo
         color: ("color" in properties 
             ? getProperty(properties, "color") as string 
             : null) ?? text.color,
-        borderColor: ("borderColor" in properties 
-            ? getProperty(properties, "borderColor") as string 
-            : null) ?? text.borderColor,
+        strokeColor: ("strokeColor" in properties 
+            ? getProperty(properties, "strokeColor") as string 
+            : null) ?? text.strokeColor,
+        strokeWidth: ("strokeWidth" in properties 
+            ? getProperty(properties, "strokeWidth") as number 
+            : null) ?? text.strokeWidth,
         fontSize: ("fontSize" in properties 
             ? getProperty(properties, "fontSize") as number 
             : null) ?? text.fontSize,
         font: ("font" in properties 
             ? getProperty(properties, "font") as string 
             : null) ?? text.font,
-        weight: ("weight" in properties 
-            ? getProperty(properties, "weight") as number 
-            : null) ?? text.weight,
+        italic: ("italic" in properties 
+            ? getProperty(properties, "italic") as boolean
+            : null) ?? text.italic,
+        bold: ("bold" in properties 
+            ? getProperty(properties, "bold") as boolean
+            : null) ?? text.bold,
+        underlined: ("underlined" in properties 
+            ? getProperty(properties, "underlined") as boolean
+            : null) ?? text.underlined,
         text: ("text" in properties 
             ? getProperty(properties, "text") as string 
             : null) ?? text.text,

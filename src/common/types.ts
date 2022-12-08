@@ -33,10 +33,13 @@ type Area = {
 type TextInfo = {
     type: 'text',
     color: string,
-    borderColor: string,
+    strokeColor: string,
+    strokeWidth: number,
     fontSize: number,
     font: string,
-    weight: number,
+    italic: boolean,
+    bold: boolean,
+    underlined: boolean,
     text: string,
 }
 

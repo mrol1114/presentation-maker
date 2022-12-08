@@ -12,10 +12,13 @@ const emptyGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo = {
 const defaultTextInfo: types.TextInfo = {
     type: 'text',
     color: 'black',
-    borderColor: 'black',
+    strokeColor: 'black',
+    strokeWidth: 0,
     fontSize: 80,
     font: 'Arial',
-    weight: 40,
+    italic: false,
+    bold: false,
+    underlined: false,
     text: '',
 };
 

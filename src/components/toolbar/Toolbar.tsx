@@ -8,8 +8,6 @@ import styles from "./styles/styles.module.css";
 
 function Toolbar(): JSX.Element
 {
-    const [active, setActive] = useState(false);
-
     const addSlideHandler = () => 
     {
         dispatch(functions.addSlide, {});
