@@ -127,28 +127,6 @@
     background-color: rgb(81, 132, 242);
 }
 
-.text-font
-{
-    text-align: center;
-    width: 100%;
-    max-width: 55px;
-    height: 28px;
-    border: 1px solid silver;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-}
-
-.text-font-size
-{
-    text-align: center;
-    width: 100%;
-    max-width: 55px;
-    height: 28px;
-    border: 0px solid silver;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-}
-
 .text-stroke-color
 {
     background-image: url("./../../images/strokeColor.svg");

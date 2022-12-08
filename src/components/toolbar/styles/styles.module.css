@@ -1,75 +1,62 @@
-.icon
-{
+.icon {
    background-repeat: no-repeat;
    background-position: center;
    background-color: white;
 }
 
-.add-slide
-{
+.add-slide {
    margin-left: 30px;
    background-image: url("./../images/addSlide.svg");
 }
 
-.undo
-{
+.undo {
    background-image: url("./../images/undo.svg");
 }
 
-.redo
-{
+.redo {
    background-image: url("./../images/redo.svg");
 }
 
-.background-image
-{
+.background-image {
    background-image: url("./../images/backgroundImage.svg");
    background-size: 63%;
 }
 
-.background-color
-{
+.background-color {
    background-image: url("./../images/backgroundColor.svg");
    background-size: 70%;
 }
 
-.text
-{
+.text {
    background-image: url("./../images/text.svg");
    background-size: 70%;
 }
 
-.image
-{
+.image {
    background-image: url("./../images/image.svg");
    background-size: 70%;
 }
 
-.elipse
-{
+.elipse {
    background-image: url("./../images/elipse.svg");
    background-size: 72%;
 }
 
-.rectangle
-{
+.rectangle {
    background-image: url("./../images/rectangle.svg");
    background-size: 72%;
 }
 
-.triangle
-{
+.triangle {
    background-image: url("./../images/triangle.svg");
    background-size: 72%;
 }
 
-.selector-active
-{
+.selector-active {
    display: flex;
 }
 
-.toolbar
-{
+.toolbar {
    display: flex;
    flex-wrap: nowrap;
    border: 0px solid silver;
@@ -77,27 +64,23 @@
    border-top-width: 1px;
 }
 
-.toolbar__slide-tools
-{
+.toolbar__slide-tools {
    border: 0px solid silver;
    border-right-width: 1px;
    padding: 10px 20px 6px 0;
 }
 
-.toolbar__text-tools-inactive
-{
+.toolbar__text-tools-inactive {
    display: none;
 }
 
-.toolbar__text-tools-active
-{
+.toolbar__text-tools-active {
    display: flex;
    flex-wrap: nowrap;
    padding: 10px 0 6px 20px;
 }
 
-.increase-font-size
-{
+.increase-font-size {
    background-image: url("./../images/minus.svg");
    background-size: 62%;
    border: 1px solid silver;
@@ -105,8 +88,7 @@
    border-bottom-left-radius: 4px;
 }
 
-.reduce-font-size
-{
+.reduce-font-size {
    background-image: url("./../images/plus.svg");
    background-size: 62%;
    border: 1px solid silver;
@@ -115,38 +97,32 @@
    margin: 0;
 }
 
-.text-color
-{
+.text-color {
    background-image: url("./../images/textColor.svg");
    background-size: 100%;
 }
 
-.bold
-{
+.bold {
    background-image: url("./../images/bold.svg");
    background-size: 110%;
 }
 
-.italic
-{
+.italic {
    background-image: url("./../images/italic.svg");
    background-size: 110%;
 }
 
-.underlined
-{
+.underlined {
    background-image: url("./../images/underlined.svg");
    background-size: 110%;
 }
 
-.text-stroke-color
-{
+.text-stroke-color {
    background-image: url("./../images/strokeColor.svg");
    background-size: 130%;
 }
 
-.font
-{
+.font {
    margin: 0;
    border: 1px solid silver;
    border-left-width: 0;
@@ -154,4 +130,24 @@
    border-bottom-right-radius: 4px;
    background-image: url("./../images/font.svg");
    background-size: 75%;
+}
+
+.text-font {
+   text-align: center;
+   width: 100%;
+   max-width: 75px;
+   height: 28px;
+   border: 1px solid silver;
+   border-top-left-radius: 4px;
+   border-bottom-left-radius: 4px;
+}
+
+.text-font-size {
+   text-align: center;
+   width: 100%;
+   max-width: 55px;
+   height: 28px;
+   border: 0px solid silver;
+   border-top-width: 1px;
+   border-bottom-width: 1px;
 }

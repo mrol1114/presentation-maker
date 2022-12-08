@@ -7,6 +7,7 @@ import StrokeWidth from "./components/StrokeWidth";
 import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import styles from "./styles/styles.module.css";
+import InputComponent from "./components/InputComponent";
 
 
 function Toolbar(): JSX.Element
@@ -130,12 +131,12 @@ function Toolbar(): JSX.Element
                     onClick={addTriangleHandler} />
             </div>
             <div className={textTools ? styles["toolbar__text-tools-active"] : styles["toolbar__text-tools-inactive"]}>
-                <Font />
+                <InputComponent additionalClass={styles["text-font"]} value="Arial" />
                 <Button additionalClass={styles["font"] + " " + styles["icon"]}
                     onClick={changeTextFontHandler} />
                 <Button additionalClass={styles["increase-font-size"] + " " + styles["icon"]}
                     onClick={increaseFontSizeHandler} />
-                <FontSize />
+                <InputComponent additionalClass={styles["text-font-size"]} value={0} />
                 <Button additionalClass={styles["reduce-font-size"] + " " + styles["icon"]}
                     onClick={reduceFontSizeHandler} />
                 <Button additionalClass={styles["text-color"] + " " + styles["icon"]}
@@ -148,7 +149,7 @@ function Toolbar(): JSX.Element
                     onClick={textUnderlinedHandler} />
                 <Button additionalClass={styles["text-stroke-color"] + " " + styles["icon"]}
                     onClick={changeTextStrokeColorHandler} />
-                <StrokeWidth />
+                <StrokeWidth value={0} />
             </div>
         </div>
     );
