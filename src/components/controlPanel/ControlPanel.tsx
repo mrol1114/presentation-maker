@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./components/Button";
 import PresentationName from "./components/PresentationName";
-import styles from "./components/styles/control-panel.module.css";
+import styles from "./styles.module.css";
 
 function ControlPanel(props: {name: string}): JSX.Element
 {

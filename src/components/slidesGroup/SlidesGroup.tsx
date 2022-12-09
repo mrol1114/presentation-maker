@@ -1,7 +1,7 @@
 import React from "react";
 import Slide from "../slide/Slide";
 import type * as types from "../../common/types";
-import styles from "./styles/slidesGroup.module.css";
+import styles from "./slidesGroup.module.css";
 
 function SlidesGroup(props: {slideElements: types.Slide[]}): JSX.Element
 {

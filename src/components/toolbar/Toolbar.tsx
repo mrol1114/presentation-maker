@@ -1,12 +1,10 @@
 import React from "react";
 import Button from "./components/Button";
-import Font from "./components/Font";
 import ImageSelector from "./components/ImageSelector";
-import FontSize from "./components/FontSize";
 import StrokeWidth from "./components/StrokeWidth";
 import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
-import styles from "./styles/styles.module.css";
+import styles from "./styles.module.css";
 import InputComponent from "./components/InputComponent";
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./styles/presentation-name.module.css";
+import styles from "./styles/styles.module.css";
 
 function PresentationName(props: {name: string}): JSX.Element
 {
