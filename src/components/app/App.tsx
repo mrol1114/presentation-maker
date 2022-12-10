@@ -15,6 +15,11 @@ function App(): JSX.Element
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
+    if (!presentationMaker.localHistory.length)
+    {
+        presentationMaker.localHistory = [presentationMaker.presentationElements];
+    }
+
     return (
         <div className={appStyles["app"]}>
             <div>

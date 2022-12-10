@@ -10,7 +10,7 @@ let presentationMaker: types.PresentationMaker = {
         selectedAreasIndexes: [],
         currentAreaIndex: -1,
     },
-    currentPresentationElementsIndex: -1,
+    currentPresentationElementsIndex: 0,
 };
 
 let onChangeStateHandler: Function = () => {};
