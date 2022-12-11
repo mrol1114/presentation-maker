@@ -13,11 +13,10 @@
 
 .button:hover
 {
-    background-color: #439AFF;
-    
+    background-color: rgba(var(--silver-color), .6);
 }
 
 .button:active
 {
-    background-color: #5117F2;
+    background-color: rgb(var(--silver-color));
 }
