@@ -632,7 +632,7 @@ function createImage(presentationMaker: types.PresentationMaker, imageInfo: type
 
 function updateGraphicPrimitive(
     presentationMaker: types.PresentationMaker, 
-    updatedGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo): types.PresentationMaker
+    properties: Object): types.PresentationMaker
 {
     const currIdSlide: number = presentationMaker.presentationElements.currentSlideIndex;
     const currIdArea: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -649,13 +649,8 @@ function updateGraphicPrimitive(
         return presentationMaker;
     }
 
-    const newGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
-        type: areaContentInfo.type,
-        color: updatedGraphicPrimitiveInfo.color ?? areaContentInfo.color,
-        strokeColor: updatedGraphicPrimitiveInfo.strokeColor ?? areaContentInfo.strokeColor,
-        strokeWidth: updatedGraphicPrimitiveInfo.strokeWidth ?? areaContentInfo.strokeWidth,
-        primitive: updatedGraphicPrimitiveInfo.primitive ?? areaContentInfo.primitive
-    };
+    const newGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = 
+        updateElement.updateGraphicPrimitive(areaContentInfo, properties);
 
     const newArea: types.Area = {
         ...presentationMaker.presentationElements.slidesGroup[currIdSlide].areas[currIdArea],

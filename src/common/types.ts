@@ -63,13 +63,6 @@ type GraphicPrimitiveInfo = {
     primitive: Primitive,
 }
 
-type UpdatedGraphicPrimitiveInfo = {
-    color: string|undefined,
-    strokeColor: string|undefined,
-    strokeWidth: number|undefined,
-    primitive: Primitive|undefined,
-}
-
 type AreaContent =
     TextInfo |
     ImageInfo |
@@ -107,7 +100,6 @@ export type {
     ImageUrl,
     ImageInfo,
     GraphicPrimitiveInfo,
-    UpdatedGraphicPrimitiveInfo,
     AreaContent,
     Primitive
 };

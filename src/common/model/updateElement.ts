@@ -36,6 +36,25 @@ function updateArea(currentArea: types.Area, properties: Object): types.Area
     };
 }
 
+function updateGraphicPrimitive(currentGraphicPrimitive: types.GraphicPrimitiveInfo, properties: Object): types.GraphicPrimitiveInfo
+{
+    return {
+        ...currentGraphicPrimitive,
+        color: ("color" in properties 
+            ? getProperty(properties, "color") as string 
+            : null) ?? currentGraphicPrimitive.color,
+        strokeColor: ("strokeColor" in properties 
+            ? getProperty(properties, "strokeColor") as string 
+            : null) ?? currentGraphicPrimitive.strokeColor,
+        strokeWidth: ("strokeWidth" in properties 
+            ? getProperty(properties, "strokeWidth") as number 
+            : null) ?? currentGraphicPrimitive.strokeWidth,
+        primitive: ("primitive" in properties 
+            ? getProperty(properties, "primitive") as types.Primitive 
+            : null) ?? currentGraphicPrimitive.primitive,
+    };
+}
+
 function updateText(text: types.TextInfo, properties: Object): types.TextInfo
 {
     return {
@@ -75,4 +94,5 @@ export
     updateSlide,
     updateArea,
     updateText,
+    updateGraphicPrimitive,
 };
