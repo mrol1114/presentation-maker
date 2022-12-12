@@ -1,6 +1,7 @@
 import React from "react";
 import Area from "./components/Area";
 import type * as types from "../../common/types";
+import styles from "./styles.module.css";
 
 function Slide(props: {slideElement: types.Slide}): JSX.Element
 {
@@ -12,7 +13,7 @@ function Slide(props: {slideElement: types.Slide}): JSX.Element
     });
 
     return (
-        <div className="slide">
+        <div className={styles["slide"]}>
             {areaComponents}
         </div>
     );

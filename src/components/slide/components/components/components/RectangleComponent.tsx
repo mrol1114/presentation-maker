@@ -8,7 +8,7 @@ function RectangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimiti
     };
 
     return (
-        <svg style={style}>
+        <svg width={prop.width} height={prop.height} style={style}>
             <rect width={prop.width} height={prop.height}/>
         </svg>
     );

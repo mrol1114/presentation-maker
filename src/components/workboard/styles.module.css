@@ -2,6 +2,8 @@
 {
     display: flex;
     justify-content: center;
+    overflow: hidden;
+    position: relative;
     padding: 50px;
     height: 100%;
     width: 100%;

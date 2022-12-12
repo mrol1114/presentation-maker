@@ -20,8 +20,8 @@ function createArea(contains: types.AreaContent, zIndex: number): types.Area
         id: generateId(),
         x: 0,
         y: 0,
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 200,
         zIndex: zIndex,
         contains: contains,
     }

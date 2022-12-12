@@ -7,7 +7,7 @@ const defaultTextInfo: types.TextInfo = {
     color: 'black',
     strokeColor: 'black',
     strokeWidth: 0,
-    fontSize: 80,
+    fontSize: 30,
     font: 'Arial',
     italic: false,
     bold: false,
