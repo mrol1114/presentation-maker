@@ -5,7 +5,7 @@ import ImageComponent from "./components/ImageComponent";
 import type * as types from "../../../common/types";
 import styles from "./styles.module.css";
 
-function Area(prop: {areaElement: types.Area}): JSX.Element
+function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Element
 {
     if (!prop.areaElement.contains)
     {

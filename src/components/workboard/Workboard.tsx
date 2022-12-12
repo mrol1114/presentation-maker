@@ -9,7 +9,7 @@ function Workboard(props: {slideElements: types.Slide[], currentSlideIndex: numb
         <div className={styles["workboard"]}>
             <div className={props.slideElements.length ? styles["workboard__slide"] : styles["workboard__without-slide"]}>
                 { props.slideElements.length !== 0 &&
-                    <Slide slideElement={props.slideElements[props.currentSlideIndex]} />
+                    <Slide slideElement={props.slideElements[props.currentSlideIndex]} isCurrent={true} />
                 }
             </div>
         </div>

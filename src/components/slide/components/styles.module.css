@@ -17,3 +17,9 @@
 {
     cursor: move;
 }
+
+.scale
+{
+    transform: scale(0.3, 0.2);
+    transform-origin: 0 0;
+}
