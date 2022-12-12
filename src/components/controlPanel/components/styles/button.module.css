@@ -13,10 +13,10 @@
 
 .button:hover
 {
-    background-color: rgba(var(--silver-color), .6);
+    background-color: rgba(var(--light-blue-color), .5);
 }
 
 .button:active
 {
-    background-color: rgb(var(--silver-color));
+    background-color: rgb(var(--light-blue-color), .7);
 }

@@ -2,13 +2,6 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
-const emptyGraphicPrimitiveInfo: types.UpdatedGraphicPrimitiveInfo = {
-    color: undefined,
-    strokeColor: undefined,
-    strokeWidth: undefined,
-    primitive: undefined,
-};
-
 const defaultTextInfo: types.TextInfo = {
     type: 'text',
     color: 'black',
@@ -32,7 +25,6 @@ const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
 
 export {
     notSelectedIndex,
-    emptyGraphicPrimitiveInfo,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
 };

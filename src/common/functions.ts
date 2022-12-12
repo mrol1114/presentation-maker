@@ -587,7 +587,7 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
 
 // работа с картинкой
 
-function createImage(presentationMaker: types.PresentationMaker, imageInfo: types.ImageInfo): types.PresentationMaker
+function createImage(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker
 {
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -597,11 +597,10 @@ function createImage(presentationMaker: types.PresentationMaker, imageInfo: type
     {
         return presentationMaker;
     }
-
-    const newArea: types.Area = {
-        ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex],
-        contains: imageInfo
-    };
+    
+    const currentSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currentSlideIndex];
+    const newAreaContent: types.AreaContent = createElement.createAreaContent(properties)
+    const newArea: types.Area = createElement.createArea(newAreaContent, currentSlide.areas.length);
 
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex],

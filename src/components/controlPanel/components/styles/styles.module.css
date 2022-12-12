@@ -18,5 +18,5 @@
 
 .presentation-name:hover
 {
-    background-color: rgb(var(--silver-color));
+    background-color: rgba(var(--light-blue-color), .5);
 }

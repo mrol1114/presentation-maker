@@ -61,6 +61,25 @@ function createAreaContent(properties: Object): types.AreaContent
     }
 }
 
+function createImage(properties: Object): types.ImageInfo
+{
+    const imageInfo = getProperty(properties, "ImageInfo") as types.ImageInfo;
+
+    const path = getProperty(properties, "path") as string;
+    
+    if (imageInfo.type === "imageBase64") {
+        return {
+            base64: path,
+            type: "imageBase64",
+        }
+    }
+
+    return {
+        path: path,
+        type: "imageUrl",
+    }
+}
+
 export 
 {
     createSlide,
