@@ -2,21 +2,18 @@ import React from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
+import style from "./styles.module.css";
 import type * as types from "../../../common/types";
 
-function Area(prop: {areaElement: types.Area}): JSX.Element
+function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Element
 {
     if (!prop.areaElement.contains)
     {
         return(<></>);
     }
 
-    const style = {
-
-    };
-
     return (
-        <div className="area-wrapper" style={style}>
+        <div className={style["area-wrapper"]}>
             { prop.areaElement.contains.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains}/>
             }
