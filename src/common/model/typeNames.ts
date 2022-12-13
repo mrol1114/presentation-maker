@@ -6,15 +6,7 @@ const areaContentTypeNames =
     imageUrl: "imageUrl"
 }
 
-const graphicPrimitiveTypeNames =
-{
-    ellipse: "ellipse",
-    rectangle: "rectangle",
-    triangle: "triangle",
-}
-
 export
 {
-    areaContentTypeNames,
-    graphicPrimitiveTypeNames,
+    areaContentTypeNames
 }

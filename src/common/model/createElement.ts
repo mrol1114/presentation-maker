@@ -1,6 +1,6 @@
 import * as types from "../types";
 import { generateId } from "../utils/generateId";
-import { areaContentTypeNames, graphicPrimitiveTypeNames } from "./typeNames";
+import { areaContentTypeNames } from "./typeNames";
 import { getProperty } from "../utils/property";
 import * as consts from "../consts";
 
@@ -49,25 +49,6 @@ function createAreaContent(properties: Object): types.AreaContent
 
     if (areaType === areaContentTypeNames.imageBase64)
     {
-        return {
-            base64: path,
-            type: "imageBase64",
-        }
-    }
-
-    return {
-        path: path,
-        type: "imageUrl",
-    }
-}
-
-function createImage(properties: Object): types.ImageInfo
-{
-    const imageInfo = getProperty(properties, "ImageInfo") as types.ImageInfo;
-
-    const path = getProperty(properties, "path") as string;
-    
-    if (imageInfo.type === "imageBase64") {
         return {
             base64: path,
             type: "imageBase64",
