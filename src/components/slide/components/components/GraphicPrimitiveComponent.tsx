@@ -3,6 +3,7 @@ import type * as types from "../../../../common/types";
 import TriangleComponent from "./components/TriangleComponent";
 import RectangleComponent from "./components/RectangleComponent";
 import EllipseComponent from "./components/EllipseComponent";
+import styles from "./styles.module.css";
 
 function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Element
 {
@@ -17,7 +18,7 @@ function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Elemen
     }
 
     return (
-        <div className="graphic-primitive" style={style}>
+        <div className={styles["graphic-primitive"]} style={style}>
             { props.areaElement.contains.primitive === 'ellipse' && 
                 <EllipseComponent 
                     graphicPrimitiveElement={props.areaElement.contains} 

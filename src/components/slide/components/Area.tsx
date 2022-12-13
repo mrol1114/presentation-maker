@@ -13,14 +13,14 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
     }
 
     const style = {
-        marginLeft: prop.areaElement.x,
-        marginTop: prop.areaElement.y,
+        marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / 9,
+        marginTop: prop.isCurrentSlide ? prop.areaElement.y : prop.areaElement.y / 9,
         width: prop.areaElement.width + 10,
         height: prop.areaElement.height + 10,
     };
 
     return (
-        <div className={styles["area-wrapper"]} style={style}>
+        <div className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} style={style}>
             { prop.areaElement.contains.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains} id={prop.areaElement.id}/>
             }
