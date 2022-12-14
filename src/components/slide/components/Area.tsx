@@ -3,7 +3,9 @@ import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
 import type * as types from "../../../common/types";
+import * as functions from "../../../common/functions";
 import styles from "./styles.module.css";
+import { dispatch, getState } from "../../../actions/actions";
 
 function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Element
 {
@@ -19,8 +21,58 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
         height: prop.areaElement.height + 10,
     };
 
+    const presElements: types.PresentationElements = getState().presentationElements;
+    const areaIndex: number = presElements.slidesGroup[presElements.currentSlideIndex].areas.findIndex(area => area.id === prop.areaElement.id);
+
+    const workboardPositionX: number = 420;
+    const workboardPositionY: number = 166;
+
+    let coordX: number;
+    let coordY: number;
+
+    const mousePositionHandler = e => {
+        coordX = e.pageX - workboardPositionX;
+        coordY = e.pageY - workboardPositionY;
+    }
+
+    const onMouseDownHandler = () =>
+    {
+        const areaElement = document.querySelectorAll("#" + prop.areaElement.id)[1];
+
+        let stepX: number;
+        let stepY: number;
+
+        dispatch(functions.assignAreaIndex, areaIndex);
+
+        document.addEventListener("dragover", mousePositionHandler);
+
+        document.addEventListener("mousedown", function mouseHandler(e) {
+            stepX = e.pageX - workboardPositionX - prop.areaElement.x;
+            stepY = e.pageY - workboardPositionY - prop.areaElement.y;
+
+            areaElement.classList.add(styles["area-wrapper-selected"]);
+
+            document.removeEventListener("mousedown", mouseHandler);
+        });
+
+        areaElement?.addEventListener("dragstart", function dragStartHandler() {
+            areaElement.classList.add(styles["selected"]);
+            areaElement.removeEventListener("dragend", dragStartHandler);
+        });
+
+        areaElement?.addEventListener("dragend", function dragEndHandler() {
+            areaElement.classList.remove(styles["selected"]);
+
+            dispatch(functions.updateArea, {x: coordX - stepX, y: coordY - stepY});
+
+            areaElement.removeEventListener("dragend", dragEndHandler);
+            document.removeEventListener("dragover", mousePositionHandler);
+        });
+    }
+
     return (
-        <div className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} style={style}>
+        <div id={prop.areaElement.id} draggable={prop.isCurrentSlide ? true : false} className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} 
+        onMouseDown={onMouseDownHandler} style={style}>
             { prop.areaElement.contains.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains} id={prop.areaElement.id}/>
             }

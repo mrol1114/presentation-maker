@@ -449,8 +449,7 @@ function assignAreaIndex(presentationMaker: types.PresentationMaker, areaIndex: 
 
     return {
         ...presentationMaker,
-        presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        presentationElements: newPresentationElements
     };
 }
 
