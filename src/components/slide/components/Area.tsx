@@ -14,9 +14,14 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
         return(<></>);
     }
 
+    const workboardSlideElement = document.getElementById("workboard-slide");
+    const slideWrapperElement = document.getElementById("slide-wrapper");
+    const xDivider: number = workboardSlideElement && slideWrapperElement ? workboardSlideElement.offsetWidth / slideWrapperElement.offsetWidth + 0.3 : 9;
+    const yDivider: number = workboardSlideElement && slideWrapperElement ? workboardSlideElement.offsetHeight / slideWrapperElement.offsetHeight + 0.3 : 9;
+
     const style = {
-        marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / 9,
-        marginTop: prop.isCurrentSlide ? prop.areaElement.y : prop.areaElement.y / 9,
+        marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / xDivider,
+        marginTop: prop.isCurrentSlide ? prop.areaElement.y : prop.areaElement.y / yDivider,
         width: prop.areaElement.width + 10,
         height: prop.areaElement.height + 10,
     };
@@ -29,7 +34,6 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
 
     let coordX: number;
     let coordY: number;
-
     const mousePositionHandler = e => {
         coordX = e.pageX - workboardPositionX;
         coordY = e.pageY - workboardPositionY;
