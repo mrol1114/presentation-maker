@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -6,18 +6,18 @@ import type * as types from "../../../common/types";
 import * as functions from "../../../common/functions";
 import styles from "./styles.module.css";
 import { dispatch, getState } from "../../../actions/actions";
+import { useWorkboardSlideRef } from "../../workboard/useWorkboardSlideRef";
+import { useSlideRef } from "../useSlideRef";
 
 function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Element
 {
-    if (!prop.areaElement.contains)
-    {
-        return(<></>);
-    }
+    const workboardSlideRef = useWorkboardSlideRef();
+    const slideRef = useSlideRef();
 
-    const workboardSlideElement = document.getElementById("workboard-slide");
-    const slideWrapperElement = document.getElementById("slide-wrapper");
-    const xDivider: number = workboardSlideElement && slideWrapperElement ? workboardSlideElement.offsetWidth / slideWrapperElement.offsetWidth + 0.3 : 9;
-    const yDivider: number = workboardSlideElement && slideWrapperElement ? workboardSlideElement.offsetHeight / slideWrapperElement.offsetHeight + 0.3 : 9;
+    const xDivider: number = workboardSlideRef.current && slideRef.current ? 
+        workboardSlideRef.current.offsetWidth / slideRef.current.offsetWidth + 0.3 : 9;
+    const yDivider: number = workboardSlideRef.current && slideRef.current ? 
+        workboardSlideRef.current.offsetHeight / slideRef.current.offsetHeight + 0.3 : 9;
 
     const style = {
         marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / xDivider,
@@ -38,6 +38,18 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
         coordX = e.pageX - workboardPositionX;
         coordY = e.pageY - workboardPositionY;
     }
+
+    useEffect(() => {
+        function onDragStart() {
+
+        }
+
+        document.addEventListener('dragstart', onDragStart)
+
+        return () => {
+            document.removeEventListener('dragstart', onDragStart)
+        }
+    }, [])
 
     const onMouseDownHandler = () =>
     {
@@ -77,15 +89,15 @@ function Area(prop: {areaElement: types.Area, isCurrentSlide: boolean}): JSX.Ele
     return (
         <div id={prop.areaElement.id} draggable={prop.isCurrentSlide ? true : false} className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} 
         onMouseDown={onMouseDownHandler} style={style}>
-            { prop.areaElement.contains.type === "text" && 
+            { prop.areaElement.contains?.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains} id={prop.areaElement.id}/>
             }
 
-            { prop.areaElement.contains.type === "primitive" && 
+            { prop.areaElement.contains?.type === "primitive" && 
                 <GraphicPrimitiveComponent areaElement={prop.areaElement}/>
             }
 
-            { (prop.areaElement.contains.type === "imageUrl" || prop.areaElement.contains.type === "imageBase64") && 
+            { (prop.areaElement.contains?.type === "imageUrl" || prop.areaElement.contains?.type === "imageBase64") && 
                 <ImageComponent imageElement={prop.areaElement.contains}/>
             }
         </div>
