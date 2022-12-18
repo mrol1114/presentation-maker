@@ -20,6 +20,6 @@
 {
     flex-grow: 2;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     overflow: hidden;
 }

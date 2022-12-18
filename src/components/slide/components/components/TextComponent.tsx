@@ -19,7 +19,7 @@ function TextComponent(prop: {textElement: types.TextInfo, id: string}): JSX.Ele
     };
 
     return (
-        <input id={prop.id} type="textarea" className={styles["text"]} value={prop.textElement.text} onChange={onChangeHandler} style={style} />
+        <input type="textarea" className={styles["text"]} value={prop.textElement.text} onChange={onChangeHandler} style={style} />
     );
 }
 

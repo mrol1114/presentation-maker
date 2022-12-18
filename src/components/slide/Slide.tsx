@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Area from "./components/Area";
 import type * as types from "../../common/types";
 import slideStyles from "./slide.module.css"
@@ -6,18 +6,17 @@ import { useSlideRef } from "./useSlideRef";
 
 function Slide(props: {slideElement: types.Slide, isCurrent: boolean}): JSX.Element
 {
-    const ref = useSlideRef();
+    const slideRef = useSlideRef();
 
-    const areaElements = props.slideElement.areas;
-    const areaComponents = areaElements.map((area: types.Area) => {
+    const areaElements = props.slideElement.areas.map((area: types.Area, index: number) => {
         return area.contains ? (
-            <Area areaElement={area} key={area.id} isCurrentSlide={props.isCurrent} />
+            <Area areaElement={area} key={area.id} areaIndex={index} isCurrentSlide={props.isCurrent} slideRef={slideRef.current}/>
         ) : null;
-    });
+    }).filter(value => value);
 
     return (
-        <div ref={ref} className={slideStyles["slide"]}>
-            {areaComponents.filter(value => value)}
+        <div ref={slideRef} className={slideStyles["slide"]}>
+            {areaElements}
         </div>
     );
 }

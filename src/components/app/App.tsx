@@ -12,7 +12,7 @@ function App(): JSX.Element
 {
     const presentationMaker: types.PresentationMaker = getState();
     const presentationName: string = presentationMaker.name;
-    const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
+    const presentationElements: types.PresentationElements = presentationMaker.presentationElements;
     const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
     if (!presentationMaker.localHistory.length)
@@ -28,8 +28,8 @@ function App(): JSX.Element
             </div>
 
             <div className={appStyles["workspace"]}>
+                <Workboard presentationElements={presentationElements} />
                 <SlidesGroup slideElements={slideElements} />
-                <Workboard slideElements={slideElements} currentSlideIndex={currentSlideIndex} />
             </div>
         </div>
     );

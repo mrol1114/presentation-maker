@@ -27,9 +27,9 @@
     border: 5px dashed rgb(var(--blue-color), 0.7);
 }
 
-.selected
+.dragged
 {
-    opacity: 0.7;
+    opacity: 0.5;
 }
 
 .area-wrapper-selected
