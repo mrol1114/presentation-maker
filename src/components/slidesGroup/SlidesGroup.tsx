@@ -8,7 +8,7 @@ function SlidesGroup(props: {slideElements: types.Slide[]}): JSX.Element
     const slideComponents = props.slideElements.map((slideElement: types.Slide) => {
         return (
             <li key={slideElement.id} className={styles["slide-wrapper"]}>
-                <Slide slideElement={slideElement} isCurrent={false} />
+                <Slide slideElement={slideElement} isCurrent={false} isControl={false} />
             </li>
         );
     });

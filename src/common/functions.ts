@@ -376,7 +376,8 @@ function selectAreas(presentationMaker: types.PresentationMaker, selectedAreas: 
     }
 
     const selectedAreasIndexes: number[] = presentationMaker.presentationElements.selectedAreasIndexes.length ? 
-    [...presentationMaker.presentationElements.selectedAreasIndexes] : [presentationMaker.presentationElements.currentAreaIndex];
+    [...presentationMaker.presentationElements.selectedAreasIndexes] : 
+    (presentationMaker.presentationElements.currentAreaIndex !== -1 ? [presentationMaker.presentationElements.currentAreaIndex] : []);
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -387,8 +388,7 @@ function selectAreas(presentationMaker: types.PresentationMaker, selectedAreas: 
 
     return {
         ...presentationMaker,
-        presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        presentationElements: newPresentationElements
     };
 }
 
@@ -435,7 +435,7 @@ function assignAreaIndex(presentationMaker: types.PresentationMaker, areaIndex: 
     }
 
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex]; 
-    if (areaIndex < 0 || curSlide.areas.length <= areaIndex)
+    if (areaIndex < -1 || curSlide.areas.length <= areaIndex)
     {
         return presentationMaker;
     }

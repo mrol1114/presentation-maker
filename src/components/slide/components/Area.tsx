@@ -11,7 +11,8 @@ function Area(prop: {
     areaElement: types.Area, 
     areaIndex: number,
     isCurrentSlide: boolean,
-    slideRef: HTMLDivElement|null
+    slideRef: HTMLDivElement|null,
+    isControl: boolean
 }): JSX.Element
 {
     const workboardSlide = document.getElementById("workboard-slide");
@@ -53,9 +54,10 @@ function Area(prop: {
 
         function onMouseDown(e) {
             areaElement?.classList.add(styles["area-wrapper-selected"]);
-            dispatch(functions.assignAreaIndex, prop.areaIndex);
+            prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : dispatch(functions.assignAreaIndex, prop.areaIndex);
 
             const areaPosition = areaElement.getBoundingClientRect();
+
             stepX = e.pageX - areaPosition.x;
             stepY = e.pageY - areaPosition.y;
         }
@@ -69,10 +71,10 @@ function Area(prop: {
             areaElement.removeEventListener("dragstart", onDragStart);
             areaElement.removeEventListener("dragend", onDragEnd);
         }
-    }, []);
+    }, [prop.isControl]);
 
     return (
-        <div id={prop.areaElement.id} draggable={prop.isCurrentSlide ? true : false} 
+        <div id={prop.areaElement.id} draggable={prop.isCurrentSlide ? true : false}
         className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} style={style}>
             { prop.areaElement.contains?.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains} id={prop.areaElement.id}/>
