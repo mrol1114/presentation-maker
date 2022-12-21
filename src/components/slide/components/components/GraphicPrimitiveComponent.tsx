@@ -6,19 +6,14 @@ import EllipseComponent from "./components/EllipseComponent";
 import styles from "./styles.module.css";
 
 function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Element
-{
-    const style = {
-        width: props.areaElement.width,
-        height: props.areaElement.height,
-    };
-    
+{    
     if (!props.areaElement.contains || props.areaElement.contains.type !== 'primitive')
     {
         return <></>;
     }
 
     return (
-        <div className={styles["graphic-primitive"]} style={style}>
+        <div className={styles["graphic-primitive"]}>
             { props.areaElement.contains.primitive === 'ellipse' && 
                 <EllipseComponent 
                     graphicPrimitiveElement={props.areaElement.contains} 

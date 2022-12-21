@@ -13,3 +13,9 @@
     border-style: solid;
     background-color: rgba(0, 125, 215, 0);
 }
+
+.graphic-primitive
+{
+    width: 100%;
+    height: 100%;
+}

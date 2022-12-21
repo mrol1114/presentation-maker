@@ -4,7 +4,7 @@ import type * as types from "../../../../common/types";
 import * as functions from "../../../../common/functions";
 import styles from "./styles.module.css";
 
-function TextComponent(prop: {textElement: types.TextInfo, id: string}): JSX.Element
+function TextComponent(prop: {textElement: types.TextInfo}): JSX.Element
 {
     const onChangeHandler = e => {
         dispatch(functions.updateText, {text: e.target.value});

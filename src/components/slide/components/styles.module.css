@@ -24,15 +24,19 @@
     position: absolute;
     transform: scale(0.11, 0.11);
     transform-origin: 0 0;
-    border: 5px dashed rgb(var(--blue-color), 0.7);
+    border: 10px dashed rgb(var(--blue-color), 0.7);
 }
 
 .dragged
 {
-    opacity: 0.5;
+    opacity: 0.2;
 }
 
 .area-wrapper-selected
 {
-    border-width: 5px;
+    border-width: 10px;
+    resize: both;
+    overflow: hidden;
+    min-width: 30px;
+    min-height: 30px;
 }

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Toolbar from "../toolbar/Toolbar";
 import SlidesGroup from "../slidesGroup/SlidesGroup";
 import Workboard from "../workboard/Workboard";
 import ControlPanel from "../controlPanel/ControlPanel";
-import { getState } from "../../actions/actions";
+import { dispatch, getState } from "../../actions/actions";
 import * as types from "../../common/types";
+import * as functions from "../../common/functions";
 import appStyles from "./styles/app.module.css";
 import "./styles/commonStyles.css";
 
@@ -20,6 +21,29 @@ function App(): JSX.Element
         presentationMaker.localHistory = [presentationMaker.presentationElements];
     }
 
+    const [isControl, setIsControl] = useState(false);
+
+    useEffect(() => {
+        function onKeyDown(e) {
+            if (e.key === "Control") setIsControl(true);
+
+            if (e.key === "z" && isControl) dispatch(functions.undo, {});
+            else if (e.key === "y" && isControl) dispatch(functions.redo, {});
+        };
+
+        function onKeyUp(e) {
+            if (e.key === "Control") setIsControl(false);
+        };
+
+        document.addEventListener("keydown", onKeyDown);
+        document.addEventListener("keyup", onKeyUp);
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown);
+            document.removeEventListener("keyup", onKeyUp);
+        }
+    }, [isControl]);
+
     return (
         <div className={appStyles["app"]}>
             <div>
@@ -28,7 +52,7 @@ function App(): JSX.Element
             </div>
 
             <div className={appStyles["workspace"]}>
-                <Workboard presentationElements={presentationElements} />
+                <Workboard presentationElements={presentationElements} isControl={isControl} />
                 <SlidesGroup slideElements={slideElements} />
             </div>
         </div>

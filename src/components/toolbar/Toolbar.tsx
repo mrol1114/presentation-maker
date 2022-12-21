@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "./components/Button";
 import ImageSelector from "./components/ImageSelector";
 import StrokeWidth from "./components/StrokeWidth";
-import { dispatch } from "../../actions/actions";
+import { dispatch, getState } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import styles from "./styles.module.css";
 import InputComponent from "./components/InputComponent";
@@ -101,7 +101,16 @@ function Toolbar(): JSX.Element
         selector?.classList.add(styles["selector-active"]);
     }
 
-    let textTools: boolean = true;
+    let isText: boolean = false;
+
+    const presElements = getState().presentationElements;
+
+    if (presElements.slidesGroup.length && presElements.slidesGroup[presElements.currentSlideIndex].areas.length && 
+        presElements.currentAreaIndex !== -1)
+    {
+        presElements.slidesGroup[presElements.currentSlideIndex].areas[presElements.currentAreaIndex].contains?.type === "text" ? 
+        isText = true : isText = false;
+    }
 
     return (
         <div id="toolbar" className={styles["toolbar"]}>
@@ -128,7 +137,7 @@ function Toolbar(): JSX.Element
                 <Button additionalClass={styles["triangle"] + " " + styles["icon"]}
                     onClick={addTriangleHandler} />
             </div>
-            <div className={textTools ? styles["toolbar__text-tools-active"] : styles["toolbar__text-tools-inactive"]}>
+            <div className={isText ? styles["toolbar__text-tools-active"] : styles["toolbar__text-tools-inactive"]}>
                 <InputComponent additionalClass={styles["text-font"]} value="Arial" />
                 <Button additionalClass={styles["font"] + " " + styles["icon"]}
                     onClick={changeTextFontHandler} />
