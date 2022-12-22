@@ -48,7 +48,7 @@ function App(): JSX.Element
         <div className={appStyles["app"]}>
             <div>
                 <ControlPanel name={presentationName}/>
-                <Toolbar />
+                <Toolbar presentationElements={presentationElements} />
             </div>
 
             <div className={appStyles["workspace"]}>

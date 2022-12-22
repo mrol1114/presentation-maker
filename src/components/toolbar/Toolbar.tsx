@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./components/Button";
 import ImageSelector from "./components/ImageSelector";
 import StrokeWidth from "./components/StrokeWidth";
@@ -6,10 +6,27 @@ import { dispatch, getState } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
+import * as types from "../../common/types";
 
 
-function Toolbar(): JSX.Element
+function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.Element
 {
+    const currSlideIndex: number = prop.presentationElements.currentSlideIndex;
+    const currAreaIndex: number = prop.presentationElements.currentAreaIndex;
+
+    const [isText, setIsText] = useState(false);
+
+    useEffect(() => {
+        setIsText(false);
+
+        if (prop.presentationElements.slidesGroup.length && currAreaIndex !== -1 && 
+            prop.presentationElements.slidesGroup[currSlideIndex].areas.length)
+        {
+            prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex].contains?.type === "text" ? 
+            setIsText(true) : setIsText(false);
+        }
+    });
+    
     const addSlideHandler = () => 
     {
         dispatch(functions.addSlide, {});
@@ -97,23 +114,12 @@ function Toolbar(): JSX.Element
 
     const openImageSelectorHandler = () => 
     {
-        let selector = document.getElementById("image-selector");
+        const selector = document.getElementById("image-selector");
         selector?.classList.add(toolbarStyles["selector-active"]);
     }
 
-    let isText: boolean = false;
-
-    const presElements = getState().presentationElements;
-
-    if (presElements.slidesGroup.length && presElements.slidesGroup[presElements.currentSlideIndex].areas.length && 
-        presElements.currentAreaIndex !== -1)
-    {
-        presElements.slidesGroup[presElements.currentSlideIndex].areas[presElements.currentAreaIndex].contains?.type === "text" ? 
-        isText = true : isText = false;
-    }
-
     return (
-        <div id="toolbar" className={toolbarStyles["toolbar"]}>
+        <div className={toolbarStyles["toolbar"]}>
             <div className={toolbarStyles["toolbar__slide-tools"]}>
                 <Button additionalClass={toolbarStyles["add-slide"] + " " + toolbarStyles["icon"]}
                     onClick={addSlideHandler} />
