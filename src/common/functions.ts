@@ -2,20 +2,11 @@ import type * as types from "./types";
 import * as consts from "./consts";
 import * as createElement from "./model/createElement";
 import * as updateElement from "./model/updateElement";
+import { json } from "stream/consumers";
 
 // загрузка, выгрузка
 
 /*function download(): PresentationMaker
-{
-
-}
-
-function convertPresentationMakerToJson(presentationMaker: PresentationMaker): JSON
-{
-
-}
-
-function convertJsonToPresentationMaker(json: JSON): PresentationMaker
 {
 
 }
@@ -29,6 +20,24 @@ function convertPdf(presentationMaker: PresentationMaker): Pdf
 {
 
 }*/
+
+function convertPresentationMakerToJson(presentationMaker: types.PresentationMaker):  types.PresentationMaker
+{
+    const json: string = JSON.stringify(presentationMaker);
+    const blob = new Blob([json], {type: "text/plain"});
+    const link = document.createElement("a");
+    link.setAttribute("href", URL.createObjectURL(blob));
+    link.setAttribute("download", Date.now()+"");
+    link.click();
+    return  presentationMaker;
+}
+
+
+
+function convertJsonToPresentationMaker(json: string): types.PresentationMaker
+{
+    return JSON.parse(json);
+}
 
 // работа с локальной историей
 
@@ -747,4 +756,6 @@ export {
     createImage,
     createGraphicPrimitive,
     updateGraphicPrimitive,
+    convertPresentationMakerToJson,
+    convertJsonToPresentationMaker
 };
