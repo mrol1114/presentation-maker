@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as types from "../../common/types";
 import Slide from "../slide/Slide";
 import workboadStyles from "./workboard.module.css";
@@ -11,44 +11,48 @@ function Workboard(props: {presentationElements: types.PresentationElements, isC
 {
     const workboardSlide = document.getElementById("workboard-slide");
     const workboardSlidePosition = workboardSlide?.getBoundingClientRect();
+    const areaBorderWidth: number = 10;
+
+    const currSlideIndex: number = props.presentationElements.currentSlideIndex;
+    const currAreaIndex: number = props.presentationElements.currentAreaIndex;
+    const slidesGroup: types.Slide[] = props.presentationElements.slidesGroup;
+
+    const [areaSelect, setAreaSelect] = useState(false);
 
     const onMouseDownHandler = (e) => {
-        if (!props.presentationElements.slidesGroup.length) return;
+        if (!slidesGroup.length) return;
 
         const mousePositionX: number = e.pageX - (workboardSlidePosition ? workboardSlidePosition.x : 0);
         const mousePositionY: number = e.pageY - (workboardSlidePosition ? workboardSlidePosition.y : 0);
 
-        const areaBorderWidth: number = 20;
-
-        let areaNotSelected: boolean = true;
-
-        props.presentationElements.slidesGroup[props.presentationElements.currentSlideIndex].areas.map((area, index) => {
-            const areaElement = document.getElementById(area.id);
-
-            if (mousePositionX >= area.x && mousePositionX <= area.x + area.width + areaBorderWidth &&
-                mousePositionY >= area.y && mousePositionY <= area.y + area.height + areaBorderWidth &&
-                (index === props.presentationElements.currentAreaIndex || 
-                props.presentationElements.selectedAreasIndexes.includes(index)))
+        setAreaSelect(false);
+        slidesGroup[currSlideIndex].areas.map((area, index) => {
+            if (mousePositionX >= area.x && mousePositionX <= area.x + area.width + areaBorderWidth * 2 &&
+                mousePositionY >= area.y && mousePositionY <= area.y + area.height + areaBorderWidth * 2 &&
+                (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)))
             {
-                areaNotSelected = false;
+                setAreaSelect(true);
             }
             else if (!props.isControl)
             {
+                const areaElement = document.getElementById(area.id);
                 areaElement?.classList.remove(areaStyles["area-wrapper-selected"]);
             }
         });
+    };
 
-        if (areaNotSelected)
+    useEffect(() => {
+        if (!areaSelect)
         {
             dispatch(functions.assignAreaIndex, consts.notSelectedIndex);
         }
-    };
+    }, [areaSelect]);
 
     return (
         <div onMouseDown={onMouseDownHandler} className={workboadStyles["workboard"]}>
-            <div id="workboard-slide" className={props.presentationElements.slidesGroup.length ? workboadStyles["workboard__slide"] : workboadStyles["workboard__without-slide"]}>
-                { props.presentationElements.slidesGroup.length !== 0 &&
-                    <Slide slideElement={props.presentationElements.slidesGroup[props.presentationElements.currentSlideIndex]} isCurrent={true} isControl={props.isControl} />
+            <div id="workboard-slide" className={slidesGroup.length ? workboadStyles["workboard__slide"] : workboadStyles["workboard__without-slide"]}>
+                { slidesGroup.length !== 0 &&
+                    <Slide slideElement={slidesGroup[currSlideIndex]} isCurrent={true} isControl={props.isControl} />
                 }
             </div>
         </div>
