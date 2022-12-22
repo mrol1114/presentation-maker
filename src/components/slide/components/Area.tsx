@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
 import type * as types from "../../../common/types";
 import * as functions from "../../../common/functions";
-import styles from "./styles.module.css";
+import areaStyles from "./area.module.css";
 import { dispatch } from "../../../actions/actions";
 
 function Area(prop: {
@@ -15,14 +15,16 @@ function Area(prop: {
     isControl: boolean
 }): JSX.Element
 {
+    const areaBorderWidth: number = 10;
+    const standartDivider: number = 9;
+    const slideSizeMultiplier: number = 9;
+
     const workboardSlide = document.getElementById("workboard-slide");
     const xDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.offsetWidth / prop.slideRef.offsetWidth * 9 : 9;
+        workboardSlide.offsetWidth / prop.slideRef.offsetWidth * slideSizeMultiplier : standartDivider;
 
     const yDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.offsetHeight / prop.slideRef.offsetHeight * 9 : 9;
-
-    const areaBorderWidth: number = 10;
+        workboardSlide.offsetHeight / prop.slideRef.offsetHeight * slideSizeMultiplier : standartDivider;
 
     const style = {
         marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / xDivider,
@@ -31,17 +33,17 @@ function Area(prop: {
         height: prop.areaElement.height + areaBorderWidth * 2,
     };
 
+    const [stepX, setStepX] = useState(0);
+    const [stepY, setStepY] = useState(0);
+
     useEffect(() => {
         if (!prop.isCurrentSlide) return;
 
         const areaElement = document.querySelectorAll("#" + prop.areaElement.id)[0];
         const workboardSlidePosition = workboardSlide?.getBoundingClientRect();
 
-        let stepX: number;
-        let stepY: number;
-
         function onDragStart() {
-            areaElement.classList.add(styles["dragged"]);
+            areaElement.classList.add(areaStyles["dragged"]);
         }
 
         function onDragEnd(e) {
@@ -50,17 +52,17 @@ function Area(prop: {
 
             dispatch(functions.updateArea, {x: newAreaX, y: newAreaY});
 
-            areaElement.classList.remove(styles["dragged"]);
+            areaElement.classList.remove(areaStyles["dragged"]);
         }
 
         function onMouseDown(e) {
             const areaPosition = areaElement.getBoundingClientRect();
             
-            areaElement?.classList.add(styles["area-wrapper-selected"]);
+            areaElement?.classList.add(areaStyles["area-wrapper-selected"]);
             prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : dispatch(functions.assignAreaIndex, prop.areaIndex);
 
-            stepX = e.pageX - areaPosition.x;
-            stepY = e.pageY - areaPosition.y;
+            setStepX(e.pageX - areaPosition.x);
+            setStepY(e.pageY - areaPosition.y);
         }
 
         function onMouseUp() {
@@ -81,11 +83,11 @@ function Area(prop: {
             areaElement.removeEventListener("dragend", onDragEnd);
             areaElement.removeEventListener("mouseup", onMouseUp);
         }
-    }, [prop.isControl]);
+    }, [prop.isControl, stepX, stepY]);
 
     return (
-        <div id={prop.areaElement.id} draggable={true}
-        className={prop.isCurrentSlide ? styles["area-wrapper"] : styles["area-wrapper-scale"]} style={style}>
+        <div id={prop.areaElement.id} draggable={true} style={style}
+        className={prop.isCurrentSlide ? areaStyles["area-wrapper"] : areaStyles["area-wrapper-scale"]}>
             { prop.areaElement.contains?.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains}/>
             }

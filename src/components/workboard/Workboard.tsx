@@ -1,8 +1,8 @@
 import React from "react";
 import * as types from "../../common/types";
 import Slide from "../slide/Slide";
-import styles from "./styles.module.css";
-import areaStyles from "../slide/components/styles.module.css";
+import workboadStyles from "./workboard.module.css";
+import areaStyles from "../slide/components/area.module.css";
 import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import * as consts from "../../common/consts";
@@ -45,8 +45,8 @@ function Workboard(props: {presentationElements: types.PresentationElements, isC
     };
 
     return (
-        <div onMouseDown={onMouseDownHandler} className={styles["workboard"]}>
-            <div id="workboard-slide" className={props.presentationElements.slidesGroup.length ? styles["workboard__slide"] : styles["workboard__without-slide"]}>
+        <div onMouseDown={onMouseDownHandler} className={workboadStyles["workboard"]}>
+            <div id="workboard-slide" className={props.presentationElements.slidesGroup.length ? workboadStyles["workboard__slide"] : workboadStyles["workboard__without-slide"]}>
                 { props.presentationElements.slidesGroup.length !== 0 &&
                     <Slide slideElement={props.presentationElements.slidesGroup[props.presentationElements.currentSlideIndex]} isCurrent={true} isControl={props.isControl} />
                 }

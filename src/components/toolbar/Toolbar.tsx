@@ -4,7 +4,7 @@ import ImageSelector from "./components/ImageSelector";
 import StrokeWidth from "./components/StrokeWidth";
 import { dispatch, getState } from "../../actions/actions";
 import * as functions from "../../common/functions";
-import styles from "./styles.module.css";
+import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
 
 
@@ -98,7 +98,7 @@ function Toolbar(): JSX.Element
     const openImageSelectorHandler = () => 
     {
         let selector = document.getElementById("image-selector");
-        selector?.classList.add(styles["selector-active"]);
+        selector?.classList.add(toolbarStyles["selector-active"]);
     }
 
     let isText: boolean = false;
@@ -113,48 +113,48 @@ function Toolbar(): JSX.Element
     }
 
     return (
-        <div id="toolbar" className={styles["toolbar"]}>
-            <div className={styles["toolbar__slide-tools"]}>
-                <Button additionalClass={styles["add-slide"] + " " + styles["icon"]}
+        <div id="toolbar" className={toolbarStyles["toolbar"]}>
+            <div className={toolbarStyles["toolbar__slide-tools"]}>
+                <Button additionalClass={toolbarStyles["add-slide"] + " " + toolbarStyles["icon"]}
                     onClick={addSlideHandler} />
-                <Button additionalClass={styles["undo"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["undo"] + " " + toolbarStyles["icon"]}
                     onClick={undoHandler} />
-                <Button additionalClass={styles["redo"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["redo"] + " " + toolbarStyles["icon"]}
                     onClick={redoHandler} />
-                <Button additionalClass={styles["background-image"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["background-image"] + " " + toolbarStyles["icon"]}
                     onClick={backgroundImageHandler} />
-                <Button additionalClass={styles["background-color"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["background-color"] + " " + toolbarStyles["icon"]}
                     onClick={backgroundColorHandler} />
-                <Button additionalClass={styles["text"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["text"] + " " + toolbarStyles["icon"]}
                     onClick={addTextHandler} />
-                <Button additionalClass={styles["image"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["image"] + " " + toolbarStyles["icon"]}
                     onClick={openImageSelectorHandler} />
                 <ImageSelector />
-                <Button additionalClass={styles["elipse"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["elipse"] + " " + toolbarStyles["icon"]}
                     onClick={addElipseHandler} />
-                <Button additionalClass={styles["rectangle"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["rectangle"] + " " + toolbarStyles["icon"]}
                     onClick={addRectangleHandler} />
-                <Button additionalClass={styles["triangle"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["triangle"] + " " + toolbarStyles["icon"]}
                     onClick={addTriangleHandler} />
             </div>
-            <div className={isText ? styles["toolbar__text-tools-active"] : styles["toolbar__text-tools-inactive"]}>
-                <InputComponent additionalClass={styles["text-font"]} value="Arial" />
-                <Button additionalClass={styles["font"] + " " + styles["icon"]}
+            <div className={isText ? toolbarStyles["toolbar__text-tools-active"] : toolbarStyles["toolbar__text-tools-inactive"]}>
+                <InputComponent additionalClass={toolbarStyles["text-font"]} value="Arial" />
+                <Button additionalClass={toolbarStyles["font"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextFontHandler} />
-                <Button additionalClass={styles["increase-font-size"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["increase-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={increaseFontSizeHandler} />
-                <InputComponent additionalClass={styles["text-font-size"]} value={0} />
-                <Button additionalClass={styles["reduce-font-size"] + " " + styles["icon"]}
+                <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={0} />
+                <Button additionalClass={toolbarStyles["reduce-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={reduceFontSizeHandler} />
-                <Button additionalClass={styles["text-color"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["text-color"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextColorHandler} />
-                <Button additionalClass={styles["bold"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["bold"] + " " + toolbarStyles["icon"]}
                     onClick={textBoldHandler} />
-                <Button additionalClass={styles["italic"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["italic"] + " " + toolbarStyles["icon"]}
                     onClick={textItalicHandler} />
-                <Button additionalClass={styles["underlined"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["underlined"] + " " + toolbarStyles["icon"]}
                     onClick={textUnderlinedHandler} />
-                <Button additionalClass={styles["text-stroke-color"] + " " + styles["icon"]}
+                <Button additionalClass={toolbarStyles["text-stroke-color"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextStrokeColorHandler} />
                 <StrokeWidth value={0} />
             </div>
