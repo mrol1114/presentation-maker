@@ -1,15 +1,12 @@
 import React from "react";
 import type * as types from "../../../../../common/types";
 
-function TriangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo, width: number, height: number}): JSX.Element
+function TriangleComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo}): JSX.Element
 {
-    const style = {
-
-    };
-
     return (
-        <svg width={prop.width} height={prop.height} style={style}>
-            <polyline points={"0 " + String(prop.height) + " " + String(prop.width/2) + " 0 " + String(prop.width) + " " + String(prop.height)}/>
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" >
+            <polygon strokeWidth={prop.graphicPrimitiveElement.strokeWidth} stroke={prop.graphicPrimitiveElement.strokeColor} 
+            fill={prop.graphicPrimitiveElement.color} points="0,100 50,0 100,100"/>
         </svg>
     );
 }

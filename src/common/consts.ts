@@ -17,9 +17,9 @@ const defaultTextInfo: types.TextInfo = {
 
 const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
     type: 'primitive',
-    color: 'white',
+    color: 'black',
     strokeColor: 'black',
-    strokeWidth: 1,
+    strokeWidth: 0,
     primitive: 'rectangle',
 };
 

@@ -16,25 +16,19 @@ function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Elemen
         <div className={styles["graphic-primitive"]}>
             { props.areaElement.contains.primitive === 'ellipse' && 
                 <EllipseComponent 
-                    graphicPrimitiveElement={props.areaElement.contains} 
-                    width={props.areaElement.width} 
-                    height={props.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains}
                 /> 
             }
 
             { props.areaElement.contains.primitive === 'triangle' && 
                 <TriangleComponent 
-                    graphicPrimitiveElement={props.areaElement.contains} 
-                    width={props.areaElement.width} 
-                    height={props.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains}
                 /> 
             }
 
             { props.areaElement.contains.primitive === 'rectangle' && 
                 <RectangleComponent 
-                    graphicPrimitiveElement={props.areaElement.contains} 
-                    width={props.areaElement.width} 
-                    height={props.areaElement.height} 
+                    graphicPrimitiveElement={props.areaElement.contains}
                 /> 
             }
         </div>
