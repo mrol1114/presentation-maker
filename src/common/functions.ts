@@ -36,6 +36,10 @@ function convertPresentationMakerToJson(presentationMaker: types.PresentationMak
 
 function convertJsonToPresentationMaker(json: string): types.PresentationMaker
 {
+    if (typeof json === "object")
+    {
+        return json;
+    }
     return JSON.parse(json);
 }
 

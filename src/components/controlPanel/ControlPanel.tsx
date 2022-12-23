@@ -17,16 +17,20 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
     const uploadFromMyComputerHandler = () => 
     {
         const input = document.getElementById('sortpicture');
-        if (input !== null)
+        if (input === null)
         {
-            input.click();
+            return;
+        }
+        input.click();
+        input.onchange = (e) => 
+        {
             input['files'][0]
             const file_data = input['files'][0];
             const reader = new FileReader();
             reader.readAsText(file_data);
             reader.onload = function() 
             {
-                const result = reader.result;
+                let result = reader.result;
                 if (typeof result === "string")
                 {
                     dispatch(functions.convertJsonToPresentationMaker, {json: result})
