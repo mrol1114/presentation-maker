@@ -39,6 +39,7 @@ function addOnChangeStateHandler(handler: Function): void
 export
 {
     getState,
+    setState,
     dispatch,
     addOnChangeStateHandler,
 }

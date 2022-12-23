@@ -4,7 +4,7 @@ import * as types from "../../common/types";
 import * as functions from "../../common/functions";
 import PresentationName from "./components/PresentationName";
 import styles from "./styles.module.css";
-import { dispatch } from "../../actions/actions";
+import { dispatch, setState } from "../../actions/actions";
 
 function ControlPanel(props: {name: string, presentationMaker: types.PresentationMaker}): JSX.Element
 {
@@ -24,7 +24,6 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
         input.click();
         input.onchange = (e) => 
         {
-            input['files'][0]
             const file_data = input['files'][0];
             const reader = new FileReader();
             reader.readAsText(file_data);
@@ -33,7 +32,7 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
                 let result = reader.result;
                 if (typeof result === "string")
                 {
-                    dispatch(functions.convertJsonToPresentationMaker, {json: result})
+                    setState(functions.convertJsonToPresentationMaker(result));
                 }
             };
         }
