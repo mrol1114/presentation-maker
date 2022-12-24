@@ -2,44 +2,19 @@ import React, { useEffect, useState } from "react";
 import * as types from "../../common/types";
 import Slide from "../slide/Slide";
 import workboadStyles from "./workboard.module.css";
-import areaStyles from "../slide/components/area.module.css";
 import { dispatch } from "../../actions/actions";
-import * as functions from "../../common/functions";
+import areaStyles from "../slide/components/area.module.css";
 import * as consts from "../../common/consts";
+import * as functions from "../../common/functions";
 
 function Workboard(props: {presentationElements: types.PresentationElements, isControl: boolean}): JSX.Element
 {
-    const workboardSlide = document.getElementById("workboard-slide");
-    const workboardSlidePosition = workboardSlide?.getBoundingClientRect();
     const areaBorderWidth: number = 10;
-
+    const slidesGroup: types.Slide[] = props.presentationElements.slidesGroup;
     const currSlideIndex: number = props.presentationElements.currentSlideIndex;
     const currAreaIndex: number = props.presentationElements.currentAreaIndex;
-    const slidesGroup: types.Slide[] = props.presentationElements.slidesGroup;
 
     const [areaSelect, setAreaSelect] = useState(false);
-
-    const onMouseDownHandler = (e) => {
-        if (!slidesGroup.length) return;
-
-        const mousePositionX: number = e.pageX - (workboardSlidePosition ? workboardSlidePosition.x : 0);
-        const mousePositionY: number = e.pageY - (workboardSlidePosition ? workboardSlidePosition.y : 0);
-
-        setAreaSelect(false);
-        slidesGroup[currSlideIndex].areas.map((area, index) => {
-            if (mousePositionX >= area.x && mousePositionX <= area.x + area.width + areaBorderWidth * 2 &&
-                mousePositionY >= area.y && mousePositionY <= area.y + area.height + areaBorderWidth * 2 &&
-                (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)))
-            {
-                setAreaSelect(true);
-            }
-            else if (!props.isControl)
-            {
-                const areaElement = document.getElementById(area.id);
-                areaElement?.classList.remove(areaStyles["area-wrapper-selected"]);
-            }
-        });
-    };
 
     useEffect(() => {
         if (!areaSelect)
@@ -47,6 +22,33 @@ function Workboard(props: {presentationElements: types.PresentationElements, isC
             dispatch(functions.assignAreaIndex, consts.notSelectedIndex);
         }
     }, [areaSelect]);
+
+    const onMouseDownHandler = (e) => {
+        if (!slidesGroup.length) return;
+
+        setAreaSelect(false);
+        slidesGroup[currSlideIndex].areas.map((area, index) => {
+            const areaElements = document.querySelectorAll("#" + area.id);
+            const areaWorkboard = areaElements[0];
+            const areaSlidesGroup = areaElements[1];
+
+            const areaPosition = areaWorkboard.getBoundingClientRect();
+            
+            if (e.pageX >= areaPosition.x && e.pageX <= areaPosition.x + area.width + areaBorderWidth * 2 &&
+                e.pageY >= areaPosition.y && e.pageY <= areaPosition.y + area.height + areaBorderWidth * 2 &&
+                (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)))
+            {
+                setAreaSelect(true);
+                areaWorkboard.classList.add(areaStyles["area-wrapper-selected"]);
+                areaSlidesGroup.classList.add(areaStyles["area-wrapper-selected"]);
+            }
+            else if (!props.isControl)
+            {
+                areaWorkboard.classList.remove(areaStyles["area-wrapper-selected"]);
+                areaSlidesGroup.classList.remove(areaStyles["area-wrapper-selected"]);
+            }
+        });
+    };
 
     return (
         <div onMouseDown={onMouseDownHandler} className={workboadStyles["workboard"]}>

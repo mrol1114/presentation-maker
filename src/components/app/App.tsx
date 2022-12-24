@@ -53,7 +53,7 @@ function App(): JSX.Element
 
             <div className={appStyles["workspace"]}>
                 <Workboard presentationElements={presentationElements} isControl={isControl} />
-                <SlidesGroup slideElements={slideElements} />
+                <SlidesGroup slideElements={slideElements} isControl={isControl} />
             </div>
         </div>
     );

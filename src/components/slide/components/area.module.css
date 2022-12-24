@@ -24,7 +24,7 @@
     position: absolute;
     transform: scale(0.11, 0.11);
     transform-origin: 0 0;
-    border: 10px dashed rgb(var(--blue-color), 0.7);
+    border: 0px dashed rgb(var(--blue-color), 0.7);
 }
 
 .dragged
