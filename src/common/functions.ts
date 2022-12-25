@@ -93,7 +93,7 @@ function addSlide(presentationMaker: types.PresentationMaker): types.Presentatio
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -119,7 +119,7 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -152,7 +152,7 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -461,7 +461,7 @@ function updateArea(presentationMaker: types.PresentationMaker, properties: Obje
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -504,7 +504,7 @@ function updateAreas(presentationMaker: types.PresentationMaker, updatedAreas: t
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -550,7 +550,7 @@ function updateText(presentationMaker: types.PresentationMaker, properties: Obje
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -589,7 +589,7 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -629,7 +629,7 @@ function createImage(presentationMaker: types.PresentationMaker, properties: Obj
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -680,7 +680,7 @@ function updateGraphicPrimitive(
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
@@ -724,7 +724,7 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory,
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
