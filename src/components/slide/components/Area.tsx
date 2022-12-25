@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -33,59 +33,35 @@ function Area(prop: {
         height: prop.areaElement.height + areaBorderWidth * 2,
     };
 
-    const [stepX, setStepX] = useState(0);
-    const [stepY, setStepY] = useState(0);
-
     useEffect(() => {
         if (!prop.isCurrentSlide) return;
 
         const areaElement = document.querySelectorAll("#" + prop.areaElement.id)[0];
-        const workboardSlidePosition = workboardSlide.getBoundingClientRect();
 
-        function onDragStart() {
-            areaElement.classList.add(areaStyles["dragged"]);
-        }
-
-        function onDragEnd(e) {
-            const newAreaX: number = e.pageX - workboardSlidePosition.x - stepX;
-            const newAreaY: number = e.pageY - workboardSlidePosition.y - stepY;
-
-            dispatch(functions.updateArea, {x: newAreaX, y: newAreaY});
-
-            areaElement.classList.remove(areaStyles["dragged"]);
-        }
-
-        function onMouseDown(e) {
-            const areaPosition = areaElement.getBoundingClientRect();
-            
-            prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : dispatch(functions.assignAreaIndex, prop.areaIndex);
-
-            setStepX(e.pageX - areaPosition.x);
-            setStepY(e.pageY - areaPosition.y);
+        function onMouseDown() {
+            prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : 
+                dispatch(functions.assignAreaIndex, prop.areaIndex);
         }
 
         function onMouseUp() {
+            /* Ресайз
             if (areaElement.clientWidth !== prop.areaElement.width || areaElement.clientHeight !== prop.areaElement.height)
             {
                 dispatch(functions.updateArea, {width: areaElement.clientWidth, height: areaElement.clientHeight});
-            }
+            }*/
         }
 
         areaElement.addEventListener("mousedown", onMouseDown);
-        areaElement.addEventListener("dragstart", onDragStart);
-        areaElement.addEventListener("dragend", onDragEnd);
         areaElement.addEventListener("mouseup", onMouseUp);
 
         return () => {
             areaElement.removeEventListener("mousedown", onMouseDown);
-            areaElement.removeEventListener("dragstart", onDragStart);
-            areaElement.removeEventListener("dragend", onDragEnd);
             areaElement.removeEventListener("mouseup", onMouseUp);
         }
-    }, [prop.isControl, stepX, stepY]);
+    }, [prop.isControl]);
 
     return (
-        <div id={prop.areaElement.id} draggable={prop.isCurrentSlide} style={style}
+        <div id={prop.areaElement.id} style={style}
         className={prop.isCurrentSlide ? areaStyles["area-wrapper"] : areaStyles["area-wrapper-scale"]}>
             { prop.areaElement.contains?.type === "text" && 
                 <TextComponent textElement={prop.areaElement.contains}/>
