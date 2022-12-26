@@ -57,7 +57,7 @@ function Area(prop: {
             areaElement.removeEventListener("mousedown", onMouseDown);
             areaElement.removeEventListener("mouseup", onMouseUp);
         }
-    }, [prop.isControl, prop.areaElement]);
+    }, [prop.isControl, prop.areaElement, prop.areaIndex]);
 
     return (
         <div id={prop.areaElement.id} style={style}
