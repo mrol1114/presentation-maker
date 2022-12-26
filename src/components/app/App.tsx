@@ -24,22 +24,22 @@ function App(): JSX.Element
 
     const [isControl, setIsControl] = useState(false);
 
-    function deleteSelected() {
+    const deleteSelected = () => {
         if (presentationElements.currentAreaIndex !== consts.notSelectedIndex ||
         presentationElements.selectedAreasIndexes.length > 0) {
             dispatch(functions.deleteAreas, {});
         }
     }
 
+    const keyDownCheck = (key: string) => {
+        if (key === "Control") setIsControl(true);
+        else if (key === "Delete") deleteSelected();
+
+        if (key === "z" && isControl) dispatch(functions.undo, {});
+        else if (key === "y" && isControl) dispatch(functions.redo, {});
+    }
+
     useEffect(() => {
-        function keyDownCheck(key: string) {
-            if (key === "Control") setIsControl(true);
-            else if (key === "Delete") deleteSelected();
-
-            if (key === "z" && isControl) dispatch(functions.undo, {});
-            else if (key === "y" && isControl) dispatch(functions.redo, {});
-        }
-
         function onKeyDown(e) {
             keyDownCheck(e.key);
         };

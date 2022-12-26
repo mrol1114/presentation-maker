@@ -22,6 +22,51 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
     const [isDrag, setIsDrag] = useState(false);
     const [isMove, setIsMove] = useState(false);
 
+    const saveAreasCoords = (e) => {
+        if (!slidesGroup.length) return;
+
+        let areasInfo: Array<{ index: number, x: number, y: number, stepX: number, stepY: number }> = [];
+
+        slidesGroup[currSlideIndex].areas.map((area, index) => {
+            const areaWorkboard = document.querySelectorAll("#" + area.id)[0];
+            const areaPosition = areaWorkboard.getBoundingClientRect();
+
+            if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
+                const areaInfo: types.AreaSelect = {
+                    index: index,
+                    x: areaPosition.x,
+                    y: areaPosition.y,
+                    stepX: e.pageX - areaPosition.x,
+                    stepY: e.pageY - areaPosition.y,
+                }
+
+                areasInfo = (index === currAreaIndex) ? [areaInfo] : 
+                    [...areasInfo.filter(value => value.index !== index), areaInfo];
+            }
+        });
+
+        setAreasSelect(areasInfo);
+    }
+
+    const updateAreasSelect = () => {
+        if (!slidesGroup[currSlideIndex] || !slidesGroup[currSlideIndex].areas) return;
+
+        slidesGroup[currSlideIndex].areas.map((area, index) => {
+            const areaElements = document.querySelectorAll("#" + area.id);
+            const areaWorkboard = areaElements[0];
+            const areaSlidesGroup = areaElements[1];
+
+            if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
+                areaWorkboard.classList.add(areaStyles["area-wrapper-selected"]);
+                areaSlidesGroup.classList.add(areaStyles["area-wrapper-selected"]);
+            }
+            else {
+                areaWorkboard.classList.remove(areaStyles["area-wrapper-selected"]);
+                areaSlidesGroup.classList.remove(areaStyles["area-wrapper-selected"]);
+            }
+        });
+    }
+
     useEffect(() => {
         const presMaker: types.PresentationMaker = getState();
         const workboard = document.querySelectorAll("#workboard")[0];
@@ -119,51 +164,6 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
                 dispatch(functions.assignAreaIndex, consts.notSelectedIndex);
             }
         };
-
-        function saveAreasCoords(e) {
-            if (!slidesGroup.length) return;
-
-            let areasInfo: Array<{ index: number, x: number, y: number, stepX: number, stepY: number }> = [];
-
-            slidesGroup[currSlideIndex].areas.map((area, index) => {
-                const areaWorkboard = document.querySelectorAll("#" + area.id)[0];
-                const areaPosition = areaWorkboard.getBoundingClientRect();
-
-                if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
-                    const areaInfo: types.AreaSelect = {
-                        index: index,
-                        x: areaPosition.x,
-                        y: areaPosition.y,
-                        stepX: e.pageX - areaPosition.x,
-                        stepY: e.pageY - areaPosition.y,
-                    }
-
-                    areasInfo = (index === currAreaIndex) ? [areaInfo] : 
-                        [...areasInfo.filter(value => value.index !== index), areaInfo];
-                }
-            });
-
-            setAreasSelect(areasInfo);
-        }
-
-        function updateAreasSelect() {
-            if (!slidesGroup[currSlideIndex] || !slidesGroup[currSlideIndex].areas) return;
-
-            slidesGroup[currSlideIndex].areas.map((area, index) => {
-                const areaElements = document.querySelectorAll("#" + area.id);
-                const areaWorkboard = areaElements[0];
-                const areaSlidesGroup = areaElements[1];
-
-                if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
-                    areaWorkboard.classList.add(areaStyles["area-wrapper-selected"]);
-                    areaSlidesGroup.classList.add(areaStyles["area-wrapper-selected"]);
-                }
-                else {
-                    areaWorkboard.classList.remove(areaStyles["area-wrapper-selected"]);
-                    areaSlidesGroup.classList.remove(areaStyles["area-wrapper-selected"]);
-                }
-            });
-        }
 
         updateAreasSelect();
         workboard.addEventListener("mousedown", onMouseDown);
