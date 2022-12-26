@@ -9,6 +9,11 @@ import * as functions from "../../common/functions";
 
 function Workboard(props: { presentationElements: types.PresentationElements, isControl: boolean }): JSX.Element {
     const areaBorderWidth: number = 10;
+    const resizeRightIndent: number = 25;
+    const resizeTopIndent: number = 11;
+    const resizeLeftIndent: number = 11;
+    const resizeBottomIndent: number = 25;
+
     const slidesGroup: types.Slide[] = props.presentationElements.slidesGroup;
     const currSlideIndex: number = props.presentationElements.currentSlideIndex;
     const currAreaIndex: number = props.presentationElements.currentAreaIndex;
@@ -79,14 +84,26 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
             if (!slidesGroup.length) return;
 
             let isSelect: boolean = false;
+            let isResize: boolean = false;
             slidesGroup[currSlideIndex].areas.map((area, index) => {
                 const areaWorkboard = document.querySelectorAll("#" + area.id)[0];
                 const areaPosition = areaWorkboard.getBoundingClientRect();
 
                 const cursorInArea: boolean = e.pageX >= areaPosition.x && e.pageY >= areaPosition.y &&
-                    e.pageX <= areaPosition.x + area.width + areaBorderWidth * 2 && e.pageY <= areaPosition.y + area.height + areaBorderWidth * 2;
+                    e.pageX <= areaPosition.x + area.width + areaBorderWidth * 2 && 
+                    e.pageY <= areaPosition.y + area.height + areaBorderWidth * 2;
+                
+                const cursorInResize: boolean = e.pageX >= areaPosition.x + areaPosition.width - resizeRightIndent && 
+                    e.pageY >= areaPosition.y + areaPosition.height - resizeBottomIndent &&
+                    e.pageX <= areaPosition.x + areaPosition.width - resizeLeftIndent && 
+                    e.pageY <= areaPosition.y + areaPosition.height - resizeTopIndent;
 
-                if (cursorInArea && (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index))) {
+                if (cursorInResize && !props.isControl)
+                {
+                    isSelect = false;
+                    isResize = true;
+                }
+                else if (cursorInArea && (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index))) {
                     isSelect = true;
                 }
             });
@@ -97,7 +114,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
 
                 saveAreasCoords(e);
             }
-            else if (!props.isControl) {
+            else if (!props.isControl && !isResize) {
                 setAreasSelect([]);
                 dispatch(functions.assignAreaIndex, consts.notSelectedIndex);
             }

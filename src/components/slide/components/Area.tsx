@@ -44,11 +44,10 @@ function Area(prop: {
         }
 
         function onMouseUp() {
-            /* Ресайз
-            if (areaElement.clientWidth !== prop.areaElement.width || areaElement.clientHeight !== prop.areaElement.height)
+            if (!prop.isControl && (areaElement.clientWidth !== prop.areaElement.width || areaElement.clientHeight !== prop.areaElement.height))
             {
                 dispatch(functions.updateArea, {width: areaElement.clientWidth, height: areaElement.clientHeight});
-            }*/
+            }
         }
 
         areaElement.addEventListener("mousedown", onMouseDown);
@@ -58,7 +57,7 @@ function Area(prop: {
             areaElement.removeEventListener("mousedown", onMouseDown);
             areaElement.removeEventListener("mouseup", onMouseUp);
         }
-    }, [prop.isControl]);
+    }, [prop.isControl, prop.areaElement]);
 
     return (
         <div id={prop.areaElement.id} style={style}
