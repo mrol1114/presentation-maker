@@ -8,6 +8,7 @@ import * as types from "../../common/types";
 import * as functions from "../../common/functions";
 import appStyles from "./styles/app.module.css";
 import "./styles/commonStyles.css";
+import * as consts from "../../common/consts";
 
 function App(): JSX.Element 
 {
@@ -23,12 +24,24 @@ function App(): JSX.Element
 
     const [isControl, setIsControl] = useState(false);
 
-    useEffect(() => {
-        function onKeyDown(e) {
-            if (e.key === "Control") setIsControl(true);
+    function deleteSelected() {
+        if (presentationElements.currentAreaIndex !== consts.notSelectedIndex ||
+        presentationElements.selectedAreasIndexes.length > 0) {
+            dispatch(functions.deleteAreas, {});
+        }
+    }
 
-            if (e.key === "z" && isControl) dispatch(functions.undo, {});
-            else if (e.key === "y" && isControl) dispatch(functions.redo, {});
+    useEffect(() => {
+        function keyDownCheck(key: string) {
+            if (key === "Control") setIsControl(true);
+            else if (key === "Delete") deleteSelected();
+
+            if (key === "z" && isControl) dispatch(functions.undo, {});
+            else if (key === "y" && isControl) dispatch(functions.redo, {});
+        }
+
+        function onKeyDown(e) {
+            keyDownCheck(e.key);
         };
 
         function onKeyUp(e) {

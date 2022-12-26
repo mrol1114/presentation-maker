@@ -317,10 +317,12 @@ function deleteAreas(presentationMaker: types.PresentationMaker): types.Presenta
         return presentationMaker;
     }
 
+    const curAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex];
     const newSlide: types.Slide = {
         ...curSlide,
-        areas: curSlide.areas.filter((_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index))
+        areas: curSlide.areas.filter((_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index) && 
+            index !== curAreaIndex)
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
