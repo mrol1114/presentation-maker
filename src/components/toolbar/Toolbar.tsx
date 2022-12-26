@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "./components/Button";
 import ImageSelector from "./components/ImageSelector";
 import StrokeWidth from "./components/StrokeWidth";
-import { dispatch, getState } from "../../actions/actions";
+import { dispatch } from "../../actions/actions";
 import * as functions from "../../common/functions";
 import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
@@ -15,15 +15,19 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     const currAreaIndex: number = prop.presentationElements.currentAreaIndex;
 
     const [isText, setIsText] = useState(false);
+    const [isGraphicPrimitive, setIsGraphicPrimitive] = useState(false);
 
     useEffect(() => {
         setIsText(false);
+        setIsGraphicPrimitive(false);
 
         if (prop.presentationElements.slidesGroup.length && currAreaIndex !== -1 && 
             prop.presentationElements.slidesGroup[currSlideIndex].areas.length)
         {
-            prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex].contains?.type === "text" ? 
-            setIsText(true) : setIsText(false);
+            const areaContainsType = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex].contains?.type;
+
+            if (areaContainsType === "text") setIsText(true);
+            else if (areaContainsType === "primitive") setIsGraphicPrimitive(true);
         }
     });
     
@@ -112,6 +116,16 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     }
 
+    const changeGraphicPrimitiveColorHandler = () =>
+    {
+
+    }
+
+    const changeGraphicPrimitiveStrokeColorHandler = () =>
+    {
+        
+    }
+
     const openImageSelectorHandler = () => 
     {
         const selector = document.getElementById("image-selector");
@@ -143,7 +157,8 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                 <Button additionalClass={toolbarStyles["triangle"] + " " + toolbarStyles["icon"]}
                     onClick={addTriangleHandler} />
             </div>
-            <div className={isText ? toolbarStyles["toolbar__text-tools-active"] : toolbarStyles["toolbar__text-tools-inactive"]}>
+            <div className={isText ? toolbarStyles["toolbar__text-tools-active"] : 
+            toolbarStyles["toolbar__text-tools-inactive"]}>
                 <InputComponent additionalClass={toolbarStyles["text-font"]} value="Arial" />
                 <Button additionalClass={toolbarStyles["font"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextFontHandler} />
@@ -162,7 +177,15 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                     onClick={textUnderlinedHandler} />
                 <Button additionalClass={toolbarStyles["text-stroke-color"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextStrokeColorHandler} />
-                <StrokeWidth value={0} />
+                <StrokeWidth value={0} type={"text"} />
+            </div>
+            <div className={isGraphicPrimitive ? toolbarStyles["toolbar__graphic-primitive-active"] : 
+            toolbarStyles["toolbar__graphic-primitive-inactive"]}>
+                <Button additionalClass={toolbarStyles["graphic-primitive-color"] + " " + toolbarStyles["icon"]}
+                    onClick={changeGraphicPrimitiveColorHandler} />
+                <Button additionalClass={toolbarStyles["graphic-primitive-stroke-color"] + " " + toolbarStyles["icon"]}
+                    onClick={changeGraphicPrimitiveStrokeColorHandler} />
+                <StrokeWidth value={0} type={"primitive"} />
             </div>
         </div>
     );
