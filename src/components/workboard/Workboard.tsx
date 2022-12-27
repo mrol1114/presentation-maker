@@ -181,7 +181,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
         <div id="workboard" className={workboadStyles["workboard"]}>
             <div id="workboard-slide" className={slidesGroup.length ? workboadStyles["workboard__slide"] : workboadStyles["workboard__without-slide"]}>
                 {slidesGroup.length !== 0 &&
-                    <Slide slideElement={slidesGroup[currSlideIndex]} isCurrent={true} isControl={props.isControl} />
+                    <Slide slideElement={slidesGroup[currSlideIndex]} index={currSlideIndex} isCurrent={true} isControl={props.isControl} />
                 }
             </div>
         </div>

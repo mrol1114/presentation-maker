@@ -13,9 +13,7 @@ import * as consts from "../../common/consts";
 function App(): JSX.Element 
 {
     const presentationMaker: types.PresentationMaker = getState();
-    const presentationName: string = presentationMaker.name;
     const presentationElements: types.PresentationElements = presentationMaker.presentationElements;
-    const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
     if (!presentationMaker.localHistory.length)
     {
@@ -25,8 +23,10 @@ function App(): JSX.Element
     const [isControl, setIsControl] = useState(false);
 
     const deleteSelected = () => {
-        if (presentationElements.currentAreaIndex !== consts.notSelectedIndex ||
-        presentationElements.selectedAreasIndexes.length > 0) {
+        const updatedPresentationElements = getState().presentationElements;
+
+        if (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
+        updatedPresentationElements.selectedAreasIndexes.length > 0) {
             dispatch(functions.deleteAreas, {});
         }
     }
@@ -60,13 +60,13 @@ function App(): JSX.Element
     return (
         <div className={appStyles["app"]}>
             <div>
-                <ControlPanel name={presentationName} presentationMaker={presentationMaker}/>
+                <ControlPanel name={presentationMaker.name} presentationMaker={presentationMaker}/>
                 <Toolbar presentationElements={presentationElements} />
             </div>
 
             <div className={appStyles["workspace"]}>
                 <Workboard presentationElements={presentationElements} isControl={isControl} />
-                <SlidesGroup slideElements={slideElements} isControl={isControl} />
+                <SlidesGroup presentationElements={presentationElements} isControl={isControl} />
             </div>
         </div>
     );

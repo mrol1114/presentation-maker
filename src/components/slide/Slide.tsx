@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Area from "./components/Area";
 import type * as types from "../../common/types";
 import slideStyles from "./slide.module.css"
 import { useSlideRef } from "./useSlideRef";
+import { dispatch } from "../../actions/actions";
+import * as functions from "../../common/functions";
 
-function Slide(props: {slideElement: types.Slide, isCurrent: boolean, isControl: boolean}): JSX.Element
+function Slide(props: {slideElement: types.Slide, index: number, isCurrent: boolean, isControl: boolean}): JSX.Element
 {
     const slideRef = useSlideRef();
+
+    useEffect(() => {
+        if (props.isCurrent || !slideRef.current) return;
+
+        const slideElement = slideRef.current;
+
+        function onMouseDown() {
+            props.isControl ? dispatch(functions.selectSlides, [props.index]) : 
+                dispatch(functions.assignSlideIndex, props.index);
+        }
+
+        slideElement.addEventListener("mousedown", onMouseDown);
+
+        return () => {
+            slideElement.removeEventListener("mousedown", onMouseDown);
+        }
+    }, [props.index, props.isControl]);
 
     const areaElements = props.slideElement.areas.map((area: types.Area, index: number) => {
         return area.contains ? (
