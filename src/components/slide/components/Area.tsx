@@ -51,11 +51,11 @@ function Area(prop: {
         }
 
         areaElement.addEventListener("mousedown", onMouseDown);
-        areaElement.addEventListener("mouseup", onMouseUp);
+        document.addEventListener("mouseup", onMouseUp);
 
         return () => {
             areaElement.removeEventListener("mousedown", onMouseDown);
-            areaElement.removeEventListener("mouseup", onMouseUp);
+            document.removeEventListener("mouseup", onMouseUp);
         }
     }, [prop.isControl, prop.areaElement, prop.areaIndex]);
 

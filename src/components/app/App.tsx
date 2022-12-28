@@ -25,10 +25,9 @@ function App(): JSX.Element
     const deleteSelected = () => {
         const updatedPresentationElements = getState().presentationElements;
 
-        if (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
-        updatedPresentationElements.selectedAreasIndexes.length > 0) {
-            dispatch(functions.deleteAreas, {});
-        }
+        (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
+        updatedPresentationElements.selectedAreasIndexes.length > 0) 
+        ? dispatch(functions.deleteAreas, {}) : dispatch(functions.deleteSlides, {});
     }
 
     const keyDownCheck = (key: string) => {

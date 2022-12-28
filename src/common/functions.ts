@@ -105,15 +105,15 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
     const newSelectedSlidesIndexes: number[] = [...presentationMaker.presentationElements.selectedSlidesIndexes];
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.filter(
-        (_, index) => !newSelectedSlidesIndexes.includes(index));
+        (_, index) => !newSelectedSlidesIndexes.includes(index) && index !== presentationMaker.presentationElements.currentSlideIndex);
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup,
-        currentSlideIndex: newSlidesGroup.length > 0 ? 0 : -1,
+        currentSlideIndex: newSlidesGroup.length > 0 ? 0 : consts.notSelectedIndex,
         selectedSlidesIndexes: [],
         selectedAreasIndexes: [],
-        currentAreaIndex: -1
+        currentAreaIndex: consts.notSelectedIndex
     }
 
     return {

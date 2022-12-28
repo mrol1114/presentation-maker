@@ -137,6 +137,8 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
                 const cursorInArea: boolean = e.pageX >= areaPosition.x && e.pageY >= areaPosition.y &&
                     e.pageX <= areaPosition.x + area.width + areaBorderWidth * 2 && 
                     e.pageY <= areaPosition.y + area.height + areaBorderWidth * 2;
+
+                console.log(cursorInArea, index);
                 
                 const cursorInResize: boolean = e.pageX >= areaPosition.x + areaPosition.width - resizeRightIndent && 
                     e.pageY >= areaPosition.y + areaPosition.height - resizeBottomIndent &&
