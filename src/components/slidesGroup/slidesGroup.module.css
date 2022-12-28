@@ -6,6 +6,11 @@
     overflow-y: auto;
 }
 
+.slides-group-active
+{
+    cursor: move;
+}
+
 .slide-wrapper,
 .slide-wrapper-current,
 .slide-wrapper-selected

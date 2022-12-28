@@ -3,13 +3,14 @@ import Slide from "../slide/Slide";
 import type * as types from "../../common/types";
 import slidesGroupStyles from "./slidesGroup.module.css";
 import { dispatch } from "../../actions/actions";
-import * as consts from "../../common/consts";
 import * as functions from "../../common/functions";
 
 function SlidesGroup(props: {presentationElements: types.PresentationElements, isControl: boolean}): JSX.Element
 {
     const slideWidth: number = 219;
     const slideHeight: number = 125;
+    const slideDistance: number = 20;
+
     const currSlideIndex: number = props.presentationElements.currentSlideIndex;
     const slidesGroup = props.presentationElements.slidesGroup;
 
@@ -22,10 +23,12 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
         slidesGroup.map((slide, index) => {
             const slideElement = document.querySelectorAll("#" + slide.id)[0];
 
-            if (index === currSlideIndex || props.presentationElements.selectedSlidesIndexes.includes(index)) {
+            if (index === currSlideIndex || props.presentationElements.selectedSlidesIndexes.includes(index)) 
+            {
                 slideElement.classList.add(slidesGroupStyles["slide-wrapper-selected"]);
             }
-            else {
+            else 
+            {
                 slideElement.classList.remove(slidesGroupStyles["slide-wrapper-selected"]);
             }
         });
@@ -34,18 +37,41 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
     useEffect(() => {
         const slidesGroupElement = document.querySelectorAll("#slides-group")[0];
 
-        function onMouseMove(e) {
-            /* Code */
-            
+        function onMouseMove() {
             setIsMove(true);
         }
 
-        function onMouseUp() {
+        function onMouseUp(e) {
             setIsDrag(false);
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
+            slidesGroupElement.classList.remove(slidesGroupStyles["slides-group-active"]);
 
-            /* Code */
+            let insertPos: number = -1;
+
+            props.presentationElements.slidesGroup.map((slide, index) => {
+                const slideElement = document.querySelectorAll("#" + slide.id)[0];
+                const slidePosition = slideElement.getBoundingClientRect();
+
+                const cursorPosDownY: number = e.pageY - slidePosition.y - slidePosition.height;
+
+                const cursorPosDown: boolean = cursorPosDownY > 0 && (cursorPosDownY <= slideDistance || index === slidesGroup.length - 1);
+                const cursorPosUp: boolean = slidePosition.y - e.pageY <= slideDistance;
+
+                if (cursorPosDown)
+                {
+                    insertPos = index + 1;
+                }
+                else if (cursorPosUp)
+                {
+                    insertPos = index;
+                }
+            });
+
+            if (isMove)
+            {
+                dispatch(functions.moveSlides, insertPos);
+            }
         }
 
         function onMouseDown(e) {
@@ -68,6 +94,7 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
             {
                 setIsMove(false);
                 setIsDrag(true);
+                slidesGroupElement.classList.add(slidesGroupStyles["slides-group-active"]);
             }
             else if (!props.isControl)
             {
@@ -77,7 +104,8 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
 
         updateSlidesSelect();
         slidesGroupElement.addEventListener("mousedown", onMouseDown);
-        if (isDrag) {
+        if (isDrag) 
+        {
             document.addEventListener("mousemove", onMouseMove);
             document.addEventListener("mouseup", onMouseUp);
         }

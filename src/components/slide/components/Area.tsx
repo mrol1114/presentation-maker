@@ -17,14 +17,13 @@ function Area(prop: {
 {
     const areaBorderWidth: number = 10;
     const standartDivider: number = 9;
-    const slideSizeMultiplier: number = 9;
 
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
     const xDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.clientWidth / prop.slideRef.offsetWidth * slideSizeMultiplier : standartDivider;
+        workboardSlide.clientWidth / prop.slideRef.offsetWidth : standartDivider;
 
     const yDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.clientHeight / prop.slideRef.offsetHeight * slideSizeMultiplier : standartDivider;
+        workboardSlide.clientHeight / prop.slideRef.offsetHeight : standartDivider;
 
     const style = {
         marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / xDivider,
@@ -39,6 +38,8 @@ function Area(prop: {
         const areaElement = document.querySelectorAll("#" + prop.areaElement.id)[0];
 
         function onMouseDown() {
+            document.addEventListener("mouseup", onMouseUp);
+            
             prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : 
                 dispatch(functions.assignAreaIndex, prop.areaIndex);
         }
@@ -48,14 +49,13 @@ function Area(prop: {
             {
                 dispatch(functions.updateArea, {width: areaElement.clientWidth, height: areaElement.clientHeight});
             }
+            document.removeEventListener("mouseup", onMouseUp);
         }
 
         areaElement.addEventListener("mousedown", onMouseDown);
-        document.addEventListener("mouseup", onMouseUp);
 
         return () => {
             areaElement.removeEventListener("mousedown", onMouseDown);
-            document.removeEventListener("mouseup", onMouseUp);
         }
     }, [prop.isControl, prop.areaElement, prop.areaIndex]);
 
