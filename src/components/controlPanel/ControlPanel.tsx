@@ -1,4 +1,5 @@
 import React from "react";
+import { jsPDF } from "jspdf";
 import Button from "./components/Button";
 import * as types from "../../common/types";
 import * as functions from "../../common/functions";
@@ -42,7 +43,19 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
     {
         dispatch(functions.convertPresentationMakerToJson, {presentationMaker: props.presentationMaker})
     };
-    const exportHandler = () => {
+    const exportHandler = () => 
+    {
+        const doc = new jsPDF();
+        const PM = document.getElementById("root");
+        if (PM === null)
+        {
+            return;
+        }
+        doc.html(PM, {
+            async callback(doc) {
+                await doc.save('pdf_name');
+            },
+        });
     };
     const previewHandler = () => {
     };
