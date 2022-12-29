@@ -158,3 +158,23 @@
    border-top-width: 2px;
    border-bottom-width: 2px;
 }
+
+.toolbar__graphic-primitive-inactive {
+   display: none;
+}
+
+.toolbar__graphic-primitive-active {
+   display: flex;
+   flex-wrap: nowrap;
+   padding: 10px 0 6px 20px;
+}
+
+.graphic-primitive-color {
+   background-image: url("./images/graphicPrimitiveColor.svg");
+   background-size: 100%;
+}
+
+.graphic-primitive-stroke-color {
+   background-image: url("./images/graphicPrimitiveStrokeColor.svg");
+   background-size: 130%;
+}

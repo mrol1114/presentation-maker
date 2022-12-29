@@ -30,6 +30,20 @@ type Area = {
     contains: AreaContent|undefined,
 }
 
+type UpdatedArea = {
+    index: number,
+    x: number,
+    y: number
+}
+
+type AreaSelect = {
+    index: number, 
+    x: number, 
+    y: number, 
+    stepX: number, 
+    stepY: number
+}
+
 type TextInfo = {
     type: 'text',
     color: string,
@@ -95,6 +109,8 @@ export type {
     PresentationElements,
     Slide,
     Area,
+    UpdatedArea,
+    AreaSelect,
     TextInfo,
     ImageBase64,
     ImageUrl,

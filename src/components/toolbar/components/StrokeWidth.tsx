@@ -3,14 +3,21 @@ import { dispatch } from "../../../actions/actions";
 import * as functions from "../../../common/functions";
 import styles from "./styles/styles.module.css";
 
-function StrokeWidth(props: {value: number}): JSX.Element
+function StrokeWidth(props: {value: number, type: string}): JSX.Element
 {
     const [value, setValue] = useState(0);
 
     const onChangeHandler = e =>
     {
         setValue(e.target.value);
-        dispatch(functions.updateText, {fontSize: e.target.value});
+        if (props.type === "text")
+        {
+            dispatch(functions.updateText, {strokeWidth: e.target.value});
+        }
+        else if (props.type === "primitive")
+        {
+            dispatch(functions.updateGraphicPrimitive, {strokeWidth: e.target.value});
+        }
     }
 
     return (

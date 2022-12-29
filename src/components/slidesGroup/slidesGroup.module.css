@@ -6,13 +6,29 @@
     overflow-y: auto;
 }
 
-.slide-wrapper
+.slides-group-active
+{
+    cursor: move;
+}
+
+.slide-wrapper,
+.slide-wrapper-current,
+.slide-wrapper-selected
 {
     position: relative;
     overflow: hidden;
-    border: 3px solid rgb(var(--silver-color));
     border-radius: 10px;
     margin-bottom: 20px;
     width: 219px;
     height: 125px;
+}
+
+.slide-wrapper
+{
+    border: 3px solid rgb(var(--silver-color), 0.7);
+}
+
+.slide-wrapper-selected
+{
+    border: 4px solid rgb(var(--light-blue-color));
 }

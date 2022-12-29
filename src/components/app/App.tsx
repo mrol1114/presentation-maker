@@ -8,13 +8,12 @@ import * as types from "../../common/types";
 import * as functions from "../../common/functions";
 import appStyles from "./styles/app.module.css";
 import "./styles/commonStyles.css";
+import * as consts from "../../common/consts";
 
 function App(): JSX.Element 
 {
     const presentationMaker: types.PresentationMaker = getState();
-    const presentationName: string = presentationMaker.name;
     const presentationElements: types.PresentationElements = presentationMaker.presentationElements;
-    const slideElements: types.Slide[] = presentationMaker.presentationElements.slidesGroup;
 
     if (!presentationMaker.localHistory.length)
     {
@@ -23,12 +22,25 @@ function App(): JSX.Element
 
     const [isControl, setIsControl] = useState(false);
 
+    const deleteSelected = () => {
+        const updatedPresentationElements = getState().presentationElements;
+
+        (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
+        updatedPresentationElements.selectedAreasIndexes.length > 0) 
+        ? dispatch(functions.deleteAreas, {}) : dispatch(functions.deleteSlides, {});
+    }
+
+    const keyDownCheck = (key: string) => {
+        if (key === "Control") setIsControl(true);
+        else if (key === "Delete") deleteSelected();
+
+        if (key === "z" && isControl) dispatch(functions.undo, {});
+        else if (key === "y" && isControl) dispatch(functions.redo, {});
+    }
+
     useEffect(() => {
         function onKeyDown(e) {
-            if (e.key === "Control") setIsControl(true);
-
-            if (e.key === "z" && isControl) dispatch(functions.undo, {});
-            else if (e.key === "y" && isControl) dispatch(functions.redo, {});
+            keyDownCheck(e.key);
         };
 
         function onKeyUp(e) {
@@ -47,13 +59,13 @@ function App(): JSX.Element
     return (
         <div className={appStyles["app"]}>
             <div>
-                <ControlPanel name={presentationName} presentationMaker={presentationMaker}/>
+                <ControlPanel name={presentationMaker.name} presentationMaker={presentationMaker}/>
                 <Toolbar presentationElements={presentationElements} />
             </div>
 
             <div className={appStyles["workspace"]}>
                 <Workboard presentationElements={presentationElements} isControl={isControl} />
-                <SlidesGroup slideElements={slideElements} />
+                <SlidesGroup presentationElements={presentationElements} isControl={isControl} />
             </div>
         </div>
     );
