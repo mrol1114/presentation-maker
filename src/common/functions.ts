@@ -2,6 +2,7 @@ import type * as types from "./types";
 import * as consts from "./consts";
 import * as createElement from "./model/createElement";
 import * as updateElement from "./model/updateElement";
+import { getProperty } from "./utils/property";
 
 // загрузка, выгрузка
 
@@ -139,11 +140,11 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.filter((_, index) => {
         return !newSelectedSlidesIndexes.includes(index) && index !== currSlideIndex
     });
-    
-    const selectedSlides: types.Slide[] = !presentationMaker.presentationElements.selectedSlidesIndexes.length ? 
-    [currSlide] : presentationMaker.presentationElements.selectedSlidesIndexes.map((index) => {
-        return presentationMaker.presentationElements.slidesGroup[index];
-    });
+
+    const selectedSlides: types.Slide[] = !presentationMaker.presentationElements.selectedSlidesIndexes.length ?
+        [currSlide] : presentationMaker.presentationElements.selectedSlidesIndexes.map((index) => {
+            return presentationMaker.presentationElements.slidesGroup[index];
+        });
 
     newSlidesGroup.splice(insertPos, 0, ...selectedSlides);
 
@@ -151,9 +152,9 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup,
         currentSlideIndex: insertPos,
-        selectedSlidesIndexes: newSlidesGroup.map((value, index) => 
+        selectedSlidesIndexes: newSlidesGroup.map((value, index) =>
             selectedSlides.includes(value) ? index : consts.notSelectedIndex).filter(value => value !== consts.notSelectedIndex
-        )
+            )
     }
 
     return {
@@ -184,7 +185,7 @@ function selectSlides(presentationMaker: types.PresentationMaker, selectedSlides
         ? [presentationMaker.presentationElements.currentSlideIndex] : [];
 
     const selectedSlidesIndexes: number[] = presentationMaker.presentationElements.selectedSlidesIndexes.length
-        ? [...presentationMaker.presentationElements.selectedSlidesIndexes.filter(value => !slidesIndexes.includes(value))] 
+        ? [...presentationMaker.presentationElements.selectedSlidesIndexes.filter(value => !slidesIndexes.includes(value))]
         : currSlideIndex;
 
     const newPresentationElements: types.PresentationElements = {
@@ -329,7 +330,7 @@ function deleteAreas(presentationMaker: types.PresentationMaker): types.Presenta
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex];
     const newSlide: types.Slide = {
         ...curSlide,
-        areas: curSlide.areas.filter((_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index) && 
+        areas: curSlide.areas.filter((_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index) &&
             index !== curAreaIndex)
     };
 
@@ -479,32 +480,109 @@ function updateArea(presentationMaker: types.PresentationMaker, properties: Obje
     };
 }
 
-function updateAreas(presentationMaker: types.PresentationMaker, updatedAreas: types.UpdatedArea[]): types.PresentationMaker {
-    const currIdSlide: number = presentationMaker.presentationElements.currentSlideIndex;
+function updateAreas(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
+    const currSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
 
-    if (currIdSlide === consts.notSelectedIndex) {
+    if (currSlideIndex === consts.notSelectedIndex) {
         return presentationMaker;
     }
 
-    const currentSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currIdSlide];
+    const areasSelect: types.AreaSelect[] = getProperty(properties, "areasSelect") as types.AreaSelect[];
+    const slidePosX: number = getProperty(properties, "slidePosX") as number;
+    const slidePosY: number = getProperty(properties, "slidePosY") as number;
 
-    const newAreas: types.Area[] = currentSlide.areas.map((area, index) => {
-        const updatedArea: types.UpdatedArea | undefined = updatedAreas.find(value => value.index === index);
+    const currentSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[currSlideIndex];
 
-        if (updatedArea) {
-            return updateElement.updateArea(area, { x: updatedArea.x, y: updatedArea.y });
+    const updatedAreas: (types.UpdatedArea | undefined)[] = presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas.map((area, index) => {
+        if (!areasSelect.find(value => value.index === index)) return;
+
+        return {
+            index: index,
+            x: area.x,
+            y: area.y
         }
-
-        return area;
     });
+
+    const earlySlide: types.Slide = {
+        ...currentSlide,
+        areas: currentSlide.areas.map((area, index) => {
+            const areaSelect = areasSelect.find(value => value.index === index);
+    
+            if (!areaSelect) return area;
+    
+            return updateElement.updateArea(area, { x: areaSelect.x - slidePosX, y: areaSelect.y - slidePosY });
+        })
+    }
 
     const newSlide: types.Slide = {
         ...currentSlide,
-        areas: newAreas
+        areas: currentSlide.areas.map((area, index) => {
+            const updatedArea: types.UpdatedArea | undefined = updatedAreas.find(value => value && value.index === index);
+    
+            if (!updatedArea) return area;
+            
+            return updateElement.updateArea(area, { x: updatedArea.x, y: updatedArea.y });
+        })
     };
 
+    const earlyPresentationElements: types.PresentationElements = {
+        ...presentationMaker.presentationElements,
+        slidesGroup: presentationMaker.presentationElements.slidesGroup.map(
+            (slide, index) => index === currSlideIndex ? earlySlide : slide)
+    }
+
+    const newPresentationElements: types.PresentationElements = {
+        ...presentationMaker.presentationElements,
+        slidesGroup: presentationMaker.presentationElements.slidesGroup.map(
+            (slide, index) => index === currSlideIndex ? newSlide : slide)
+    }
+
+    return {
+        ...presentationMaker,
+        localHistory: [
+            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex),
+            earlyPresentationElements,
+            newPresentationElements
+        ],
+        presentationElements: newPresentationElements,
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+    };
+}
+
+function updateInDragAreas(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
+    const areasSelect: types.AreaSelect[] = getProperty(properties, "areasSelect") as types.AreaSelect[];
+    const newAreaLastX: number = getProperty(properties, "newAreaLastX") as number;
+    const newAreaLastY: number = getProperty(properties, "newAreaLastY") as number;
+
+    const currSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
+
+    if (currSlideIndex === consts.notSelectedIndex) {
+        return presentationMaker;
+    }
+
+    const lastAreaIndex: number = areasSelect[areasSelect.length - 1].index;
+
+    const stepX: number = newAreaLastX - presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].x;
+    const stepY: number = newAreaLastY - presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].y;
+
+    const newAreas: types.Area[] = presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas.map((area, index) => {
+        if (!areasSelect.find(value => value.index === index) || index === lastAreaIndex) {
+            return area;
+        }
+
+        return updateElement.updateArea(area, { x: area.x + stepX, y: area.y + stepY });
+    });
+
+    newAreas[lastAreaIndex].x = newAreaLastX;
+    newAreas[lastAreaIndex].y = newAreaLastY;
+
+    const newSlide: types.Slide = {
+        ...presentationMaker.presentationElements.slidesGroup[currSlideIndex],
+        areas: newAreas
+    }
+
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currIdSlide ? newSlide : value);
+        (slide, index) => index === currSlideIndex ? newSlide : slide);
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -513,12 +591,7 @@ function updateAreas(presentationMaker: types.PresentationMaker, updatedAreas: t
 
     return {
         ...presentationMaker,
-        localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
-            newPresentationElements
-        ],
-        presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        presentationElements: newPresentationElements
     };
 }
 
@@ -759,6 +832,7 @@ export {
     updateSlideProperty,
     updateArea,
     updateAreas,
+    updateInDragAreas,
     updateText,
     createText,
     createImage,

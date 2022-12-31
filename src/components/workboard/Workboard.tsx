@@ -20,7 +20,6 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
 
     const [areasSelect, setAreasSelect] = useState(Array<types.AreaSelect>);
     const [isDrag, setIsDrag] = useState(false);
-    const [isMove, setIsMove] = useState(false);
 
     const saveAreasCoords = (e) => {
         if (!slidesGroup.length) return;
@@ -68,32 +67,19 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
     }
 
     useEffect(() => {
-        const presMaker: types.PresentationMaker = getState();
         const workboard = document.querySelectorAll("#workboard")[0];
         const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
         const workboardSlidePosition = workboardSlide.getBoundingClientRect();
 
-        function onMouseMove(e) {
-            const lastAreaIndex: number = areasSelect[areasSelect.length - 1].index;
+        let isMove: boolean = false;
 
+        function onMouseMove(e) {
             const newCoordX: number = e.pageX - workboardSlidePosition.x - areasSelect[areasSelect.length - 1].stepX;
             const newCoordY: number = e.pageY - workboardSlidePosition.y - areasSelect[areasSelect.length - 1].stepY;
 
-            const stepX: number = newCoordX - presMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].x;
-            const stepY: number = newCoordY - presMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].y;
+            dispatch(functions.updateInDragAreas, {areasSelect: areasSelect, newAreaLastX: newCoordX, newAreaLastY: newCoordY});
 
-            presMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].x = newCoordX;
-            presMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].y = newCoordY;
-
-            presMaker.presentationElements.slidesGroup[currSlideIndex].areas.map((area, index) => {
-                if (!areasSelect.find(value => value.index === index) || index === lastAreaIndex) return;
-
-                area.x += stepX;
-                area.y += stepY;
-            });
-
-            setIsMove(true);
-            setState(presMaker);
+            isMove = true;
         }
 
         function onMouseUp() {
@@ -103,26 +89,9 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
 
             if (!isMove) return;
 
-            let updatedAreas: types.UpdatedArea[] = [];
-
-            presMaker.presentationElements.slidesGroup[currSlideIndex].areas.map((area, index) => {
-                const areaSelect = areasSelect.find(value => value.index === index);
-
-                if (!areaSelect) return;
-
-                const updatedArea: types.UpdatedArea = {
-                    index: index,
-                    x: area.x,
-                    y: area.y
-                };
-
-                updatedAreas = [...updatedAreas, updatedArea];
-
-                area.x = areaSelect.x - workboardSlidePosition.x;
-                area.y = areaSelect.y - workboardSlidePosition.y;
+            dispatch(functions.updateAreas, {
+                areasSelect: areasSelect, slidePosX: workboardSlidePosition.x, slidePosY: workboardSlidePosition.y
             });
-
-            dispatch(functions.updateAreas, updatedAreas);
         }
 
         function onMouseDown(e) {
@@ -154,7 +123,6 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
             });
 
             if (isSelect) {
-                setIsMove(false);
                 setIsDrag(true);
 
                 saveAreasCoords(e);
@@ -170,12 +138,13 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
         if (isDrag) {
             document.addEventListener("mousemove", onMouseMove);
             document.addEventListener("mouseup", onMouseUp);
+            setIsDrag(false);
         }
 
         return () => {
             workboard.removeEventListener("mousedown", onMouseDown);
         }
-    }, [areasSelect, isDrag, isMove, props.presentationElements, props.isControl]);
+    }, [areasSelect, isDrag, props.presentationElements, props.isControl]);
 
     return (
         <div id="workboard" className={workboadStyles["workboard"]}>
