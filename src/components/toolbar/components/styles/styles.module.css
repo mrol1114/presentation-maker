@@ -176,3 +176,15 @@
 .stroke-width::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
+
+.error-message-inactive
+{
+    display: none;
+}
+
+.error-message-active
+{
+    display: flex;
+    font-size: 18px;
+    color: red;
+}
