@@ -10,6 +10,15 @@ function Slide(props: {slideElement: types.Slide, index: number, isCurrent: bool
 {
     const slideRef = useSlideRef();
 
+    const path: string = props.slideElement.backgroundImage.type === "imageUrl" ? 
+        props.slideElement.backgroundImage.path : props.slideElement.backgroundImage.base64;
+
+    const style = {
+        backgroundImage: "url(" + path + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
+    };
+
     useEffect(() => {
         if (props.isCurrent || !slideRef.current) return;
 
@@ -34,7 +43,7 @@ function Slide(props: {slideElement: types.Slide, index: number, isCurrent: bool
     }).filter(value => value);
 
     return (
-        <div ref={slideRef} className={slideStyles["slide"]}>
+        <div ref={slideRef} className={slideStyles["slide"]} style={style}>
             {areaElements}
         </div>
     );

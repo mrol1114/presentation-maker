@@ -16,6 +16,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const [isText, setIsText] = useState(false);
     const [isGraphicPrimitive, setIsGraphicPrimitive] = useState(false);
+    const [isBackgroundImage, setIsBackgroundImage] = useState(false);
 
     useEffect(() => {
         setIsText(false);
@@ -48,7 +49,9 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const backgroundImageHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        const selector = document.getElementById("image-selector");
+        selector?.classList.add(toolbarStyles["selector-active"]);
+        setIsBackgroundImage(true);
     }
 
     const backgroundColorHandler = () => 
@@ -59,6 +62,13 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     const addTextHandler = () => 
     {
         dispatch(functions.addArea, {areaType: "text"});
+    }
+
+    const openImageSelectorHandler = () => 
+    {
+        const selector = document.getElementById("image-selector");
+        selector?.classList.add(toolbarStyles["selector-active"]);
+        setIsBackgroundImage(false);
     }
 
     const addElipseHandler = () => 
@@ -126,12 +136,6 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         
     }
 
-    const openImageSelectorHandler = () => 
-    {
-        const selector = document.getElementById("image-selector");
-        selector?.classList.add(toolbarStyles["selector-active"]);
-    }
-
     return (
         <div className={toolbarStyles["toolbar"]}>
             <div className={toolbarStyles["toolbar__slide-tools"]}>
@@ -149,7 +153,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                     onClick={addTextHandler} />
                 <Button additionalClass={toolbarStyles["image"] + " " + toolbarStyles["icon"]}
                     onClick={openImageSelectorHandler} />
-                <ImageSelector />
+                <ImageSelector isBackgroundImageSelector={isBackgroundImage} />
                 <Button additionalClass={toolbarStyles["elipse"] + " " + toolbarStyles["icon"]}
                     onClick={addElipseHandler} />
                 <Button additionalClass={toolbarStyles["rectangle"] + " " + toolbarStyles["icon"]}
