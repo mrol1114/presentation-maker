@@ -14,6 +14,7 @@ function Slide(props: {slideElement: types.Slide, index: number, isCurrent: bool
         props.slideElement.backgroundImage.path : props.slideElement.backgroundImage.base64;
 
     const style = {
+        backgroundColor: props.slideElement.backgroundColor,
         backgroundImage: "url(" + path + ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%",

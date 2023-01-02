@@ -22,11 +22,6 @@
    background-size: 63%;
 }
 
-.background-color {
-   background-image: url("./images/backgroundColor.svg");
-   background-size: 70%;
-}
-
 .text {
    background-image: url("./images/text.svg");
    background-size: 70%;
@@ -121,11 +116,6 @@
    background-size: 110%;
 }
 
-.text-stroke-color {
-   background-image: url("./images/strokeColor.svg");
-   background-size: 130%;
-}
-
 .font {
    margin: 0 10px 0 0;
    border: 2px solid  rgb(var(--almost-black-color), 0.7);
@@ -167,14 +157,4 @@
    display: flex;
    flex-wrap: nowrap;
    padding: 10px 0 6px 20px;
-}
-
-.graphic-primitive-color {
-   background-image: url("./images/graphicPrimitiveColor.svg");
-   background-size: 100%;
-}
-
-.graphic-primitive-stroke-color {
-   background-image: url("./images/graphicPrimitiveStrokeColor.svg");
-   background-size: 130%;
 }

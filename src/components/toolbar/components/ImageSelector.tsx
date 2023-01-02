@@ -33,8 +33,8 @@ function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Elemen
                 base64: fileReader.result as string
             };
 
-            prop.isBackgroundImageSelector ? dispatch(functions.updateSlideProperty, { backgroundImage: backgroundImage }) :
-                dispatch(functions.addArea, { areaType: "imageBase64", path: fileReader.result });
+            prop.isBackgroundImageSelector ? dispatch(functions.updateSlideProperty, { backgroundImage: backgroundImage, 
+                backgroundColor: "" }) : dispatch(functions.addArea, { areaType: "imageBase64", path: fileReader.result });
             
             setIsError(false);
         }
@@ -73,7 +73,7 @@ function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Elemen
             <div id="selector" className={styles["image-selector__content"]} onClick={e => e.stopPropagation()}>
                 <label className={styles["image-base"]}>
                     <div className={styles["image-base__text"]}>Загрузить с компьютера</div>
-                    <input className={styles["image-base__input"]} type="file" accept=".jpg, .jpeg, .png" onChange={addImageBaseHandler} />
+                    <input className={styles["input"]} type="file" accept=".jpg, .jpeg, .png" onChange={addImageBaseHandler} />
                 </label>
                 <input id="image-url" className={styles["image-url"]} placeholder="Добавьте URL изображения" type="url" autoComplete="off" />
                 <button className={styles["button-image-add"]} type="submit" onClick={addImageUrlHandler}>Добавить</button>

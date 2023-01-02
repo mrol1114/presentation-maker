@@ -7,6 +7,7 @@ import * as functions from "../../common/functions";
 import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
 import * as types from "../../common/types";
+import ColorSelector from "./components/ColorSelector";
 
 
 function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.Element
@@ -54,11 +55,6 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         setIsBackgroundImage(true);
     }
 
-    const backgroundColorHandler = () => 
-    {
-        dispatch(functions.addSlide, {});
-    }
-
     const addTextHandler = () => 
     {
         dispatch(functions.addArea, {areaType: "text"});
@@ -101,11 +97,6 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         
     }
 
-    const changeTextColorHandler = () =>
-    {
-
-    }
-
     const textBoldHandler = () =>
     {
 
@@ -126,11 +117,6 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     }
 
-    const changeGraphicPrimitiveColorHandler = () =>
-    {
-
-    }
-
     const changeGraphicPrimitiveStrokeColorHandler = () =>
     {
         
@@ -147,8 +133,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                     onClick={redoHandler} />
                 <Button additionalClass={toolbarStyles["background-image"] + " " + toolbarStyles["icon"]}
                     onClick={backgroundImageHandler} />
-                <Button additionalClass={toolbarStyles["background-color"] + " " + toolbarStyles["icon"]}
-                    onClick={backgroundColorHandler} />
+                <ColorSelector type="background" styleName="background-color-button" />
                 <Button additionalClass={toolbarStyles["text"] + " " + toolbarStyles["icon"]}
                     onClick={addTextHandler} />
                 <Button additionalClass={toolbarStyles["image"] + " " + toolbarStyles["icon"]}
@@ -171,24 +156,20 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                 <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={0} />
                 <Button additionalClass={toolbarStyles["reduce-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={reduceFontSizeHandler} />
-                <Button additionalClass={toolbarStyles["text-color"] + " " + toolbarStyles["icon"]}
-                    onClick={changeTextColorHandler} />
+                <ColorSelector type="text" styleName="text-color-button" />
                 <Button additionalClass={toolbarStyles["bold"] + " " + toolbarStyles["icon"]}
                     onClick={textBoldHandler} />
                 <Button additionalClass={toolbarStyles["italic"] + " " + toolbarStyles["icon"]}
                     onClick={textItalicHandler} />
                 <Button additionalClass={toolbarStyles["underlined"] + " " + toolbarStyles["icon"]}
                     onClick={textUnderlinedHandler} />
-                <Button additionalClass={toolbarStyles["text-stroke-color"] + " " + toolbarStyles["icon"]}
-                    onClick={changeTextStrokeColorHandler} />
+                <ColorSelector type="textStroke" styleName="text-stroke-color-button" />
                 <StrokeWidth value={0} type={"text"} />
             </div>
             <div className={isGraphicPrimitive ? toolbarStyles["toolbar__graphic-primitive-active"] : 
             toolbarStyles["toolbar__graphic-primitive-inactive"]}>
-                <Button additionalClass={toolbarStyles["graphic-primitive-color"] + " " + toolbarStyles["icon"]}
-                    onClick={changeGraphicPrimitiveColorHandler} />
-                <Button additionalClass={toolbarStyles["graphic-primitive-stroke-color"] + " " + toolbarStyles["icon"]}
-                    onClick={changeGraphicPrimitiveStrokeColorHandler} />
+                <ColorSelector type="primitive" styleName="primitive-color-button" />
+                <ColorSelector type="primitiveStroke" styleName="primitive-stroke-color-button" />
                 <StrokeWidth value={0} type={"primitive"} />
             </div>
         </div>
