@@ -14,7 +14,7 @@ function TextComponent(prop: {textElement: types.TextInfo}): JSX.Element
         color: prop.textElement.color,
         fontFamily: prop.textElement.font,
         fontSize: prop.textElement.fontSize,
-        borderWidth: prop.textElement.strokeWidth,
+        borderWidth: Number(prop.textElement.strokeWidth),
         borderColor: prop.textElement.strokeColor,
     };
 
