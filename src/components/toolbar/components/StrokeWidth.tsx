@@ -5,22 +5,23 @@ import styles from "./styles/styles.module.css";
 
 function StrokeWidth(props: {value: number, type: string}): JSX.Element
 {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState("");
 
     useEffect(() => {
-        setValue(props.value);
+        setValue(props.value.toString());
     }, [props.value]);
 
     const onChangeHandler = e =>
     {
-        setValue(e.target.value);
+        const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
+        setValue(newValue.toString());
         if (props.type === "text")
         {
-            dispatch(functions.updateText, {strokeWidth: e.target.value});
+            dispatch(functions.updateText, {strokeWidth: newValue});
         }
         else if (props.type === "primitive")
         {
-            dispatch(functions.updateGraphicPrimitive, {strokeWidth: e.target.value});
+            dispatch(functions.updateGraphicPrimitive, {strokeWidth: newValue});
         }
     }
 

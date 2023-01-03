@@ -21,6 +21,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const [primitiveStrokeWidth, setPrimitiveStrokeWidth] = useState(0);
     const [textStrokeWidth, setTextStrokeWidth] = useState(0);
+    const [textFontSize, setTextFontSize] = useState(0);
 
     useEffect(() => {
         setIsText(false);
@@ -36,6 +37,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
             {
                 setIsText(true);
                 setTextStrokeWidth(currArea.contains?.strokeWidth ? currArea.contains?.strokeWidth : 0);
+                setTextFontSize(currArea.contains?.fontSize ? currArea.contains?.fontSize : 0);
             }
             else if (areaContainsType === "primitive")
             {
@@ -101,12 +103,26 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const reduceFontSizeHandler = () =>
     {
-        
+        const area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex];
+
+        if (!area.contains || area.contains?.type !== "text")
+        {
+            return;
+        }
+
+        dispatch(functions.updateText, {fontSize: area.contains.fontSize + 1});
     }
 
     const increaseFontSizeHandler = () =>
     {
-        
+        const area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex];
+
+        if (!area.contains || area.contains?.type !== "text" || area.contains.fontSize - 1 < 0)
+        {
+            return;
+        }
+
+        dispatch(functions.updateText, {fontSize: area.contains.fontSize - 1});
     }
 
     const textBoldHandler = () =>
@@ -155,7 +171,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                     onClick={changeTextFontHandler} />
                 <Button additionalClass={toolbarStyles["increase-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={increaseFontSizeHandler} />
-                <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={0} />
+                <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={textFontSize} />
                 <Button additionalClass={toolbarStyles["reduce-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={reduceFontSizeHandler} />
                 <ColorSelector type="text" styleName="text-color-button" />
