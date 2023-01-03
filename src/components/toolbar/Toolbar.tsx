@@ -19,6 +19,9 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     const [isGraphicPrimitive, setIsGraphicPrimitive] = useState(false);
     const [isBackgroundImage, setIsBackgroundImage] = useState(false);
 
+    const [primitiveStrokeWidth, setPrimitiveStrokeWidth] = useState(0);
+    const [textStrokeWidth, setTextStrokeWidth] = useState(0);
+
     useEffect(() => {
         setIsText(false);
         setIsGraphicPrimitive(false);
@@ -26,10 +29,19 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         if (prop.presentationElements.slidesGroup.length && currAreaIndex !== -1 && 
             prop.presentationElements.slidesGroup[currSlideIndex].areas.length)
         {
-            const areaContainsType = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex].contains?.type;
+            const currArea: types.Area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex]; 
+            const areaContainsType = currArea.contains?.type;
 
-            if (areaContainsType === "text") setIsText(true);
-            else if (areaContainsType === "primitive") setIsGraphicPrimitive(true);
+            if (areaContainsType === "text")
+            {
+                setIsText(true);
+                setTextStrokeWidth(currArea.contains?.strokeWidth ? currArea.contains?.strokeWidth : 0);
+            }
+            else if (areaContainsType === "primitive")
+            {
+                setIsGraphicPrimitive(true);
+                setPrimitiveStrokeWidth(currArea.contains?.strokeWidth ? currArea.contains?.strokeWidth : 0);
+            }
         }
     });
     
@@ -112,16 +124,6 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         
     }
 
-    const changeTextStrokeColorHandler = () =>
-    {
-
-    }
-
-    const changeGraphicPrimitiveStrokeColorHandler = () =>
-    {
-        
-    }
-
     return (
         <div className={toolbarStyles["toolbar"]}>
             <div className={toolbarStyles["toolbar__slide-tools"]}>
@@ -164,13 +166,13 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                 <Button additionalClass={toolbarStyles["underlined"] + " " + toolbarStyles["icon"]}
                     onClick={textUnderlinedHandler} />
                 <ColorSelector type="textStroke" styleName="text-stroke-color-button" />
-                <StrokeWidth value={0} type={"text"} />
+                <StrokeWidth value={textStrokeWidth} type={"text"} />
             </div>
             <div className={isGraphicPrimitive ? toolbarStyles["toolbar__graphic-primitive-active"] : 
             toolbarStyles["toolbar__graphic-primitive-inactive"]}>
                 <ColorSelector type="primitive" styleName="primitive-color-button" />
                 <ColorSelector type="primitiveStroke" styleName="primitive-stroke-color-button" />
-                <StrokeWidth value={0} type={"primitive"} />
+                <StrokeWidth value={primitiveStrokeWidth} type={"primitive"} />
             </div>
         </div>
     );
