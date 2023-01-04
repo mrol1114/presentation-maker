@@ -22,6 +22,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     const [primitiveStrokeWidth, setPrimitiveStrokeWidth] = useState(0);
     const [textStrokeWidth, setTextStrokeWidth] = useState(0);
     const [textFontSize, setTextFontSize] = useState(0);
+    const [textFont, setTextFont] = useState("");
 
     useEffect(() => {
         setIsText(false);
@@ -36,8 +37,9 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
             if (areaContainsType === "text")
             {
                 setIsText(true);
-                setTextStrokeWidth(currArea.contains?.strokeWidth ? currArea.contains?.strokeWidth : 0);
-                setTextFontSize(currArea.contains?.fontSize ? currArea.contains?.fontSize : 0);
+                setTextStrokeWidth(currArea.contains ? currArea.contains.strokeWidth : 0);
+                setTextFontSize(currArea.contains ? currArea.contains.fontSize : 0);
+                setTextFont(currArea.contains ? currArea.contains.font : "Arial");
             }
             else if (areaContainsType === "primitive")
             {
@@ -166,7 +168,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
             </div>
             <div className={isText ? toolbarStyles["toolbar__text-tools-active"] : 
             toolbarStyles["toolbar__text-tools-inactive"]}>
-                <InputComponent additionalClass={toolbarStyles["text-font"]} value="Arial" />
+                <InputComponent additionalClass={toolbarStyles["text-font"]} value={textFont} />
                 <Button additionalClass={toolbarStyles["font"] + " " + toolbarStyles["icon"]}
                     onClick={changeTextFontHandler} />
                 <Button additionalClass={toolbarStyles["increase-font-size"] + " " + toolbarStyles["icon"]}

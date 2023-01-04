@@ -11,10 +11,18 @@ function InputComponent(props: {additionalClass: string, value: string|number}):
     }, [props.value]);
 
     const onChangeHandler = e => {
-        const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
-        setValue(newValue.toString());
-
-        dispatch(functions.updateText, {fontSize: newValue});
+        if (typeof props.value === "number")
+        {
+            const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
+            setValue(newValue.toString());
+            dispatch(functions.updateText, {fontSize: newValue});
+        }
+        else
+        {
+            const newValue: string = e.target.value.toString();
+            setValue(newValue);
+            dispatch(functions.updateText, {font: newValue});
+        }
     }
 
     return (
