@@ -1,22 +1,41 @@
 .presentation-name
 {
-    border: 1px solid transparent;
-    border-radius: 6px;
-    font-size: 18px;
-    height: 20px;
-    line-height: 22px;
-    min-width: 1px;
-    padding: 2px 7px;
-    margin: 0 0 10px 10px;
-    font-family: inherit;
-}
-
-.presentation-name-label
-{
     flex: 1 0 100%;
+    width: 100%;
 }
 
-.presentation-name:hover
+.presentation-name-input
 {
-    background-color: rgba(var(--light-blue-color), .5);
+    border: 2px solid transparent;
+    border-radius: 5px;
+    outline: none;
+    height: 35px;
+    min-width: 240px;
+    padding: 2px 17px;
+    margin: 0 0 10px 10px;
+    font-size: 23px;
+    caret-color: transparent;
+}
+
+.presentation-name-input:focus
+{
+    border-color: rgba(var(--dark-blue-color), .5);
+}
+
+.presentation-name-input::placeholder
+{
+    text-align: center;
+}
+
+.message
+{
+    display: none;
+    margin-left: 30px;
+    color: rgb(255, 128, 0);
+    font-size: 18px;
+}
+
+.active
+{
+    display: inline-block;
 }

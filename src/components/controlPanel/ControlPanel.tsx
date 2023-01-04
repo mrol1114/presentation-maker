@@ -7,10 +7,17 @@ import PresentationName from "./components/PresentationName";
 import styles from "./styles.module.css";
 import { dispatch, setState } from "../../actions/actions";
 
-function ControlPanel(props: {name: string, presentationMaker: types.PresentationMaker}): JSX.Element
+function ControlPanel(props: {presentationMaker: types.PresentationMaker}): JSX.Element
 {
     const renameHandler = () => {
+        const newName = document.getElementsByTagName("input")[1].value;
+
+        if (newName)
+        {
+            dispatch(functions.updateName, newName);
+        }
     };
+
     const uploadFromCloudHandler = () => {
     };
     const saveInCloudHandler = () => {
@@ -72,7 +79,7 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
     return (
         <div className = {styles["control-panel"]}>
             <input className={styles['fileInput']} id="sortpicture" type="file"/>
-            <PresentationName name="My presentation"/>
+            <PresentationName presentationName={props.presentationMaker.name} />
             <Button onClick={renameHandler} actionName={"Change name"}/>
             <Button onClick={uploadFromCloudHandler} actionName={"Upload from cloud"}/>
             <Button onClick={saveInCloudHandler} actionName={"Save in cloud"}/>

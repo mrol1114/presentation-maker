@@ -21,6 +21,13 @@ function convertPdf(presentationMaker: PresentationMaker): Pdf
 
 }*/
 
+function updateName(presentationMaker: types.PresentationMaker, updatedName: string): types.PresentationMaker {
+    return {
+        ...presentationMaker,
+        name: updatedName
+    }
+}
+
 function convertPresentationMakerToJson(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     const json: string = JSON.stringify(presentationMaker);
     const blob = new Blob([json], { type: "text/plain" });
@@ -816,6 +823,7 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
 }
 
 export {
+    updateName,
     undo,
     redo,
     addSlide,

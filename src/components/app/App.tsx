@@ -59,7 +59,7 @@ function App(): JSX.Element
     return (
         <div className={appStyles["app"]}>
             <div>
-                <ControlPanel name={presentationMaker.name} presentationMaker={presentationMaker}/>
+                <ControlPanel presentationMaker={presentationMaker}/>
                 <Toolbar presentationElements={presentationElements} />
             </div>
 
