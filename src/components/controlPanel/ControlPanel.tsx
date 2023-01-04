@@ -50,7 +50,8 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
             return;
         }
         const doc = new jsPDF({
-			format: 'a0',
+            orientation: "landscape",
+			format: 'a1',
 			unit: 'px',
 		});
         const width = doc.internal.pageSize.getWidth();
