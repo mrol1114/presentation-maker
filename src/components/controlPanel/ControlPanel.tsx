@@ -44,12 +44,21 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
     };
     const exportHandler = () => 
     {
-        const doc = new jsPDF();
         const PM = document.getElementById("root");
         if (PM === null)
         {
             return;
         }
+        const doc = new jsPDF({
+			format: 'a0',
+			unit: 'px',
+		});
+        const width = doc.internal.pageSize.getWidth();
+        const height = doc.internal.pageSize.getHeight();
+        const imgData = "/components/toolbar/images/";
+
+        doc.addImage(imgData, 'JPEG', 0, 0, width, height);
+        doc.setFont('Inter-Regular', 'normal');
         doc.html(PM, {
             async callback(doc) {
                 await doc.save('pdf_name');
@@ -62,14 +71,14 @@ function ControlPanel(props: {name: string, presentationMaker: types.Presentatio
     return (
         <div className = {styles["control-panel"]}>
             <input className={styles['fileInput']} id="sortpicture" type="file"/>
-            <PresentationName name="Моя презентация"/>
-            <Button onClick={renameHandler} actionName={"Изменить название"}/>
-            <Button onClick={uploadFromCloudHandler} actionName={"Загрузить из облака"}/>
-            <Button onClick={saveInCloudHandler} actionName={"Сохранить в облакe"}/>
-            <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"}/>
-            <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"}/>
-            <Button onClick={exportHandler} actionName={"Экспорт"}/>
-            <Button onClick={previewHandler} actionName={"Предпросмотр"}/>
+            <PresentationName name="My presentation"/>
+            <Button onClick={renameHandler} actionName={"Change name"}/>
+            <Button onClick={uploadFromCloudHandler} actionName={"Upload from cloud"}/>
+            <Button onClick={saveInCloudHandler} actionName={"Save in cloud"}/>
+            <Button onClick={uploadFromMyComputerHandler} actionName={"Upload from desktop"}/>
+            <Button onClick={saveInMyComputerHandler} actionName={"Save in desktop"}/>
+            <Button onClick={exportHandler} actionName={"Export"}/>
+            <Button onClick={previewHandler} actionName={"Preview"}/>
         </div>
     );
 }
