@@ -8,6 +8,7 @@ import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
 import * as types from "../../common/types";
 import ColorSelector from "./components/ColorSelector";
+import TextFont from "./components/TextFont";
 
 
 function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.Element
@@ -23,6 +24,8 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     const [textStrokeWidth, setTextStrokeWidth] = useState(0);
     const [textFontSize, setTextFontSize] = useState(0);
     const [textFont, setTextFont] = useState("");
+
+    const [menuIsHidden, setMenuIsHidden] = useState(true);
 
     useEffect(() => {
         setIsText(false);
@@ -46,6 +49,20 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
                 setIsGraphicPrimitive(true);
                 setPrimitiveStrokeWidth(currArea.contains?.strokeWidth ? currArea.contains?.strokeWidth : 0);
             }
+        }
+
+        const mouseDownHandler = (e) => {
+            if (e.target.id !== "font-menu")
+            {
+                setMenuIsHidden(true);
+            }
+        }
+
+        const workboard = document.querySelectorAll("#workboard")[0];
+        workboard.addEventListener("mousedown", mouseDownHandler);
+
+        return () => {
+            workboard.removeEventListener("mousedown", mouseDownHandler);
         }
     });
     
@@ -98,9 +115,9 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         dispatch(functions.addArea, {areaType: "primitive", primitiveType: "triangle"});
     }
 
-    const changeTextFontHandler = () =>
+    const textFontButtonHandler = () =>
     {
-
+        setMenuIsHidden(!menuIsHidden);
     }
 
     const reduceFontSizeHandler = () =>
@@ -170,7 +187,8 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
             toolbarStyles["toolbar__text-tools-inactive"]}>
                 <InputComponent additionalClass={toolbarStyles["text-font"]} value={textFont} />
                 <Button additionalClass={toolbarStyles["font"] + " " + toolbarStyles["icon"]}
-                    onClick={changeTextFontHandler} />
+                    onClick={textFontButtonHandler} />
+                <TextFont isHidden={menuIsHidden} textFont={textFont} />
                 <Button additionalClass={toolbarStyles["increase-font-size"] + " " + toolbarStyles["icon"]}
                     onClick={increaseFontSizeHandler} />
                 <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={textFontSize} />

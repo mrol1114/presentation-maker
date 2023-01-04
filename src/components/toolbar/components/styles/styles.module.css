@@ -201,3 +201,49 @@
     background-image: url("../../images/graphicPrimitiveStrokeColor.svg");
     background-size: 130%;
 }
+
+.content
+{
+    position: absolute;
+    text-align: center;
+    flex-direction: column;
+    background-color: white;
+    overflow-y: scroll;
+    border: 1px solid rgb(var(--dark-blue-color));
+    border-radius: 5px;
+    margin-top: 27px;
+    margin-left: 10px;
+    width: 171px;
+    height: 250px;
+    z-index: 1;
+}
+
+.content-inactive
+{
+    display: none;
+}
+
+.content-active
+{
+    display: flex;
+}
+
+.content a
+{
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    width: 100%;
+    min-height: 25px;
+}
+
+.content a:hover
+{
+    cursor: pointer;
+    background-color: rgb(var(--silver-color), 0.4);
+}
+
+.content a:active
+{
+    background-color: rgb(var(--silver-color), 0.8);
+}
