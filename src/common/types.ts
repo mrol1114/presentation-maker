@@ -1,5 +1,5 @@
 type PresentationMaker = {
-    name: string,
+    title: string,
     localHistory: PresentationElements[],
     presentationElements: PresentationElements,
     currentPresentationElementsIndex: number

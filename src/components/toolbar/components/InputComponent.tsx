@@ -1,8 +1,21 @@
-import React, {useEffect, useState} from "react";
-import { dispatch } from "../../../actions/actions";
-import * as functions from "../../../common/functions";
+import React, {useState, useEffect} from "react";
+import { connect, ConnectedProps } from "react-redux";
+import * as areaContentActions from "../../../actions/area-content/areaContentActions";
 
-function InputComponent(props: {additionalClass: string, value: string|number}): JSX.Element
+const mapDispatch = {
+    updateText: areaContentActions.updateText
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
+    additionalClass: string,
+    value: string|number,
+};
+
+function InputComponent(props: Props): JSX.Element
 {
     const [value, setValue] = useState("");
 
@@ -15,13 +28,13 @@ function InputComponent(props: {additionalClass: string, value: string|number}):
         {
             const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
             setValue(newValue.toString());
-            dispatch(functions.updateText, {fontSize: newValue});
+            props.updateText({fontSize: newValue});
         }
         else
         {
             const newValue: string = e.target.value.toString();
             setValue(newValue);
-            dispatch(functions.updateText, {font: newValue});
+            props.updateText({font: newValue});
         }
     }
 
@@ -30,4 +43,4 @@ function InputComponent(props: {additionalClass: string, value: string|number}):
     );
 }
 
-export default InputComponent;
+export default connector(InputComponent);

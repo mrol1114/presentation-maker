@@ -1,29 +1,44 @@
 import React, { useEffect, useState } from "react";
 import Slide from "../slide/Slide";
-import type * as types from "../../common/types";
 import slidesGroupStyles from "./slidesGroup.module.css";
-import { dispatch } from "../../actions/actions";
-import * as functions from "../../common/functions";
+import * as slideActions from "../../actions/slides/slidesActions";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../store";
 
-function SlidesGroup(props: {presentationElements: types.PresentationElements, isControl: boolean}): JSX.Element
+const mapState = (state: RootState) => ({
+    currSlideIndex: state.presentationElements.currentSlideIndex,
+    slidesGroup: state.presentationElements.slidesGroup,
+    selectedSlidesIndexes: state.presentationElements.selectedSlidesIndexes,
+});
+
+const mapDispatch = {
+    moveSlides: slideActions.moveSlides,
+    assignSlideIndex: slideActions.assignSlideIndex,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    isControl: boolean,
+};
+
+function SlidesGroup(props: Props): JSX.Element
 {
     const slideWidth: number = 219;
     const slideHeight: number = 125;
     const slideDistance: number = 20;
 
-    const currSlideIndex: number = props.presentationElements.currentSlideIndex;
-    const slidesGroup = props.presentationElements.slidesGroup;
-
     const [isDrag, setIsDrag] = useState(false);
     const [isMove, setIsMove] = useState(false);
 
     const updateSlidesSelect = () => {
-        if (!slidesGroup[currSlideIndex] || !slidesGroup[currSlideIndex].areas) return;
+        if (!props.slidesGroup[props.currSlideIndex] || !props.slidesGroup[props.currSlideIndex].areas) return;
 
-        slidesGroup.map((slide, index) => {
+        props.slidesGroup.map((slide, index) => {
             const slideElement = document.querySelectorAll("#" + slide.id)[0];
 
-            if (index === currSlideIndex || props.presentationElements.selectedSlidesIndexes.includes(index)) 
+            if (index === props.currSlideIndex || props.selectedSlidesIndexes.includes(index)) 
             {
                 slideElement.classList.add(slidesGroupStyles["slide-wrapper-selected"]);
             }
@@ -49,13 +64,14 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
 
             let insertPos: number = -1;
 
-            props.presentationElements.slidesGroup.map((slide, index) => {
+            props.slidesGroup.map((slide, index) => {
                 const slideElement = document.querySelectorAll("#" + slide.id)[0];
                 const slidePosition = slideElement.getBoundingClientRect();
 
                 const cursorPosDownY: number = e.pageY - slidePosition.y - slidePosition.height;
 
-                const cursorPosDown: boolean = cursorPosDownY > 0 && (cursorPosDownY <= slideDistance || index === slidesGroup.length - 1);
+                const cursorPosDown: boolean = cursorPosDownY > 0 && 
+                    (cursorPosDownY <= slideDistance || index === props.slidesGroup.length - 1);
                 const cursorPosUp: boolean = slidePosition.y - e.pageY <= slideDistance;
 
                 if (cursorPosDown)
@@ -70,21 +86,21 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
 
             if (isMove)
             {
-                dispatch(functions.moveSlides, insertPos);
+                props.moveSlides(insertPos);
             }
         }
 
         function onMouseDown(e) {
             let isSelect: boolean = false;
 
-            props.presentationElements.slidesGroup.map((slide, index) => {
+            props.slidesGroup.map((slide, index) => {
                 const slideElement = document.querySelectorAll("#" + slide.id)[0];
                 const slidePosition = slideElement.getBoundingClientRect();
 
                 const cursorInSlide: boolean = e.pageX >= slidePosition.x && e.pageY >= slidePosition.y &&
                     e.pageX <= slidePosition.x + slideWidth && e.pageY <= slidePosition.y + slideHeight;
 
-                if (cursorInSlide && (index === currSlideIndex || props.presentationElements.selectedSlidesIndexes.includes(index)))
+                if (cursorInSlide && (index === props.currSlideIndex || props.selectedSlidesIndexes.includes(index)))
                 {
                     isSelect = true;
                 }
@@ -98,7 +114,7 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
             }
             else if (!props.isControl)
             {
-                dispatch(functions.assignSlideIndex, slidesGroup.length - 1);
+                props.assignSlideIndex(props.slidesGroup.length - 1);
             }
         };
 
@@ -115,9 +131,9 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
         };
     });
 
-    const slideComponents = props.presentationElements.slidesGroup.map((slideElement, index) => {
+    const slideComponents = props.slidesGroup.map((slideElement, index) => {
         return (
-            <li key={slideElement.id} id={slideElement.id} className={currSlideIndex === index ? 
+            <li key={slideElement.id} id={slideElement.id} className={props.currSlideIndex === index ? 
             slidesGroupStyles["slide-wrapper-current"] : slidesGroupStyles["slide-wrapper"]}>
                 <Slide slideElement={slideElement} index={index} isCurrent={false} isControl={props.isControl} />
             </li>
@@ -131,4 +147,4 @@ function SlidesGroup(props: {presentationElements: types.PresentationElements, i
     );
 }
 
-export default SlidesGroup;
+export default connector(SlidesGroup);

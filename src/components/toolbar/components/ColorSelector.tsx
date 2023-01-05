@@ -1,41 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { dispatch, getState } from "../../../actions/actions";
-import * as functions from "../../../common/functions";
 import styles from "./styles/styles.module.css";
 import buttonStyles from "./styles/button.module.css";
 import * as consts from "../../../common/consts";
+import { updateSlideProperty } from "../../../actions/slides/slidesActions";
+import { assignAreaIndex } from "../../../actions/areas/areasActions";
+import * as areaContentActions from "../../../actions/area-content/areaContentActions";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../../store";
 
-function ColorSelector(prop: { type: string, styleName: string }): JSX.Element {
+const mapState = (state: RootState) => ({
+    currAreaIndex: state.presentationElements.currentAreaIndex,
+});
+
+const mapDispatch = {
+    updateSlideProperty: updateSlideProperty,
+    updateText: areaContentActions.updateText,
+    updateGraphicPrimitive: areaContentActions.updateGraphicPrimitive,
+    assignAreaIndex: assignAreaIndex,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    type: string,
+    styleName: string,
+};
+
+function ColorSelector(props: Props): JSX.Element {
     const [areaIndex, setAreaIndex] = useState(0);
 
     useEffect(() => {
-        const input = document.querySelectorAll("#" + prop.type)[0];
+        const input = document.querySelectorAll("#" + props.type)[0];
 
-        const currAreaIndex = getState().presentationElements.currentAreaIndex;
-        if (currAreaIndex !== consts.notSelectedIndex) {
-            setAreaIndex(currAreaIndex);
+        if (props.currAreaIndex !== consts.notSelectedIndex) {
+            setAreaIndex(props.currAreaIndex);
         }
 
         const onFocusoutHandler = (e) => {
             const color: string = e.target.value;
 
-            dispatch(functions.assignAreaIndex, areaIndex);
+            props.assignAreaIndex(areaIndex);
 
-            switch (prop.type) {
+            switch (props.type) {
                 case "background":
-                    dispatch(functions.updateSlideProperty, { backgroundImage: { type: "imageUrl", path: "" }, backgroundColor: color });
+                    props.updateSlideProperty({backgroundImage: {type: "imageUrl", path: ""}, backgroundColor: color});
                     break;
                 case "text":
-                    dispatch(functions.updateText, { color: color });
+                    props.updateText({color: color});
                     break;
                 case "textStroke":
-                    dispatch(functions.updateText, { strokeColor: color });
+                    props.updateText({strokeColor: color});
                     break;
                 case "primitive":
-                    dispatch(functions.updateGraphicPrimitive, { color: color });
+                    props.updateGraphicPrimitive({color: color});
                     break;
                 case "primitiveStroke":
-                    dispatch(functions.updateGraphicPrimitive, { strokeColor: color });
+                    props.updateGraphicPrimitive({strokeColor: color});
             }
         }
 
@@ -48,10 +69,10 @@ function ColorSelector(prop: { type: string, styleName: string }): JSX.Element {
 
     return (
         <label className={buttonStyles["button"]}>
-            <div className={styles["color-button"] + " " + styles[prop.styleName]}></div>
-            <input id={prop.type} className={styles["input"]} type="color" ></input>
+            <div className={styles["color-button"] + " " + styles[props.styleName]}></div>
+            <input id={props.type} className={styles["input"]} type="color" ></input>
         </label>
     );
 }
 
-export default ColorSelector;
+export default connector(ColorSelector);

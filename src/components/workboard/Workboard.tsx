@@ -2,35 +2,53 @@ import React, { useEffect, useState } from "react";
 import * as types from "../../common/types";
 import Slide from "../slide/Slide";
 import workboadStyles from "./workboard.module.css";
-import { dispatch, getState, setState } from "../../actions/actions";
 import areaStyles from "../slide/components/area.module.css";
 import * as consts from "../../common/consts";
-import * as functions from "../../common/functions";
+import * as areaActions from "../../actions/areas/areasActions";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../store";
 
-function Workboard(props: { presentationElements: types.PresentationElements, isControl: boolean }): JSX.Element {
+const mapState = (state: RootState) => ({
+    slidesGroup: state.presentationElements.slidesGroup,
+    currSlideIndex: state.presentationElements.currentSlideIndex,
+    currAreaIndex: state.presentationElements.currentAreaIndex,
+    selectedAreasIndexes: state.presentationElements.selectedAreasIndexes,
+    presentationElements: state.presentationElements,
+});
+
+const mapDispatch = {
+    updateInDragAreas: areaActions.updateInDragAreas,
+    updateAreas: areaActions.updateAreas,
+    assignAreaIndex: areaActions.assignAreaIndex,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    isControl: boolean,
+};
+
+function Workboard(props: Props): JSX.Element {
     const areaBorderWidth: number = 10;
     const resizeRightIndent: number = 25;
     const resizeTopIndent: number = 11;
     const resizeLeftIndent: number = 11;
     const resizeBottomIndent: number = 25;
 
-    const slidesGroup: types.Slide[] = props.presentationElements.slidesGroup;
-    const currSlideIndex: number = props.presentationElements.currentSlideIndex;
-    const currAreaIndex: number = props.presentationElements.currentAreaIndex;
-
     const [areasSelect, setAreasSelect] = useState(Array<types.AreaSelect>);
     const [isDrag, setIsDrag] = useState(false);
 
     const saveAreasCoords = (e) => {
-        if (!slidesGroup.length) return;
+        if (!props.slidesGroup.length) return;
 
         let areasInfo: Array<{ index: number, x: number, y: number, stepX: number, stepY: number }> = [];
 
-        slidesGroup[currSlideIndex].areas.map((area, index) => {
+        props.slidesGroup[props.currSlideIndex].areas.map((area, index) => {
             const areaWorkboard = document.querySelectorAll("#" + area.id)[0];
             const areaPosition = areaWorkboard.getBoundingClientRect();
 
-            if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
+            if (index === props.currAreaIndex || props.selectedAreasIndexes.includes(index)) {
                 const areaInfo: types.AreaSelect = {
                     index: index,
                     x: areaPosition.x,
@@ -39,7 +57,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
                     stepY: e.pageY - areaPosition.y,
                 }
 
-                areasInfo = (index === currAreaIndex) ? [areaInfo] : 
+                areasInfo = (index === props.currAreaIndex) ? [areaInfo] : 
                     [...areasInfo.filter(value => value.index !== index), areaInfo];
             }
         });
@@ -48,14 +66,14 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
     }
 
     const updateAreasSelect = () => {
-        if (!slidesGroup[currSlideIndex] || !slidesGroup[currSlideIndex].areas) return;
+        if (!props.slidesGroup[props.currSlideIndex] || !props.slidesGroup[props.currSlideIndex].areas) return;
 
-        slidesGroup[currSlideIndex].areas.map((area, index) => {
+        props.slidesGroup[props.currSlideIndex].areas.map((area, index) => {
             const areaElements = document.querySelectorAll("#" + area.id);
             const areaWorkboard = areaElements[0];
             const areaSlidesGroup = areaElements[1];
 
-            if (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index)) {
+            if (index === props.currAreaIndex || props.selectedAreasIndexes.includes(index)) {
                 areaWorkboard.classList.add(areaStyles["area-wrapper-selected"]);
                 areaSlidesGroup.classList.add(areaStyles["area-wrapper-selected"]);
             }
@@ -77,7 +95,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
             const newCoordX: number = e.pageX - workboardSlidePosition.x - areasSelect[areasSelect.length - 1].stepX;
             const newCoordY: number = e.pageY - workboardSlidePosition.y - areasSelect[areasSelect.length - 1].stepY;
 
-            dispatch(functions.updateInDragAreas, {areasSelect: areasSelect, newAreaLastX: newCoordX, newAreaLastY: newCoordY});
+            props.updateInDragAreas({areasSelect: areasSelect, newAreaLastX: newCoordX, newAreaLastY: newCoordY});
 
             isMove = true;
         }
@@ -89,17 +107,17 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
 
             if (!isMove) return;
 
-            dispatch(functions.updateAreas, {
+            props.updateAreas({
                 areasSelect: areasSelect, slidePosX: workboardSlidePosition.x, slidePosY: workboardSlidePosition.y
             });
         }
 
         function onMouseDown(e) {
-            if (!slidesGroup.length) return;
+            if (!props.slidesGroup.length) return;
 
             let isSelect: boolean = false;
             let isResize: boolean = false;
-            slidesGroup[currSlideIndex].areas.map((area, index) => {
+            props.slidesGroup[props.currSlideIndex].areas.map((area, index) => {
                 const areaWorkboard = document.querySelectorAll("#" + area.id)[0];
                 const areaPosition = areaWorkboard.getBoundingClientRect();
 
@@ -117,7 +135,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
                     isSelect = false;
                     isResize = true;
                 }
-                else if (cursorInArea && (index === currAreaIndex || props.presentationElements.selectedAreasIndexes.includes(index))) {
+                else if (cursorInArea && (index === props.currAreaIndex || props.selectedAreasIndexes.includes(index))) {
                     isSelect = true;
                 }
             });
@@ -129,7 +147,7 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
             }
             else if (!props.isControl && !isResize) {
                 setAreasSelect([]);
-                dispatch(functions.assignAreaIndex, consts.notSelectedIndex);
+                props.assignAreaIndex(consts.notSelectedIndex);
             }
         };
 
@@ -148,13 +166,20 @@ function Workboard(props: { presentationElements: types.PresentationElements, is
 
     return (
         <div id="workboard" className={workboadStyles["workboard"]}>
-            <div id="workboard-slide" className={slidesGroup.length ? workboadStyles["workboard__slide"] : workboadStyles["workboard__without-slide"]}>
-                {slidesGroup.length !== 0 &&
-                    <Slide slideElement={slidesGroup[currSlideIndex]} index={currSlideIndex} isCurrent={true} isControl={props.isControl} />
+            <div id="workboard-slide" className={props.slidesGroup.length 
+                ? workboadStyles["workboard__slide"] 
+                : workboadStyles["workboard__without-slide"]}
+            >
+                {props.slidesGroup.length !== 0 &&
+                    <Slide slideElement={props.slidesGroup[props.currSlideIndex]} 
+                        index={props.currSlideIndex} 
+                        isCurrent={true} 
+                        isControl={props.isControl}
+                    />
                 }
             </div>
         </div>
     );
 }
 
-export default Workboard;
+export default connector(Workboard);

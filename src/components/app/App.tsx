@@ -3,39 +3,50 @@ import Toolbar from "../toolbar/Toolbar";
 import SlidesGroup from "../slidesGroup/SlidesGroup";
 import Workboard from "../workboard/Workboard";
 import ControlPanel from "../controlPanel/ControlPanel";
-import { dispatch, getState } from "../../actions/actions";
-import * as types from "../../common/types";
-import * as functions from "../../common/functions";
 import appStyles from "./styles/app.module.css";
 import "./styles/commonStyles.css";
 import * as consts from "../../common/consts";
+import {redo, undo} from "../../actions/local-history/localHistoryActions";
+import { deleteAreas } from "../../actions/areas/areasActions";
+import { deleteSlides } from "../../actions/slides/slidesActions";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../store";
 
-function App(): JSX.Element 
+const mapState = (state: RootState) => ({
+    presentationElements: state.presentationElements,
+    localHistory: state.localHistory,
+});
+
+const mapDispatch = {
+    undo: undo,
+    redo: redo,
+    deleteAreas: deleteAreas,
+    deleteSlides: deleteSlides,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
+
+function App(props: Props): JSX.Element 
 {
-    const presentationMaker: types.PresentationMaker = getState();
-    const presentationElements: types.PresentationElements = presentationMaker.presentationElements;
-
-    if (!presentationMaker.localHistory.length)
-    {
-        presentationMaker.localHistory = [presentationMaker.presentationElements];
-    }
-
     const [isControl, setIsControl] = useState(false);
 
     const deleteSelected = () => {
-        const updatedPresentationElements = getState().presentationElements;
+        const updatedPresentationElements = props.presentationElements;
 
         (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
         updatedPresentationElements.selectedAreasIndexes.length > 0) 
-        ? dispatch(functions.deleteAreas, {}) : dispatch(functions.deleteSlides, {});
+        ? props.deleteAreas() : props.deleteSlides();
     }
 
     const keyDownCheck = (key: string) => {
         if (key === "Control") setIsControl(true);
         else if (key === "Delete") deleteSelected();
 
-        if (key === "z" && isControl) dispatch(functions.undo, {});
-        else if (key === "y" && isControl) dispatch(functions.redo, {});
+        if (key === "z" && isControl) props.undo();
+        else if (key === "y" && isControl) props.redo();
     }
 
     useEffect(() => {
@@ -59,16 +70,16 @@ function App(): JSX.Element
     return (
         <div className={appStyles["app"]}>
             <div>
-                <ControlPanel presentationMaker={presentationMaker}/>
-                <Toolbar presentationElements={presentationElements} />
+                <ControlPanel />
+                <Toolbar />
             </div>
 
             <div className={appStyles["workspace"]}>
-                <Workboard presentationElements={presentationElements} isControl={isControl} />
-                <SlidesGroup presentationElements={presentationElements} isControl={isControl} />
+                <Workboard isControl={isControl} />
+                <SlidesGroup isControl={isControl} />
             </div>
         </div>
     );
 }
 
-export default App;
+export default connector(App);

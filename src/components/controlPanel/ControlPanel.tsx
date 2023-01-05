@@ -1,20 +1,31 @@
 import React from "react";
 import { jsPDF } from "jspdf";
 import Button from "./components/Button";
-import * as types from "../../common/types";
-import * as functions from "../../common/functions";
 import PresentationName from "./components/PresentationName";
 import styles from "./styles.module.css";
-import { dispatch, setState } from "../../actions/actions";
+import { convertJsonToState, convertStateToJson } from "../../actions/convert/convertActions";
+import { connect, ConnectedProps } from "react-redux";
+import { changeTitle } from "../../actions/title/titleActions";
 
-function ControlPanel(props: {presentationMaker: types.PresentationMaker}): JSX.Element
+const mapDispatch = {
+    convertJsonToState: (jsonString: string) => convertJsonToState(jsonString),
+    convertStateToJson: convertStateToJson,
+    changeTitle: changeTitle,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
+
+function ControlPanel(props: Props): JSX.Element
 {
     const renameHandler = () => {
-        const newName = document.getElementsByTagName("input")[1].value;
+        const newTitle = document.getElementsByTagName("input")[1].value;
 
-        if (newName)
+        if (newTitle)
         {
-            dispatch(functions.updateName, newName);
+            props.changeTitle(newTitle);
         }
     };
 
@@ -40,14 +51,14 @@ function ControlPanel(props: {presentationMaker: types.PresentationMaker}): JSX.
                 let result = reader.result;
                 if (typeof result === "string")
                 {
-                    setState(functions.convertJsonToPresentationMaker(result));
+                    props.convertJsonToState(result);
                 }
             };
         }
     };
     const saveInMyComputerHandler = () => 
     {
-        dispatch(functions.convertPresentationMakerToJson, {presentationMaker: props.presentationMaker})
+        props.convertStateToJson();
     };
     const exportHandler = () => 
     {
@@ -79,16 +90,16 @@ function ControlPanel(props: {presentationMaker: types.PresentationMaker}): JSX.
     return (
         <div className = {styles["control-panel"]}>
             <input className={styles['fileInput']} id="sortpicture" type="file"/>
-            <PresentationName presentationName={props.presentationMaker.name} />
-            <Button onClick={renameHandler} actionName={"Change name"}/>
-            <Button onClick={uploadFromCloudHandler} actionName={"Upload from cloud"}/>
-            <Button onClick={saveInCloudHandler} actionName={"Save in cloud"}/>
-            <Button onClick={uploadFromMyComputerHandler} actionName={"Upload from desktop"}/>
-            <Button onClick={saveInMyComputerHandler} actionName={"Save in desktop"}/>
-            <Button onClick={exportHandler} actionName={"Export"}/>
-            <Button onClick={previewHandler} actionName={"Preview"}/>
+            <PresentationName />
+            <Button onClick={renameHandler} actionName={"Изменить название"}/>
+            <Button onClick={uploadFromCloudHandler} actionName={"Загрузить из облака"}/>
+            <Button onClick={saveInCloudHandler} actionName={"Сохранить в облакe"}/>
+            <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"}/>
+            <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"}/>
+            <Button onClick={exportHandler} actionName={"Экспорт"}/>
+            <Button onClick={previewHandler} actionName={"Предпросмотр"}/>
         </div>
     );
 }
 
-export default ControlPanel;
+export default connector(ControlPanel);

@@ -21,14 +21,14 @@ function convertPdf(presentationMaker: PresentationMaker): Pdf
 
 }*/
 
-function updateName(presentationMaker: types.PresentationMaker, updatedName: string): types.PresentationMaker {
+function changeTitle(presentationMaker: types.PresentationMaker, updatedTitle: string): types.PresentationMaker {
     return {
         ...presentationMaker,
-        name: updatedName
+        title: updatedTitle
     }
 }
 
-function convertPresentationMakerToJson(presentationMaker: types.PresentationMaker): types.PresentationMaker {
+function convertStateToJson(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     const json: string = JSON.stringify(presentationMaker);
     const blob = new Blob([json], { type: "text/plain" });
     const link = document.createElement("a");
@@ -38,7 +38,7 @@ function convertPresentationMakerToJson(presentationMaker: types.PresentationMak
     return presentationMaker;
 }
 
-function convertJsonToPresentationMaker(json: string): types.PresentationMaker {
+function convertJsonToState(json: string): types.PresentationMaker {
     if (typeof json === "object") {
         return json;
     }
@@ -823,7 +823,7 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
 }
 
 export {
-    updateName,
+    changeTitle,
     undo,
     redo,
     addSlide,
@@ -846,6 +846,6 @@ export {
     createImage,
     createGraphicPrimitive,
     updateGraphicPrimitive,
-    convertPresentationMakerToJson,
-    convertJsonToPresentationMaker
+    convertStateToJson,
+    convertJsonToState,
 };

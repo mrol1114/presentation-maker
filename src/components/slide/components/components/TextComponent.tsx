@@ -1,26 +1,42 @@
 import React from "react";
-import { dispatch } from "../../../../actions/actions";
 import type * as types from "../../../../common/types";
 import * as functions from "../../../../common/functions";
 import styles from "./styles.module.css";
+import { connect, ConnectedProps } from "react-redux";
+import * as areaContentActions from "../../../../actions/area-content/areaContentActions";
 
-function TextComponent(prop: {textElement: types.TextInfo}): JSX.Element
+const mapDispatch = {
+    updateText: areaContentActions.updateText,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {textElement: types.TextInfo};
+
+function TextComponent(props: Props): JSX.Element
 {
     const onChangeHandler = e => {
-        dispatch(functions.updateText, {text: e.target.value});
+        props.updateText({text: e.target.value});
     }
 
     const style = {
-        color: prop.textElement.color,
-        fontFamily: prop.textElement.font,
-        fontSize: prop.textElement.fontSize,
-        borderWidth: Number(prop.textElement.strokeWidth),
-        borderColor: prop.textElement.strokeColor,
+        color: props.textElement.color,
+        fontFamily: props.textElement.font,
+        fontSize: props.textElement.fontSize,
+        borderWidth: Number(props.textElement.strokeWidth),
+        borderColor: props.textElement.strokeColor,
     };
 
     return (
-        <textarea className={styles["text"]} value={prop.textElement.text} onChange={onChangeHandler} style={style} placeholder="Введите текст" />
+        <input type="textarea" 
+            className={styles["text"]} 
+            value={props.textElement.text} 
+            onChange={onChangeHandler} 
+            style={style}
+            placeholder="Введите текст" 
+        />
     );
 }
 
-export default TextComponent;
+export default connector(TextComponent);

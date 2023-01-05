@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles/styles.module.css";
-import { dispatch } from "../../../actions/actions";
-import * as functions from "../../../common/functions";
+import { connect, ConnectedProps } from "react-redux";
+import * as contentAreaActions from "../../../actions/area-content/areaContentActions";
 
-function TextFont(prop: {isHidden: boolean, textFont: string}): JSX.Element
+const mapDispatch = {
+    updateText: contentAreaActions.updateText,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    isHidden: boolean,
+    textFont: string,
+};
+
+function TextFont(props: Props): JSX.Element
 {
     const [value, setValue] = useState("");
 
     useEffect(() => {
-        if (value !== "" && value !== prop.textFont)
+        if (value !== "" && value !== props.textFont)
         {
-            dispatch(functions.updateText, {font: value});
+            props.updateText({font: value});
         }
     }, [value]);
 
     return (
-        <div id="font-menu" className={prop.isHidden ? styles["content"] + " " + styles["content-inactive"] : 
+        <div id="font-menu" className={props.isHidden ? styles["content"] + " " + styles["content-inactive"] : 
             styles["content"] + " " + styles["content-active"]}>
             <a onClick={() => {setValue("Arial")}}>Arial</a>
             <a onClick={() => {setValue("Arial Black")}}>Arial Black</a>
@@ -35,4 +47,4 @@ function TextFont(prop: {isHidden: boolean, textFont: string}): JSX.Element
     );
 }
 
-export default TextFont;
+export default connector(TextFont);

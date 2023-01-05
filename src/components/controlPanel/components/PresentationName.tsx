@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles/styles.module.css";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../../store";
 
-function PresentationName(prop: {presentationName: string}): JSX.Element
+const mapState = (state: RootState) => ({
+    title: state.title,
+});
+
+const connector = connect(mapState, null);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
+
+function PresentationName(props: Props): JSX.Element
 {
     const [value, setValue] = useState("");
 
     useEffect(() => {
         const nameMessage = document.querySelectorAll("#name-message")[0];
 
-        value !== prop.presentationName ? nameMessage.classList.add(styles["active"]) :
+        value !== props.title ? nameMessage.classList.add(styles["active"]) :
             nameMessage.classList.remove(styles["active"]);
     });
 
@@ -21,4 +32,4 @@ function PresentationName(prop: {presentationName: string}): JSX.Element
     );
 }
 
-export default PresentationName;
+export default connector(PresentationName);

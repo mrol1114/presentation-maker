@@ -1,9 +1,22 @@
 import React, {useEffect, useState} from "react";
-import { dispatch } from "../../../actions/actions";
-import * as functions from "../../../common/functions";
 import styles from "./styles/styles.module.css";
+import * as areaContentActions from "../../../actions/area-content/areaContentActions";
+import { connect, ConnectedProps } from "react-redux";
 
-function StrokeWidth(props: {value: number, type: string}): JSX.Element
+const mapDispatch = {
+    updateText: areaContentActions.updateText,
+    updateGraphicPrimitive: areaContentActions.updateGraphicPrimitive,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    value: number,
+    type: string,
+};
+
+function StrokeWidth(props: Props): JSX.Element
 {
     const [value, setValue] = useState("");
 
@@ -17,20 +30,24 @@ function StrokeWidth(props: {value: number, type: string}): JSX.Element
         setValue(newValue.toString());
         if (props.type === "text")
         {
-            dispatch(functions.updateText, {strokeWidth: newValue});
+            props.updateText({strokeWidth: newValue});
         }
         else if (props.type === "primitive")
         {
-            dispatch(functions.updateGraphicPrimitive, {strokeWidth: newValue});
+            props.updateGraphicPrimitive({strokeWidth: newValue});
         }
     }
 
     return (
         <div className={styles["text-stroke-width"]}>
             <div className={styles["stroke-width-icon"]}></div>
-            <input className={styles["stroke-width"]} type="number" value={value} onChange={onChangeHandler} />
+            <input className={styles["stroke-width"]} 
+                type="number" 
+                value={value} 
+                onChange={onChangeHandler} 
+            />
         </div>
     );
 }
 
-export default StrokeWidth;
+export default connector(StrokeWidth);

@@ -4,8 +4,13 @@ import TriangleComponent from "./components/TriangleComponent";
 import RectangleComponent from "./components/RectangleComponent";
 import EllipseComponent from "./components/EllipseComponent";
 import styles from "./styles.module.css";
+import { connect } from "react-redux";
 
-function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Element
+const connector = connect(null, null);
+
+type Props = {areaElement: types.Area};
+
+function GraphicPrimitiveComponent(props: Props): JSX.Element
 {    
     if (!props.areaElement.contains || props.areaElement.contains.type !== 'primitive')
     {
@@ -35,4 +40,4 @@ function GraphicPrimitiveComponent(props: {areaElement: types.Area}): JSX.Elemen
     );
 }
 
-export default GraphicPrimitiveComponent;
+export default connector(GraphicPrimitiveComponent);

@@ -3,51 +3,62 @@ import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
 import type * as types from "../../../common/types";
-import * as functions from "../../../common/functions";
 import areaStyles from "./area.module.css";
-import { dispatch } from "../../../actions/actions";
+import * as areaActions from "../../../actions/areas/areasActions";
+import { connect, ConnectedProps } from "react-redux";
 
-function Area(prop: {
+const mapDispatch = {
+    selectAreas: areaActions.selectAreas,
+    assignAreaIndex: areaActions.assignAreaIndex,
+    updateArea: areaActions.updateArea,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
     areaElement: types.Area, 
     areaIndex: number,
     isCurrentSlide: boolean,
     slideRef: HTMLDivElement|null,
     isControl: boolean
-}): JSX.Element
+};
+
+function Area(props: Props): JSX.Element
 {
     const areaBorderWidth: number = 10;
     const standartDivider: number = 9;
 
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
-    const xDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.clientWidth / prop.slideRef.offsetWidth : standartDivider;
+    const xDivider: number = workboardSlide && props.slideRef ? 
+        workboardSlide.clientWidth / props.slideRef.offsetWidth : standartDivider;
 
-    const yDivider: number = workboardSlide && prop.slideRef ? 
-        workboardSlide.clientHeight / prop.slideRef.offsetHeight : standartDivider;
+    const yDivider: number = workboardSlide && props.slideRef ? 
+        workboardSlide.clientHeight / props.slideRef.offsetHeight : standartDivider;
 
     const style = {
-        marginLeft: prop.isCurrentSlide ? prop.areaElement.x : prop.areaElement.x / xDivider,
-        marginTop: prop.isCurrentSlide ? prop.areaElement.y : prop.areaElement.y / yDivider,
-        width: prop.areaElement.width + areaBorderWidth * 2,
-        height: prop.areaElement.height + areaBorderWidth * 2,
+        marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
+        marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
+        width: props.areaElement.width + areaBorderWidth * 2,
+        height: props.areaElement.height + areaBorderWidth * 2,
     };
 
     useEffect(() => {
-        if (!prop.isCurrentSlide) return;
+        if (!props.isCurrentSlide) return;
 
-        const areaElement = document.querySelectorAll("#" + prop.areaElement.id)[0];
+        const areaElement = document.querySelectorAll("#" + props.areaElement.id)[0];
 
         function onMouseDown() {
             document.addEventListener("mouseup", onMouseUp);
             
-            prop.isControl ? dispatch(functions.selectAreas, [prop.areaIndex]) : 
-                dispatch(functions.assignAreaIndex, prop.areaIndex);
+            props.isControl ? props.selectAreas([props.areaIndex]) : 
+                props.assignAreaIndex(props.areaIndex);
         }
 
         function onMouseUp() {
-            if (!prop.isControl && (areaElement.clientWidth !== prop.areaElement.width || areaElement.clientHeight !== prop.areaElement.height))
+            if (!props.isControl && (areaElement.clientWidth !== props.areaElement.width || areaElement.clientHeight !== props.areaElement.height))
             {
-                dispatch(functions.updateArea, {width: areaElement.clientWidth, height: areaElement.clientHeight});
+                props.updateArea({width: areaElement.clientWidth, height: areaElement.clientHeight});
             }
             document.removeEventListener("mouseup", onMouseUp);
         }
@@ -57,24 +68,24 @@ function Area(prop: {
         return () => {
             areaElement.removeEventListener("mousedown", onMouseDown);
         }
-    }, [prop.isControl, prop.areaElement, prop.areaIndex]);
+    }, [props.isControl, props.areaElement, props.areaIndex]);
 
     return (
-        <div id={prop.areaElement.id} style={style}
-        className={prop.isCurrentSlide ? areaStyles["area-wrapper"] : areaStyles["area-wrapper-scale"]}>
-            { prop.areaElement.contains?.type === "text" && 
-                <TextComponent textElement={prop.areaElement.contains}/>
+        <div id={props.areaElement.id} style={style}
+        className={props.isCurrentSlide ? areaStyles["area-wrapper"] : areaStyles["area-wrapper-scale"]}>
+            { props.areaElement.contains?.type === "text" && 
+                <TextComponent textElement={props.areaElement.contains}/>
             }
 
-            { prop.areaElement.contains?.type === "primitive" && 
-                <GraphicPrimitiveComponent areaElement={prop.areaElement}/>
+            { props.areaElement.contains?.type === "primitive" && 
+                <GraphicPrimitiveComponent areaElement={props.areaElement}/>
             }
 
-            { (prop.areaElement.contains?.type === "imageUrl" || prop.areaElement.contains?.type === "imageBase64") && 
-                <ImageComponent imageElement={prop.areaElement.contains}/>
+            { (props.areaElement.contains?.type === "imageUrl" || props.areaElement.contains?.type === "imageBase64") && 
+                <ImageComponent imageElement={props.areaElement.contains}/>
             }
         </div>
     );
 }
 
-export default Area;
+export default connector(Area);

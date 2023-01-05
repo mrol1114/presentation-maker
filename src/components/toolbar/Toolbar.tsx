@@ -2,20 +2,39 @@ import React, { useEffect, useState } from "react";
 import Button from "./components/Button";
 import ImageSelector from "./components/ImageSelector";
 import StrokeWidth from "./components/StrokeWidth";
-import { dispatch } from "../../actions/actions";
-import * as functions from "../../common/functions";
 import toolbarStyles from "./toolbar.module.css";
 import InputComponent from "./components/InputComponent";
 import * as types from "../../common/types";
 import ColorSelector from "./components/ColorSelector";
 import TextFont from "./components/TextFont";
+import { undo, redo } from "../../actions/local-history/localHistoryActions";
+import { addSlide } from "../../actions/slides/slidesActions";
+import { addArea } from "../../actions/areas/areasActions";
+import { updateText } from "../../actions/area-content/areaContentActions";
+import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../store";
 
+const mapState = (state: RootState) => ({
+    currSlideIndex: state.presentationElements.currentSlideIndex,
+    currAreaIndex: state.presentationElements.currentAreaIndex,
+    slidesGroup: state.presentationElements.slidesGroup,
+});
 
-function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.Element
+const mapDispatch = {
+    addSlide: addSlide,
+    undo: undo,
+    redo: redo,
+    addArea: addArea,
+    updateText: updateText,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
+
+function Toolbar(props: Props): JSX.Element
 {
-    const currSlideIndex: number = prop.presentationElements.currentSlideIndex;
-    const currAreaIndex: number = prop.presentationElements.currentAreaIndex;
-
     const [isText, setIsText] = useState(false);
     const [isGraphicPrimitive, setIsGraphicPrimitive] = useState(false);
     const [isBackgroundImage, setIsBackgroundImage] = useState(false);
@@ -31,10 +50,10 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
         setIsText(false);
         setIsGraphicPrimitive(false);
 
-        if (prop.presentationElements.slidesGroup.length && currAreaIndex !== -1 && 
-            prop.presentationElements.slidesGroup[currSlideIndex].areas.length)
+        if (props.slidesGroup.length && props.currAreaIndex !== -1 && 
+            props.slidesGroup[props.currSlideIndex].areas.length)
         {
-            const currArea: types.Area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex]; 
+            const currArea: types.Area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex]; 
             const areaContainsType = currArea.contains?.type;
 
             if (areaContainsType === "text")
@@ -68,17 +87,17 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     
     const addSlideHandler = () => 
     {
-        dispatch(functions.addSlide, {});
+        props.addSlide();
     }
 
     const undoHandler = () => 
     {
-        dispatch(functions.undo, {});
+        props.undo();
     }
 
     const redoHandler = () => 
     {
-        dispatch(functions.redo, {});
+        props.redo();
     }
 
     const backgroundImageHandler = () => 
@@ -90,7 +109,7 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const addTextHandler = () => 
     {
-        dispatch(functions.addArea, {areaType: "text"});
+        props.addArea({areaType: "text"});
     }
 
     const openImageSelectorHandler = () => 
@@ -102,17 +121,17 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const addElipseHandler = () => 
     {
-        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "ellipse"});
+        props.addArea({areaType: "primitive", primitiveType: "ellipse"});
     }
 
     const addRectangleHandler = () => 
     {
-        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "rectangle"});
+        props.addArea({areaType: "primitive", primitiveType: "rectangle"});
     }
 
     const addTriangleHandler = () => 
     {
-        dispatch(functions.addArea, {areaType: "primitive", primitiveType: "triangle"});
+        props.addArea({areaType: "primitive", primitiveType: "triangle"});
     }
 
     const textFontButtonHandler = () =>
@@ -122,26 +141,26 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
 
     const reduceFontSizeHandler = () =>
     {
-        const area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex];
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
 
         if (!area.contains || area.contains?.type !== "text")
         {
             return;
         }
 
-        dispatch(functions.updateText, {fontSize: area.contains.fontSize + 1});
+        props.updateText({fontSize: area.contains.fontSize + 1});
     }
 
     const increaseFontSizeHandler = () =>
     {
-        const area = prop.presentationElements.slidesGroup[currSlideIndex].areas[currAreaIndex];
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
 
         if (!area.contains || area.contains?.type !== "text" || area.contains.fontSize - 1 < 0)
         {
             return;
         }
 
-        dispatch(functions.updateText, {fontSize: area.contains.fontSize - 1});
+        props.updateText({fontSize: area.contains.fontSize - 1});
     }
 
     const textBoldHandler = () =>
@@ -214,4 +233,4 @@ function Toolbar(prop: {presentationElements: types.PresentationElements}): JSX.
     );
 }
 
-export default Toolbar;
+export default connector(Toolbar);

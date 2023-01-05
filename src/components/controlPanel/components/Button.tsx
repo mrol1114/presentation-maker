@@ -1,7 +1,15 @@
 import React from "react";
 import styles from "./styles/button.module.css";
+import { connect } from "react-redux";
 
-function Button(props: {onClick: Function, actionName: string}): JSX.Element
+const connector = connect(null, null);
+
+type Props = {
+    onClick: Function,
+    actionName: string,
+};
+
+function Button(props: Props): JSX.Element
 {
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         props.onClick();
@@ -14,4 +22,4 @@ function Button(props: {onClick: Function, actionName: string}): JSX.Element
     );
 }
 
-export default Button;
+export default connector(Button);

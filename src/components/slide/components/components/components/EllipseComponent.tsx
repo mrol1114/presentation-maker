@@ -1,21 +1,30 @@
 import React from "react";
 import type * as types from "../../../../../common/types";
+import { connect } from "react-redux";
 
-function EllipseComponent(prop: {graphicPrimitiveElement: types.GraphicPrimitiveInfo, width: number, height: number}): JSX.Element
+const connector = connect(null, null);
+
+type Props = {
+    graphicPrimitiveElement: types.GraphicPrimitiveInfo,
+    width: number,
+    height: number,
+};
+
+function EllipseComponent(props: Props): JSX.Element
 {
     const average: number = 50;
 
-    const valueX: number = (average - prop.graphicPrimitiveElement.strokeWidth * average / prop.width) > 0 ? 
-        average - prop.graphicPrimitiveElement.strokeWidth * average / prop.width : 1;
-    const valueY: number = (average - prop.graphicPrimitiveElement.strokeWidth * average / prop.height) > 0 ?
-        average - prop.graphicPrimitiveElement.strokeWidth * average / prop.height : 1;
+    const valueX: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.width) > 0 ? 
+        average - props.graphicPrimitiveElement.strokeWidth * average / props.width : 1;
+    const valueY: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.height) > 0 ?
+        average - props.graphicPrimitiveElement.strokeWidth * average / props.height : 1;
 
     return (
         <svg width="100%" height="100%">
-            <ellipse fill={prop.graphicPrimitiveElement.color} strokeWidth={valueX === 1 ? "98%" : prop.graphicPrimitiveElement.strokeWidth} 
-            stroke={prop.graphicPrimitiveElement.strokeColor} cx="50%" cy="50%" rx={valueX + "%"} ry={valueY + "%"}/>
+            <ellipse fill={props.graphicPrimitiveElement.color} strokeWidth={valueX === 1 ? "98%" : props.graphicPrimitiveElement.strokeWidth} 
+            stroke={props.graphicPrimitiveElement.strokeColor} cx="50%" cy="50%" rx={valueX + "%"} ry={valueY + "%"}/>
         </svg>
     );
 }
 
-export default EllipseComponent;
+export default connector(EllipseComponent);

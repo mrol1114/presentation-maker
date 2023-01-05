@@ -1,10 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { dispatch } from "../../../actions/actions";
-import * as functions from "../../../common/functions";
+import React, { useState } from "react";
 import * as types from "../../../common/types";
 import styles from "./styles/styles.module.css";
+import * as areaActions from "../../../actions/areas/areasActions";
+import * as slideActions from "../../../actions/slides/slidesActions";
+import { connect, ConnectedProps } from "react-redux";
 
-function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Element {
+const mapDispatch = {
+    addArea: areaActions.addArea,
+    updateSlideProperty: slideActions.updateSlideProperty,
+};
+
+const connector = connect(null, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+    isBackgroundImageSelector: boolean
+};
+
+function ImageSelector(props: Props): JSX.Element {
     const [isError, setIsError] = useState(false);
 
     const checkIfImageExists = (url: string, callback: Function) => {
@@ -33,8 +46,9 @@ function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Elemen
                 base64: fileReader.result as string
             };
 
-            prop.isBackgroundImageSelector ? dispatch(functions.updateSlideProperty, { backgroundImage: backgroundImage, 
-                backgroundColor: "" }) : dispatch(functions.addArea, { areaType: "imageBase64", path: fileReader.result });
+            props.isBackgroundImageSelector 
+                ? props.updateSlideProperty({backgroundImage: backgroundImage, backgroundColor: ""})
+                : props.addArea({areaType: "imageBase64", path: fileReader.result});
             
             setIsError(false);
         }
@@ -53,8 +67,9 @@ function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Elemen
             if (exists) 
             {
                 setIsError(false);
-                prop.isBackgroundImageSelector ? dispatch(functions.updateSlideProperty, { backgroundImage: backgroundImage }) :
-                    dispatch(functions.addArea, { areaType: "imageUrl", path: url });
+                props.isBackgroundImageSelector
+                    ? props.updateSlideProperty({backgroundImage: backgroundImage})
+                    : props.addArea({areaType: "imageUrl", path: url});
             }
             else
             {
@@ -75,13 +90,20 @@ function ImageSelector(prop: { isBackgroundImageSelector: boolean }): JSX.Elemen
                     <div className={styles["image-base__text"]}>Загрузить с компьютера</div>
                     <input className={styles["input"]} type="file" accept=".jpg, .jpeg, .png" onChange={addImageBaseHandler} />
                 </label>
-                <input id="image-url" className={styles["image-url"]} placeholder="Добавьте URL изображения" type="url" autoComplete="off" />
+                <input id="image-url" 
+                    className={styles["image-url"]} 
+                    placeholder="Добавьте URL изображения" 
+                    type="url" 
+                    autoComplete="off"
+                />
                 <button className={styles["button-image-add"]} type="submit" onClick={addImageUrlHandler}>Добавить</button>
-                <a id="error-message" className={isError ? styles["error-message-active"] : styles["error-message-inactive"]}>Недействительный URL</a>
+                <a id="error-message" className={isError ? styles["error-message-active"] : styles["error-message-inactive"]}>
+                    Недействительный URL
+                </a>
                 <button className={styles["button-ready"]} onClick={closeImageSelectorHandler}>Готово</button>
             </div>
         </div>
     );
 }
 
-export default ImageSelector;
+export default connector(ImageSelector);
