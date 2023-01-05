@@ -573,15 +573,16 @@ function updateInDragAreas(presentationMaker: types.PresentationMaker, propertie
     const stepY: number = newAreaLastY - presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas[lastAreaIndex].y;
 
     const newAreas: types.Area[] = presentationMaker.presentationElements.slidesGroup[currSlideIndex].areas.map((area, index) => {
-        if (!areasSelect.find(value => value.index === index) || index === lastAreaIndex) {
+        if (!areasSelect.find(value => value.index === index)) {
             return area;
+        }
+        else if (index === lastAreaIndex)
+        {
+            return updateElement.updateArea(area, { x: newAreaLastX, y: newAreaLastY });
         }
 
         return updateElement.updateArea(area, { x: area.x + stepX, y: area.y + stepY });
     });
-
-    newAreas[lastAreaIndex].x = newAreaLastX;
-    newAreas[lastAreaIndex].y = newAreaLastY;
 
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currSlideIndex],
