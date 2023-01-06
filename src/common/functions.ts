@@ -544,8 +544,6 @@ function updateAreas(presentationMaker: types.PresentationMaker, properties: Obj
             (slide, index) => index === currSlideIndex ? newSlide : slide)
     }
 
-    //console.log(earlyPresentationElements, newPresentationElements)
-
     return {
         ...presentationMaker,
         localHistory: [
