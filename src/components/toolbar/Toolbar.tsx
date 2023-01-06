@@ -165,17 +165,38 @@ function Toolbar(props: Props): JSX.Element
 
     const textBoldHandler = () =>
     {
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
 
+        if (!area.contains || area.contains?.type !== "text")
+        {
+            return;
+        }
+
+        props.updateText({bold: !area.contains.bold});
     }
 
     const textItalicHandler = () =>
     {
-        
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
+
+        if (!area.contains || area.contains?.type !== "text")
+        {
+            return;
+        }
+
+        props.updateText({italic: !area.contains.italic});
     }
 
     const textUnderlinedHandler = () =>
     {
-        
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
+
+        if (!area.contains || area.contains?.type !== "text")
+        {
+            return;
+        }
+
+        props.updateText({underlined: !area.contains.underlined});
     }
 
     return (

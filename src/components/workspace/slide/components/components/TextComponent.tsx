@@ -25,6 +25,9 @@ function TextComponent(props: Props): JSX.Element
         fontSize: props.textElement.fontSize,
         borderWidth: Number(props.textElement.strokeWidth),
         borderColor: props.textElement.strokeColor,
+        textDecoration: props.textElement.underlined ? "underline" : "",
+        fontStyle: props.textElement.italic ? "italic" : "",
+        fontWeight: props.textElement.bold ? "bold" : ""
     };
 
     return (
