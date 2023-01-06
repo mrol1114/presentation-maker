@@ -8,16 +8,18 @@ import { convertJsonToState, convertStateToJson } from "../actions/convert/conve
 import * as areaContentActions from "../actions/area-content/areaContentActions";
 import { changeTitle } from "../actions/title/titleActions";
 
+const initialPresentationElements: types.PresentationElements = {
+    slidesGroup: [],
+    currentSlideIndex: -1,
+    selectedSlidesIndexes: [],
+    selectedAreasIndexes: [],
+    currentAreaIndex: -1,
+}
+
 let initialState: types.PresentationMaker = {
     title: "",
-    localHistory: [],
-    presentationElements: {
-        slidesGroup: [],
-        currentSlideIndex: -1,
-        selectedSlidesIndexes: [],
-        selectedAreasIndexes: [],
-        currentAreaIndex: -1,
-    },
+    localHistory: [initialPresentationElements],
+    presentationElements: initialPresentationElements,
     currentPresentationElementsIndex: 0,
 };
 

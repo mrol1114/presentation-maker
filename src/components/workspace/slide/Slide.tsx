@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import Area from "./components/Area";
-import type * as types from "../../common/types";
+import type * as types from "../../../common/types";
 import slideStyles from "./slide.module.css"
 import { useSlideRef } from "./useSlideRef";
-import * as slideActions from "../../actions/slides/slidesActions";
+import * as slideActions from "../../../actions/slides/slidesActions";
 import { connect, ConnectedProps } from "react-redux";
 
 const mapDispatch = {

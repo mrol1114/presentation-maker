@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
-import type * as types from "../../../common/types";
+import type * as types from "../../../../common/types";
 import areaStyles from "./area.module.css";
-import * as areaActions from "../../../actions/areas/areasActions";
+import * as areaActions from "../../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
 
 const mapDispatch = {

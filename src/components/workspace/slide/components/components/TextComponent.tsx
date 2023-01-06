@@ -1,9 +1,8 @@
 import React from "react";
-import type * as types from "../../../../common/types";
-import * as functions from "../../../../common/functions";
+import type * as types from "../../../../../common/types";
 import styles from "./styles.module.css";
 import { connect, ConnectedProps } from "react-redux";
-import * as areaContentActions from "../../../../actions/area-content/areaContentActions";
+import * as areaContentActions from "../../../../../actions/area-content/areaContentActions";
 
 const mapDispatch = {
     updateText: areaContentActions.updateText,

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import * as types from "../../common/types";
+import * as types from "../../../common/types";
 import Slide from "../slide/Slide";
 import workboadStyles from "./workboard.module.css";
 import areaStyles from "../slide/components/area.module.css";
-import * as consts from "../../common/consts";
-import * as areaActions from "../../actions/areas/areasActions";
+import * as consts from "../../../common/consts";
+import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
-import type { RootState } from "../../store";
+import type { RootState } from "../../../store";
 
 const mapState = (state: RootState) => ({
     slidesGroup: state.presentationElements.slidesGroup,
@@ -38,6 +38,7 @@ function Workboard(props: Props): JSX.Element {
 
     const [areasSelect, setAreasSelect] = useState(Array<types.AreaSelect>);
     const [isDrag, setIsDrag] = useState(false);
+    const [isMove, setIsMove] = useState(false);
 
     const saveAreasCoords = (e) => {
         if (!props.slidesGroup.length) return;
@@ -89,27 +90,24 @@ function Workboard(props: Props): JSX.Element {
         const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
         const workboardSlidePosition = workboardSlide.getBoundingClientRect();
 
-        let isMove: boolean = false;
-
         function onMouseMove(e) {
             const newCoordX: number = e.pageX - workboardSlidePosition.x - areasSelect[areasSelect.length - 1].stepX;
             const newCoordY: number = e.pageY - workboardSlidePosition.y - areasSelect[areasSelect.length - 1].stepY;
 
-            props.updateInDragAreas({areasSelect: areasSelect, newAreaLastX: newCoordX, newAreaLastY: newCoordY});
+            props.updateInDragAreas({areasSelect: [...areasSelect], newAreaLastX: newCoordX, newAreaLastY: newCoordY});
 
-            isMove = true;
+            setIsMove(true);
         }
 
         function onMouseUp() {
             setIsDrag(false);
-            document.removeEventListener("mousemove", onMouseMove);
-            document.removeEventListener("mouseup", onMouseUp);
 
             if (!isMove) return;
 
             props.updateAreas({
                 areasSelect: areasSelect, slidePosX: workboardSlidePosition.x, slidePosY: workboardSlidePosition.y
             });
+            setIsMove(false);
         }
 
         function onMouseDown(e) {
@@ -141,9 +139,8 @@ function Workboard(props: Props): JSX.Element {
             });
 
             if (isSelect) {
-                setIsDrag(true);
-
                 saveAreasCoords(e);
+                setIsDrag(true);
             }
             else if (!props.isControl && !isResize) {
                 setAreasSelect([]);
@@ -152,15 +149,18 @@ function Workboard(props: Props): JSX.Element {
         };
 
         updateAreasSelect();
+
         workboard.addEventListener("mousedown", onMouseDown);
-        if (isDrag) {
+        if (isDrag)
+        {
             document.addEventListener("mousemove", onMouseMove);
             document.addEventListener("mouseup", onMouseUp);
-            setIsDrag(false);
         }
 
         return () => {
             workboard.removeEventListener("mousedown", onMouseDown);
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
         }
     }, [areasSelect, isDrag, props.presentationElements, props.isControl]);
 

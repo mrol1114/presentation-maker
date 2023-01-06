@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Slide from "../slide/Slide";
 import slidesGroupStyles from "./slidesGroup.module.css";
-import * as slideActions from "../../actions/slides/slidesActions";
+import * as slideActions from "../../../actions/slides/slidesActions";
 import { connect, ConnectedProps } from "react-redux";
-import type { RootState } from "../../store";
+import type { RootState } from "../../../store";
 
 const mapState = (state: RootState) => ({
     currSlideIndex: state.presentationElements.currentSlideIndex,
