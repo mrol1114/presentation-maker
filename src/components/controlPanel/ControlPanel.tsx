@@ -7,6 +7,7 @@ import { convertJsonToState, convertStateToJson } from "../../actions/convert/co
 import { connect, ConnectedProps } from "react-redux";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
+import { getJSDocTemplateTag } from "typescript";
 
 const mapDispatch = {
     convertJsonToState: (jsonString: string) => convertJsonToState(jsonString),
@@ -80,22 +81,29 @@ function ControlPanel(props: Props): JSX.Element {
     };
 
     const exportHandler = () => {
-        const PM = document.getElementById("root");
+        const PM = document.getElementById("workboard");
         if (PM === null) {
             return;
         }
         const doc = new jsPDF({
             orientation: "landscape",
-            format: 'a1',
+            format: 'a4',
             unit: 'px',
         });
-        const width = doc.internal.pageSize.getWidth();
-        const height = doc.internal.pageSize.getHeight();
-        const imgData = "/components/toolbar/images/";
+        let div = document.createElement("div");
+        const width = doc.internal.pageSize.getWidth() - 0.5;
+        const height = doc.internal.pageSize.getHeight() - 0.5;
+        PM.style.padding = "0";
+        PM.style.border = "none";
+        
+        div.style.width = width + "px";
+        div.style.height = height + "px";
+        div.style.display = "flex";
+        div.appendChild(PM);
 
-        doc.addImage(imgData, 'JPEG', 0, 0, width, height);
+        console.log(div);
         doc.setFont('Inter-Regular', 'normal');
-        doc.html(PM, {
+        doc.html(div, {
             async callback(doc) {
                 await doc.save('pdf_name');
             },
