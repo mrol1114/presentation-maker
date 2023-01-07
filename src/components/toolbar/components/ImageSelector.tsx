@@ -4,6 +4,7 @@ import styles from "./styles/styles.module.css";
 import * as areaActions from "../../../actions/areas/areasActions";
 import * as slideActions from "../../../actions/slides/slidesActions";
 import { connect, ConnectedProps } from "react-redux";
+import imageCompression from 'browser-image-compression';
 
 const mapDispatch = {
     addArea: areaActions.addArea,
@@ -52,18 +53,23 @@ function ImageSelector(props: Props): JSX.Element {
             
             setIsError(false);
         }
-        fileReader.readAsDataURL(e.target.files[0]);
+
+        imageCompression(e.target.files[0], {maxSizeMB: 1, useWebWorker: true})
+            .then(function (compressedFile) {
+                e.target.value = null;
+                fileReader.readAsDataURL(compressedFile);
+            })
     }
 
     const addImageUrlHandler = () => {
-        const url: string | undefined = document.getElementById("selector")?.getElementsByTagName("input")[1].value;
+        const url: string = document.getElementById("selector")?.getElementsByTagName("input")[1].value as string;
 
         const backgroundImage: types.ImageInfo = {
             type: "imageUrl",
-            path: url as string
+            path: url
         };
 
-        checkIfImageExists(url as string, (exists: boolean) => {
+        checkIfImageExists(url, (exists: boolean) => {
             if (exists) 
             {
                 setIsError(false);
