@@ -1,9 +1,10 @@
 .control-panel
 {
-    padding: 4px 6px;
+    padding: 4px 200px 6px 30px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    background: linear-gradient(to right, rgb(var(--blue-color), 0.7), rgb(var(--blue-color), 1));
 }
 
 .fileInput

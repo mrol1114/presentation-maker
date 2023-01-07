@@ -61,7 +61,7 @@ function Workspace(props: Props): JSX.Element
             document.removeEventListener("keydown", onKeyDown);
             document.removeEventListener("keyup", onKeyUp);
         }
-    }, [isControl]);
+    }, [isControl, props.presentationElements]);
 
     return (
         <div className={workspaceStyles["workspace"]}>

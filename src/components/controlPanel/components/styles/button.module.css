@@ -1,22 +1,23 @@
 .button
 {
-    border: 1px solid transparent;
-    background-color: #FFFFFF;
+    border: 2px solid transparent;
     border-radius: 6px;
     box-shadow: none;
-    color: #202124;
     cursor: pointer;
     font-size: 14px;
     padding: 4px 6px;
     margin: 2px;
+    background: none;
+    color: white;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4);
 }
 
 .button:hover
 {
-    background-color: rgba(var(--light-blue-color), .5);
+    outline: 2px solid rgb(var(--white-color), 0.8);
 }
 
 .button:active
 {
-    background-color: rgb(var(--light-blue-color), .7);
+    outline: 3px solid rgb(var(--black-color), 0.7);
 }

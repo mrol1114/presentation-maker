@@ -58,7 +58,7 @@
    border: 0px solid rgb(var(--dark-blue-color));
    border-bottom-width: 2px;
    border-top-width: 2px;
-   background-color: rgb(var(--light-blue-color), 0.25);
+   background: rgb(var(--silver-color), 0.4);
 }
 
 .toolbar__slide-tools {
