@@ -4,23 +4,6 @@ import * as createElement from "./model/createElement";
 import * as updateElement from "./model/updateElement";
 import { getProperty } from "./utils/property";
 
-// загрузка, выгрузка
-
-/*function download(): PresentationMaker
-{
-
-}
-
-function save(obj: SaveObj): void
-{
-
-}
-
-function convertPdf(presentationMaker: PresentationMaker): Pdf
-{
-
-}*/
-
 function changeTitle(presentationMaker: types.PresentationMaker, updatedTitle: string): types.PresentationMaker {
     return {
         ...presentationMaker,
@@ -28,13 +11,18 @@ function changeTitle(presentationMaker: types.PresentationMaker, updatedTitle: s
     }
 }
 
+// загрузка, выгрузка
+
 function convertStateToJson(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     const json: string = JSON.stringify(presentationMaker);
-    const blob = new Blob([json], { type: "text/plain" });
+    const blob = new Blob([json], {type: "text/plain"});
+
     const link = document.createElement("a");
+
     link.setAttribute("href", URL.createObjectURL(blob));
     link.setAttribute("download", Date.now() + "");
     link.click();
+
     return presentationMaker;
 }
 
@@ -42,6 +30,7 @@ function convertJsonToState(json: string): types.PresentationMaker {
     if (typeof json === "object") {
         return json;
     }
+
     return JSON.parse(json);
 }
 
