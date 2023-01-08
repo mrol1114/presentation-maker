@@ -31,7 +31,7 @@ function TextComponent(props: Props): JSX.Element
     };
 
     return (
-        <input type="textarea" 
+        <textarea
             className={styles["text"]} 
             value={props.textElement.text} 
             onChange={onChangeHandler} 
