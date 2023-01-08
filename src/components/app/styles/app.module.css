@@ -12,6 +12,7 @@
 .app
 {
     display: flex;
+    z-index: 2;
     flex-direction: column;
     height: 100vh;
 }
