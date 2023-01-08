@@ -154,6 +154,7 @@ function ControlPanel(props: Props): JSX.Element {
         });
     };
     const previewHandler = () => {
+        document.documentElement.requestFullscreen();
     };
 
     return (

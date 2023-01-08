@@ -1,5 +1,5 @@
 import React from "react";
-import type * as types from '../../../../../common/types';
+import type * as types from '../../../../common/types';
 import styles from "./styles.module.css";
 import { connect } from "react-redux";
 

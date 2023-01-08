@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as types from "../../../common/types";
-import areaStyles from "../slide/components/area.module.css";
+import areaStyles from "../../slide/components/area.module.css";
 import * as consts from "../../../common/consts";
 import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";

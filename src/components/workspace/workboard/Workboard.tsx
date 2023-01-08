@@ -1,5 +1,5 @@
 import React from "react";
-import Slide from "../slide/Slide";
+import Slide from "../../slide/Slide";
 import workboadStyles from "./workboard.module.css";
 import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import * as areaActions from "../../../../actions/areas/areasActions";
+import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
-import type * as types from "../../../../common/types";
+import type * as types from "../../../common/types";
 
 const mapDispatch = {
     selectAreas: areaActions.selectAreas,

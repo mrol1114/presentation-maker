@@ -1,5 +1,5 @@
 import React from "react";
-import type * as types from "../../../../../../common/types";
+import type * as types from "../../../../../common/types";
 import { connect } from "react-redux";
 
 const connector = connect(null, null);

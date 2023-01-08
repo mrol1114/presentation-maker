@@ -1,5 +1,5 @@
 import React from "react";
-import type * as types from "../../../../../common/types";
+import type * as types from "../../../../common/types";
 import TriangleComponent from "./components/TriangleComponent";
 import RectangleComponent from "./components/RectangleComponent";
 import EllipseComponent from "./components/EllipseComponent";

@@ -5,6 +5,7 @@ import Workspace from "../workspace/Workspace";
 import appStyles from "./styles/app.module.css";
 import "./styles/commonStyles.css";
 import { connect } from "react-redux";
+import Fullscreen from "../fullscreen/Fullscreen";
 
 const connector = connect(null);
 
@@ -18,6 +19,7 @@ function App(): JSX.Element
             </div>
 
             <Workspace />
+            <Fullscreen />
         </div>
     );
 }

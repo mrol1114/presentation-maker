@@ -1,5 +1,5 @@
 import React from "react";
-import Slide from "../slide/Slide";
+import Slide from "../../slide/Slide";
 import slidesGroupStyles from "./slidesGroup.module.css";
 import * as slideActions from "../../../actions/slides/slidesActions";
 import { connect, ConnectedProps } from "react-redux";
