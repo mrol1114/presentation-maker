@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import Button from "./components/Button";
 import PresentationName from "./components/PresentationName";
@@ -8,6 +8,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
 import { getJSDocTemplateTag } from "typescript";
+import { gapi } from 'gapi-script';
 
 const mapDispatch = {
     convertJsonToState: (jsonString: string) => convertJsonToState(jsonString),
@@ -23,6 +24,70 @@ type Props = PropsFromRedux;
 function ControlPanel(props: Props): JSX.Element {
     const [openPicker, authResponse] = useDrivePicker();
 
+    const apiKey = "AIzaSyDBGK9XKGSKosooSCc6AYt0utHt1XN3-vc";
+    const clientID = "1030468714467-op9s4o29m260crer5tu3n97kngv1co6i.apps.googleusercontent.com";
+    const discoveryDocs = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+    const scopes = "https://www.googleapis.com/auth/drive";
+
+    function handleClientLoad() {
+        gapi.load("client:auth2", initClient);
+    }
+
+    function initClient() {
+        gapi.client.init({
+            apiKey: apiKey,
+            clientId: clientID,
+            discoveryDocs: discoveryDocs,
+            scope: scopes
+        }).then(function () {
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        }, function (error) {
+            console.log(error);
+        });
+    }
+
+    function updateSigninStatus(isSignedIn: boolean) {
+        /* from pop-up buttons signIn/signOut
+        if (isSignedIn) {
+            
+        }*/
+    }
+
+    function openGooglePicker() {
+        const token = gapi.auth.getToken();
+
+        openPicker({
+            clientId: clientID,
+            developerKey: apiKey,
+            viewId: "DOCS",
+            token: token ? token.access_token : "",
+            showUploadView: true,
+            showUploadFolders: true,
+            supportDrives: true,
+            multiselect: false,
+            // customViews: customViewsArray,
+            callbackFunction: (data) => {
+                if (!data.docs) return;
+
+                const doc = data.docs[0];
+
+                gapi.client.drive.files.get({
+                    headers: new Headers({ "Authorization": "Bearer " + gapi.auth.getToken().access_token }),
+                    fileId: doc.id,
+                    alt: "media"
+                })
+                .then(function(res) {
+                    props.convertJsonToState(res.result as string);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+            },
+        })
+    }
+
     const renameHandler = () => {
         const newTitle = document.getElementsByTagName("input")[1].value;
 
@@ -31,30 +96,9 @@ function ControlPanel(props: Props): JSX.Element {
         }
     };
 
-    const uploadFromCloudHandler = () => {
-        openPicker({
-            clientId: "1030468714467-op9s4o29m260crer5tu3n97kngv1co6i.apps.googleusercontent.com",
-            developerKey: "AIzaSyDBGK9XKGSKosooSCc6AYt0utHt1XN3-vc",
-            viewId: "DOCS",
-            //token: token,
-            showUploadView: true,
-            showUploadFolders: true,
-            supportDrives: true,
-            multiselect: true,
-            // customViews: customViewsArray, // custom view
-            callbackFunction: (data) => {
-                console.log(data.docs[0])
-
-                /*var request = new XMLHttpRequest();
-                request.open('GET', data.docs[0].url);
-                request.setRequestHeader('Authorization', 'Bearer ' + token);
-                request.addEventListener('load', function () {
-                    var item = JSON.parse(request.responseText);
-                    window.open(item.webContentLink, "_self");
-                });
-                request.send();*/
-            },
-        })
+    const importFromCloudHandler = () => {
+        handleClientLoad();
+        openGooglePicker();
     };
 
     const uploadFromMyComputerHandler = () => {
@@ -95,7 +139,7 @@ function ControlPanel(props: Props): JSX.Element {
         const height = doc.internal.pageSize.getHeight() - 0.5;
         PM.style.padding = "0";
         PM.style.border = "none";
-        
+
         div.style.width = width + "px";
         div.style.height = height + "px";
         div.style.display = "flex";
@@ -117,7 +161,7 @@ function ControlPanel(props: Props): JSX.Element {
             <input className={styles['fileInput']} id="sortpicture" type="file" />
             <PresentationName />
             <Button onClick={renameHandler} actionName={"Изменить название"} />
-            <Button onClick={uploadFromCloudHandler} actionName={"Импортировать из облака"} />
+            <Button onClick={importFromCloudHandler} actionName={"Импортировать из облака"} />
             <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"} />
             <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"} />
             <Button onClick={exportHandler} actionName={"Экспорт"} />
