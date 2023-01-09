@@ -15,17 +15,24 @@ type Props = PropsFromRedux;
 function PresentationName(props: Props): JSX.Element
 {
     const [value, setValue] = useState("");
+    const [title, setTitle] = useState("");
 
     useEffect(() => {
+        if (props.title !== title)
+        {
+            setTitle(props.title);
+            setValue(props.title);
+        }
+
         const nameMessage = document.querySelectorAll("#name-message")[0];
 
         value !== props.title ? nameMessage.classList.add(styles["active"]) :
             nameMessage.classList.remove(styles["active"]);
-    });
+    }, [value, title, props.title]);
 
     return (
         <div className={styles["presentation-name"]}>
-            <input id="presentation-name" className={styles["presentation-name-input"]} placeholder="Введите название" 
+            <input id="presentation-name" className={styles["presentation-name-input"]} value={value} placeholder="Введите название" 
                 onChange={(e) => {setValue(e.target.value)}}></input>
             <a id="name-message" className={styles["message"]}>Название не сохранено</a>
         </div>

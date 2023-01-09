@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { jsPDF } from "jspdf";
 import Button from "./components/Button";
 import PresentationName from "./components/PresentationName";
 import ControlPanelStyles from "./controlPanel.module.css";
 import { convertJsonToState, convertStateToJson } from "../../actions/convert/convertActions";
 import { connect, ConnectedProps } from "react-redux";
+import type { RootState } from "../../store";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
 import { getJSDocTemplateTag } from "typescript";
@@ -17,7 +18,12 @@ const mapDispatch = {
     changeTitle: changeTitle,
 };
 
-const connector = connect(null, mapDispatch);
+const mapState = (state: RootState) => ({
+    title: state.title,
+    slidesGroup: state.presentationElements.slidesGroup
+});
+
+const connector = connect(mapState, mapDispatch);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
@@ -119,7 +125,8 @@ function ControlPanel(props: Props): JSX.Element {
             const reader = new FileReader();
             reader.readAsText(file_data);
             reader.onload = function () {
-                let result = reader.result;
+                const result = reader.result;
+
                 if (typeof result === "string") {
                     props.convertJsonToState(result);
                 }
@@ -156,12 +163,16 @@ function ControlPanel(props: Props): JSX.Element {
         doc.setFont('Inter-Regular', 'normal');
         doc.html(div, {
             async callback(doc) {
-                await doc.save('pdf_name');
+                await doc.save(props.title !== "" ? props.title : "presentation_maker");
             },
         });
     };
+    
     const previewHandler = () => {
-        document.documentElement.requestFullscreen();
+        if (props.slidesGroup.length)
+        {
+            document.documentElement.requestFullscreen();
+        }
     };
 
     return (
