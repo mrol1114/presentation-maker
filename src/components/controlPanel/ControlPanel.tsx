@@ -9,6 +9,7 @@ import type { RootState } from "../../store";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
 import { getJSDocTemplateTag } from "typescript";
+import html2canvas from "html2canvas";
 import { gapi } from 'gapi-script';
 import WaitingPopUp from "../waitingPopUp/WaitingPopUp";
 
@@ -139,8 +140,8 @@ function ControlPanel(props: Props): JSX.Element {
     };
 
     const exportHandler = () => {
-        const PM = document.getElementById("workboard");
-        if (PM === null) {
+        const WB = document.getElementById("workboard-slide");
+        if (WB === null) {
             return;
         }
         const doc = new jsPDF({
@@ -148,23 +149,13 @@ function ControlPanel(props: Props): JSX.Element {
             format: 'a4',
             unit: 'px',
         });
-        let div = document.createElement("div");
-        const width = doc.internal.pageSize.getWidth() - 0.5;
-        const height = doc.internal.pageSize.getHeight() - 0.5;
-        PM.style.padding = "0";
-        PM.style.border = "none";
-
-        div.style.width = width + "px";
-        div.style.height = height + "px";
-        div.style.display = "flex";
-        div.appendChild(PM);
-
-        console.log(div);
-        doc.setFont('Inter-Regular', 'normal');
-        doc.html(div, {
-            async callback(doc) {
-                await doc.save(props.title !== "" ? props.title : "presentation_maker");
-            },
+        const width = doc.internal.pageSize.getWidth();
+        const height = doc.internal.pageSize.getHeight();
+        html2canvas(WB)
+        .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png', 1);
+            doc.addImage(imgData, 'png', 0, 0, width, height);
+            doc.save(props.title !== "" ? props.title : "presentation_maker");
         });
     };
     
