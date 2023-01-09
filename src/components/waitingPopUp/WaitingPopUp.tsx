@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import styles from "./styles/styles.module.css"
+import waitingPopUpStyles from "./waitingPopUp.module.css";
 
 const connector = connect(null);
 
 function WaitingPopUp(prop: {isPopUp: boolean}): JSX.Element {
     return (
-        <div className={prop.isPopUp ? styles["pop-up-active"] : styles["pop-up-inactive"]}>
-            <div className={styles["pop-up"]}>
+        <div className={prop.isPopUp ? waitingPopUpStyles["pop-up-active"] : waitingPopUpStyles["pop-up-inactive"]}>
+            <div className={waitingPopUpStyles["pop-up"]}>
                 <a>Загрузка файла...</a>
             </div>
         </div>

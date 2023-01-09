@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -6,7 +6,6 @@ import type * as types from "../../../common/types";
 import areaStyles from "./area.module.css";
 import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
-import useArea from "./useArea";
 
 const mapDispatch = {
     selectAreas: areaActions.selectAreas,
@@ -44,7 +43,32 @@ function Area(props: Props): JSX.Element
         height: props.areaElement.height + areaBorderWidth * 2,
     };
 
-    useArea(props);
+    useEffect(() => {
+        if (!props.isCurrentSlide) return;
+
+        const areaElement = document.querySelectorAll("#" + props.areaElement.id)[0];
+
+        function onMouseDown() {
+            document.addEventListener("mouseup", onMouseUp);
+
+            props.isControl ? props.selectAreas([props.areaIndex]) : 
+                props.assignAreaIndex(props.areaIndex);
+        }
+
+        function onMouseUp() {
+            if (!props.isControl && (areaElement.clientWidth !== props.areaElement.width || areaElement.clientHeight !== props.areaElement.height))
+            {
+                props.updateArea({width: areaElement.clientWidth, height: areaElement.clientHeight});
+            }
+            document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        areaElement.addEventListener("mousedown", onMouseDown);
+
+        return () => {
+            areaElement.removeEventListener("mousedown", onMouseDown);
+        }
+    }, [props.isControl, props.areaElement, props.areaIndex]);
 
     return (
         <div id={props.areaElement.id} style={style}

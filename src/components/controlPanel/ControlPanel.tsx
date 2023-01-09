@@ -10,7 +10,7 @@ import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
 import { getJSDocTemplateTag } from "typescript";
 import { gapi } from 'gapi-script';
-import WaitingPopUp from "./components/WaitingPopUp";
+import WaitingPopUp from "../waitingPopUp/WaitingPopUp";
 
 const mapDispatch = {
     convertJsonToState: (jsonString: string) => convertJsonToState(jsonString),

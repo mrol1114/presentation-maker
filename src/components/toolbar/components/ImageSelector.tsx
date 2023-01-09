@@ -5,6 +5,7 @@ import * as areaActions from "../../../actions/areas/areasActions";
 import * as slideActions from "../../../actions/slides/slidesActions";
 import { connect, ConnectedProps } from "react-redux";
 import imageCompression from 'browser-image-compression';
+import WaitingPopUp from "../../waitingPopUp/WaitingPopUp";
 
 const mapDispatch = {
     addArea: areaActions.addArea,
@@ -20,6 +21,7 @@ type Props = PropsFromRedux & {
 
 function ImageSelector(props: Props): JSX.Element {
     const [isError, setIsError] = useState(false);
+    const [isPopUp, setIsPopUp] = useState(false);
 
     const checkIfImageExists = (url: string, callback: Function) => {
         const img = new Image();
@@ -54,11 +56,17 @@ function ImageSelector(props: Props): JSX.Element {
             setIsError(false);
         }
 
+        setIsPopUp(true);
+
         imageCompression(e.target.files[0], {maxSizeMB: 1, useWebWorker: true})
             .then(function (compressedFile) {
+                setIsPopUp(false);
                 e.target.value = null;
                 fileReader.readAsDataURL(compressedFile);
             })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     const addImageUrlHandler = () => {
@@ -108,6 +116,7 @@ function ImageSelector(props: Props): JSX.Element {
                 </a>
                 <button className={styles["button-ready"]} onClick={closeImageSelectorHandler}>Готово</button>
             </div>
+            <WaitingPopUp isPopUp={isPopUp} />
         </div>
     );
 }
