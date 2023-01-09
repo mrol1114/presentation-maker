@@ -17,11 +17,13 @@ function convertStateToJson(presentationMaker: types.PresentationMaker): types.P
     const json: string = JSON.stringify(presentationMaker);
     const blob = new Blob([json], {type: "text/plain"});
 
-    const name: string = presentationMaker.title;
+    const title: string = presentationMaker.title;
+    const fileName: string = (title !== "" ? title : "presentation_make") + ".json";
+
     const link = document.createElement("a");
 
     link.setAttribute("href", URL.createObjectURL(blob));
-    link.setAttribute("download", name !== "" ? name : "presentation_maker");
+    link.setAttribute("download", fileName);
 
     link.click();
 

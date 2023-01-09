@@ -12,26 +12,21 @@ type Props = {areaElement: types.Area};
 
 function GraphicPrimitiveComponent(props: Props): JSX.Element
 {    
-    if (!props.areaElement.contains || props.areaElement.contains.type !== 'primitive')
-    {
-        return <></>;
-    }
-
     return (
         <div className={styles["graphic-primitive"]}>
-            { props.areaElement.contains.primitive === 'ellipse' && 
+            { props.areaElement.contains?.type === "primitive" && props.areaElement.contains.primitive === 'ellipse' && 
                 <EllipseComponent 
                     graphicPrimitiveElement={props.areaElement.contains} width={props.areaElement.width} height={props.areaElement.height}
                 /> 
             }
 
-            { props.areaElement.contains.primitive === 'triangle' && 
+            { props.areaElement.contains?.type === "primitive" && props.areaElement.contains.primitive === 'triangle' && 
                 <TriangleComponent 
                     graphicPrimitiveElement={props.areaElement.contains}
                 /> 
             }
 
-            { props.areaElement.contains.primitive === 'rectangle' && 
+            { props.areaElement.contains?.type === "primitive" && props.areaElement.contains.primitive === 'rectangle' && 
                 <RectangleComponent 
                     graphicPrimitiveElement={props.areaElement.contains} width={props.areaElement.width} height={props.areaElement.height}
                 /> 
