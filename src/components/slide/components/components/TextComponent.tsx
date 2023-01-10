@@ -39,15 +39,6 @@ function TextComponent(props: Props): JSX.Element
             value={props.textElement.text}
         />
     );
-
-    /**
-     * <div contentEditable="true"
-            className={styles["text"]} 
-            onChange={onChangeHandler} 
-            style={style}
-            placeholder="Введите текст"
-        >{props.textElement.text}</div>
-     */
 }
 
 export default connector(TextComponent);

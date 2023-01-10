@@ -156,7 +156,7 @@ function ControlPanel(props: Props): JSX.Element {
             const div = document.createElement("div");
 
             div.setAttribute("class", textArea.getAttribute("class") as string);
-            div.setAttribute("style", textArea.getAttribute("style") as string)
+            div.setAttribute("style", textArea.getAttribute("style") as string);
             div.innerHTML = textArea.innerHTML;
 
             textArea.replaceWith(div);
@@ -177,6 +177,8 @@ function ControlPanel(props: Props): JSX.Element {
                 changeTextAreasToDivs(clonedDoc);
             }
         }).then(canvas => {
+            if (slidesContentArr.length <= 1) return;
+
             const contentDataURL = canvas.toDataURL("image/jpeg");
 
             slidesContentArr = [...slidesContentArr, contentDataURL];
@@ -230,6 +232,7 @@ function ControlPanel(props: Props): JSX.Element {
     }, [props.currSlideIndex, isPdf]);
 
     const exportPdfHandler = () => {
+        if (!props.slidesGroup.length) return;
         setSlidesContent([]);
 
         props.assignSlideIndex(0);
