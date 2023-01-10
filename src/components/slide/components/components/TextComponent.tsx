@@ -33,12 +33,21 @@ function TextComponent(props: Props): JSX.Element
     return (
         <textarea
             className={styles["text"]} 
-            value={props.textElement.text} 
             onChange={onChangeHandler} 
             style={style}
-            placeholder="Введите текст" 
+            placeholder="Введите текст"
+            value={props.textElement.text}
         />
     );
+
+    /**
+     * <div contentEditable="true"
+            className={styles["text"]} 
+            onChange={onChangeHandler} 
+            style={style}
+            placeholder="Введите текст"
+        >{props.textElement.text}</div>
+     */
 }
 
 export default connector(TextComponent);

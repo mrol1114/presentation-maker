@@ -98,14 +98,14 @@ function ControlPanel(props: Props): JSX.Element {
                     fileId: doc.id,
                     alt: "media"
                 })
-                    .then(function (res) {
-                        setIsPopUp(false);
-                        props.convertJsonToState(res.result as string);
-                    })
-                    .catch(function (error) {
-                        setIsPopUp(false);
-                        console.log(error);
-                    });
+                .then(function (res) {
+                    setIsPopUp(false);
+                    props.convertJsonToState(res.result as string);
+                })
+                .catch(function (error) {
+                    setIsPopUp(false);
+                    console.log(error);
+                });
             },
         })
     }
@@ -147,6 +147,22 @@ function ControlPanel(props: Props): JSX.Element {
         props.convertStateToJson();
     };
 
+    const changeTextAreasToDivs = (clonedDoc: Document) => {
+        const textAreas = clonedDoc.getElementsByTagName("textarea");
+
+        for (let i = 0; i < textAreas.length; i++) {
+            const textArea = textAreas[i];
+
+            const div = document.createElement("div");
+
+            div.setAttribute("class", textArea.getAttribute("class") as string);
+            div.setAttribute("style", textArea.getAttribute("style") as string)
+            div.innerHTML = textArea.innerHTML;
+
+            textArea.replaceWith(div);
+        }
+    }
+
     async function savePdf(prev: string) {
         const workboardSlide = document.getElementById("workboard-slide");
 
@@ -154,8 +170,14 @@ function ControlPanel(props: Props): JSX.Element {
 
         let slidesContentArr = [...slidesContent.slice(1), prev];
 
-        await html2canvas(workboardSlide).then(canvas => {
-            const contentDataURL = canvas.toDataURL("image/png");
+        await html2canvas(workboardSlide, {
+            useCORS: true, 
+            allowTaint: true,
+            onclone: (clonedDoc) => {
+                changeTextAreasToDivs(clonedDoc);
+            }
+        }).then(canvas => {
+            const contentDataURL = canvas.toDataURL("image/jpeg");
 
             slidesContentArr = [...slidesContentArr, contentDataURL];
         });
@@ -170,7 +192,7 @@ function ControlPanel(props: Props): JSX.Element {
         const positionY: number = (pdf.internal.pageSize.getHeight() - height) / 2;
 
         slidesContentArr.map((slideContent, index) => {
-            pdf.addImage(slideContent, "PNG", 0, positionY, width, height);
+            pdf.addImage(slideContent, "JPEG", 0, positionY, width, height);
 
             index === slidesContentArr.length - 1 ? pdf.save(title) : pdf.addPage();
         });
@@ -182,10 +204,14 @@ function ControlPanel(props: Props): JSX.Element {
         const workboardSlide = document.getElementById("workboard-slide");
         if (!isPdf || !workboardSlide) return;
 
-        html2canvas(workboardSlide).then(canvas => {
-            workboardSlide.style["overflow"] = "hidden";
-
-            const contentDataURL = canvas.toDataURL("image/png");
+        html2canvas(workboardSlide, {
+            useCORS: true,
+            allowTaint: true,
+            onclone: (clonedDoc) => {
+                changeTextAreasToDivs(clonedDoc);
+            }
+        }).then(canvas => {
+            const contentDataURL = canvas.toDataURL("image/jpeg");
 
             setSlidesContent([...slidesContent, contentDataURL]);
 
