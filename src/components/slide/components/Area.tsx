@@ -30,17 +30,24 @@ function Area(props: Props): JSX.Element
     const standartDivider: number = 9;
 
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
+
     const xDivider: number = workboardSlide && props.slideRef ? 
         workboardSlide.clientWidth / props.slideRef.offsetWidth : standartDivider;
 
     const yDivider: number = workboardSlide && props.slideRef ? 
         workboardSlide.clientHeight / props.slideRef.offsetHeight : standartDivider;
 
+    const width = props.areaElement.width + areaBorderWidth * 2;
+    const height = props.areaElement.height + areaBorderWidth * 2;
+
+    const widthScalingFactor = width / workboardSlide.clientWidth;
+    const heightScalingFactor = height / workboardSlide.clientWidth;
+        
     const style = {
         marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
         marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
-        width: props.areaElement.width + areaBorderWidth * 2,
-        height: props.areaElement.height + areaBorderWidth * 2,
+        width: props.isCurrentSlide ? width : width * widthScalingFactor,
+        height: props.isCurrentSlide ? height : height * heightScalingFactor,
     };
 
     useEffect(() => {

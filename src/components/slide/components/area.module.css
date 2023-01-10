@@ -22,8 +22,6 @@
 {
     display: flex;
     position: absolute;
-    transform: scale(0.11, 0.11);
-    transform-origin: 0 0;
     border: 0px dashed rgb(var(--blue-color), 0.7);
 }
 
