@@ -56,24 +56,13 @@ function ControlPanel(props: Props): JSX.Element {
             discoveryDocs: discoveryDocs,
             scope: scopes
         })
-            .then(function () {
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
-    const updateSigninStatus = (isSignedIn: boolean) => {
-        /* from buttons signIn/signOut
-        if (isSignedIn) {
-            
-        }*/
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     const openGooglePicker = () => {
+        const maxSizeBytes = 94371840;
         const token = gapi.auth.getToken();
 
         openPicker({
@@ -90,11 +79,29 @@ function ControlPanel(props: Props): JSX.Element {
 
                 const doc = data.docs[0];
 
+                if (doc.mimeType !== "application/json" || doc.sizeBytes > maxSizeBytes)
+                {
+                    const message: string = doc.mimeType !== "application/json" ? 
+                        "Формат файла должен быть json" : "Размер файла слишком большой";
+
+                    setPopUpName(message);
+                    setIsPopUp(true);
+
+                    setTimeout(() => {
+                        setIsPopUp(false);
+                    }, 1800);
+
+                    openGooglePicker();
+                    return;
+                }
+
                 setPopUpName("Загрузка файла...");
                 setIsPopUp(true);
 
                 gapi.client.drive.files.get({
-                    headers: new Headers({ "Authorization": "Bearer " + gapi.auth.getToken().access_token }),
+                    headers: new Headers({ 
+                        "Authorization": "Bearer " + gapi.auth.getToken().access_token 
+                    }),
                     fileId: doc.id,
                     alt: "media"
                 })
@@ -143,23 +150,28 @@ function ControlPanel(props: Props): JSX.Element {
         }
     };
 
-    const saveInMyComputerHandler = () => {
-        props.convertStateToJson();
-    };
-
     const changeTextAreasToDivs = (clonedDoc: Document) => {
         const textAreas = clonedDoc.getElementsByTagName("textarea");
 
+        let isTextAreaExist = false;
         for (let i = 0; i < textAreas.length; i++) {
+            isTextAreaExist = true;
+
             const textArea = textAreas[i];
 
             const div = document.createElement("div");
 
             div.setAttribute("class", textArea.getAttribute("class") as string);
-            div.setAttribute("style", textArea.getAttribute("style") as string)
+            div.setAttribute("style", textArea.getAttribute("style") as string);
+
             div.innerHTML = textArea.innerHTML;
 
             textArea.replaceWith(div);
+        }
+
+        if (isTextAreaExist)
+        {
+            changeTextAreasToDivs(clonedDoc);
         }
     }
 
@@ -177,6 +189,8 @@ function ControlPanel(props: Props): JSX.Element {
                 changeTextAreasToDivs(clonedDoc);
             }
         }).then(canvas => {
+            if (slidesContentArr.length <= 1) return;
+
             const contentDataURL = canvas.toDataURL("image/jpeg");
 
             slidesContentArr = [...slidesContentArr, contentDataURL];
@@ -221,7 +235,7 @@ function ControlPanel(props: Props): JSX.Element {
                     props.assignSlideIndex(props.currSlideIndex + 1);
                 }, 0);
             }
-            else 
+            else
             {
                 setIsPdf(false);
                 savePdf(contentDataURL);
@@ -230,6 +244,7 @@ function ControlPanel(props: Props): JSX.Element {
     }, [props.currSlideIndex, isPdf]);
 
     const exportPdfHandler = () => {
+        if (!props.slidesGroup.length) return;
         setSlidesContent([]);
 
         props.assignSlideIndex(0);
@@ -252,7 +267,7 @@ function ControlPanel(props: Props): JSX.Element {
             <Button onClick={renameHandler} actionName={"Изменить название"} />
             <Button onClick={importFromCloudHandler} actionName={"Импортировать из облака"} />
             <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"} />
-            <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"} />
+            <Button onClick={() => {props.convertStateToJson()}} actionName={"Сохранить на компьютерe"} />
             <Button onClick={exportPdfHandler} actionName={"Экспорт"} />
             <Button onClick={previewHandler} actionName={"Предпросмотр"} />
             <WaitingPopUp isPopUp={isPopUp} name={popUpName} />
