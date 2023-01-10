@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import Button from "./components/Button";
 import PresentationName from "./components/PresentationName";
@@ -8,19 +8,22 @@ import { connect, ConnectedProps } from "react-redux";
 import type { RootState } from "../../store";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
-import { getJSDocTemplateTag } from "typescript";
 import { gapi } from 'gapi-script';
 import WaitingPopUp from "../waitingPopUp/WaitingPopUp";
+import html2canvas from "html2canvas";
+import { assignSlideIndex } from "../../actions/slides/slidesActions";
 
 const mapDispatch = {
     convertJsonToState: (jsonString: string) => convertJsonToState(jsonString),
     convertStateToJson: convertStateToJson,
     changeTitle: changeTitle,
+    assignSlideIndex: assignSlideIndex
 };
 
 const mapState = (state: RootState) => ({
     title: state.title,
-    slidesGroup: state.presentationElements.slidesGroup
+    slidesGroup: state.presentationElements.slidesGroup,
+    currSlideIndex: state.presentationElements.currentSlideIndex
 });
 
 const connector = connect(mapState, mapDispatch);
@@ -29,6 +32,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 function ControlPanel(props: Props): JSX.Element {
+    const [slidesContent, setSlidesContent] = useState(Array<string>);
+    const [isPdf, setIsPdf] = useState(false);
+
+    const [popUpName, setPopUpName] = useState("");
+
     const [openPicker, authResponse] = useDrivePicker();
     const [isPopUp, setIsPopUp] = useState(false);
 
@@ -48,14 +56,14 @@ function ControlPanel(props: Props): JSX.Element {
             discoveryDocs: discoveryDocs,
             scope: scopes
         })
-        .then(function () {
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            .then(function () {
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     const updateSigninStatus = (isSignedIn: boolean) => {
@@ -82,6 +90,7 @@ function ControlPanel(props: Props): JSX.Element {
 
                 const doc = data.docs[0];
 
+                setPopUpName("Загрузка файла...");
                 setIsPopUp(true);
 
                 gapi.client.drive.files.get({
@@ -89,14 +98,14 @@ function ControlPanel(props: Props): JSX.Element {
                     fileId: doc.id,
                     alt: "media"
                 })
-                .then(function(res) {
-                    setIsPopUp(false);
-                    props.convertJsonToState(res.result as string);
-                })
-                .catch(function(error) {
-                    setIsPopUp(false);
-                    console.log(error);
-                });
+                    .then(function (res) {
+                        setIsPopUp(false);
+                        props.convertJsonToState(res.result as string);
+                    })
+                    .catch(function (error) {
+                        setIsPopUp(false);
+                        console.log(error);
+                    });
             },
         })
     }
@@ -138,39 +147,74 @@ function ControlPanel(props: Props): JSX.Element {
         props.convertStateToJson();
     };
 
-    const exportHandler = () => {
-        const PM = document.getElementById("workboard");
-        if (PM === null) {
-            return;
-        }
-        const doc = new jsPDF({
-            orientation: "landscape",
-            format: 'a4',
-            unit: 'px',
-        });
-        let div = document.createElement("div");
-        const width = doc.internal.pageSize.getWidth() - 0.5;
-        const height = doc.internal.pageSize.getHeight() - 0.5;
-        PM.style.padding = "0";
-        PM.style.border = "none";
+    async function savePdf(prev: string) {
+        const workboardSlide = document.getElementById("workboard-slide");
 
-        div.style.width = width + "px";
-        div.style.height = height + "px";
-        div.style.display = "flex";
-        div.appendChild(PM);
+        if (!workboardSlide) return;
 
-        console.log(div);
-        doc.setFont('Inter-Regular', 'normal');
-        doc.html(div, {
-            async callback(doc) {
-                await doc.save(props.title !== "" ? props.title : "presentation_maker");
-            },
+        let slidesContentArr = [...slidesContent.slice(1), prev];
+
+        await html2canvas(workboardSlide).then(canvas => {
+            const contentDataURL = canvas.toDataURL("image/png");
+
+            slidesContentArr = [...slidesContentArr, contentDataURL];
         });
+
+        const pdf = new jsPDF("l", "px", "a4");
+        const title: string = props.title !== "" ? props.title : "presentation_maker";
+
+        const imgProps = pdf.getImageProperties(slidesContentArr[0]);
+        const width: number = pdf.internal.pageSize.getWidth();
+        const height: number = (imgProps.height * width) / imgProps.width;
+
+        const positionY: number = (pdf.internal.pageSize.getHeight() - height) / 2;
+
+        slidesContentArr.map((slideContent, index) => {
+            pdf.addImage(slideContent, "PNG", 0, positionY, width, height);
+
+            index === slidesContentArr.length - 1 ? pdf.save(title) : pdf.addPage();
+        });
+
+        setIsPopUp(false);
+    }
+
+    useEffect(() => {
+        const workboardSlide = document.getElementById("workboard-slide");
+        if (!isPdf || !workboardSlide) return;
+
+        html2canvas(workboardSlide).then(canvas => {
+            workboardSlide.style["overflow"] = "hidden";
+
+            const contentDataURL = canvas.toDataURL("image/png");
+
+            setSlidesContent([...slidesContent, contentDataURL]);
+
+            if (props.currSlideIndex < props.slidesGroup.length - 1) 
+            {
+                setTimeout(() => {
+                    props.assignSlideIndex(props.currSlideIndex + 1);
+                }, 0);
+            }
+            else 
+            {
+                setIsPdf(false);
+                savePdf(contentDataURL);
+            }
+        });
+    }, [props.currSlideIndex, isPdf]);
+
+    const exportPdfHandler = () => {
+        setSlidesContent([]);
+
+        props.assignSlideIndex(0);
+        setIsPdf(true);
+
+        setPopUpName("Идёт создание PDF...");
+        setIsPopUp(true);
     };
-    
+
     const previewHandler = () => {
-        if (props.slidesGroup.length)
-        {
+        if (props.slidesGroup.length) {
             document.documentElement.requestFullscreen();
         }
     };
@@ -183,9 +227,9 @@ function ControlPanel(props: Props): JSX.Element {
             <Button onClick={importFromCloudHandler} actionName={"Импортировать из облака"} />
             <Button onClick={uploadFromMyComputerHandler} actionName={"Загрузить с копьютера"} />
             <Button onClick={saveInMyComputerHandler} actionName={"Сохранить на компьютерe"} />
-            <Button onClick={exportHandler} actionName={"Экспорт"} />
+            <Button onClick={exportPdfHandler} actionName={"Экспорт"} />
             <Button onClick={previewHandler} actionName={"Предпросмотр"} />
-            <WaitingPopUp isPopUp={isPopUp} />
+            <WaitingPopUp isPopUp={isPopUp} name={popUpName} />
         </div>
     );
 }

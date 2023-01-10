@@ -22,6 +22,7 @@ type Props = PropsFromRedux & {
 function ImageSelector(props: Props): JSX.Element {
     const [isError, setIsError] = useState(false);
     const [isPopUp, setIsPopUp] = useState(false);
+    const [popUpName, setPopUpName] = useState("");
 
     const checkIfImageExists = (url: string, callback: Function) => {
         const img = new Image();
@@ -56,6 +57,7 @@ function ImageSelector(props: Props): JSX.Element {
             setIsError(false);
         }
 
+        setPopUpName("Загрузка изображения...");
         setIsPopUp(true);
 
         imageCompression(e.target.files[0], {maxSizeMB: 1, useWebWorker: true})
@@ -116,7 +118,7 @@ function ImageSelector(props: Props): JSX.Element {
                 </a>
                 <button className={styles["button-ready"]} onClick={closeImageSelectorHandler}>Готово</button>
             </div>
-            <WaitingPopUp isPopUp={isPopUp} />
+            <WaitingPopUp isPopUp={isPopUp} name={popUpName} />
         </div>
     );
 }
