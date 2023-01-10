@@ -8,9 +8,9 @@ import { connect, ConnectedProps } from "react-redux";
 import type { RootState } from "../../store";
 import { changeTitle } from "../../actions/title/titleActions";
 import useDrivePicker from "react-google-drive-picker/dist";
+import html2canvas from "html2canvas";
 import { gapi } from 'gapi-script';
 import WaitingPopUp from "../waitingPopUp/WaitingPopUp";
-import html2canvas from "html2canvas";
 import { assignSlideIndex } from "../../actions/slides/slidesActions";
 
 const mapDispatch = {
