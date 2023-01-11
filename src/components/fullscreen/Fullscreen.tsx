@@ -35,8 +35,9 @@ function Fullscreen(props: Props): JSX.Element
         return <Slide isControl={false} isCurrent={true} slideElement={slideElement} index={index} />;
     });
 
-    const onMouseClick = (event) => {
-        const newCurrentShownSlideIndex = event.clientX > window.screen.width/2 ? currentShownSlideIndex + 1 : currentShownSlideIndex -1;
+    const onMouseClick = e => {
+        const newCurrentShownSlideIndex = e.clientX > window.screen.width / 2 ? currentShownSlideIndex + 1 : currentShownSlideIndex -1;
+        
         if (newCurrentShownSlideIndex >= 0 && newCurrentShownSlideIndex < slides.length)
         {
             setCurrentShownSlideIndex(newCurrentShownSlideIndex);
@@ -45,7 +46,9 @@ function Fullscreen(props: Props): JSX.Element
 
     return (
         <div onClick={onMouseClick} className={fullscreenStyles[isFullscreen ? "fullscreen-mode-on" : "fullscreen-mode-off"]}>
-            {slides.length > 0 ? slides[currentShownSlideIndex] : <></>}
+            {slides.length > 0 &&
+                slides[currentShownSlideIndex]
+            }
         </div>
     );
 }

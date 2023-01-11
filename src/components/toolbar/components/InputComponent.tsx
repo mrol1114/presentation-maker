@@ -24,15 +24,19 @@ function InputComponent(props: Props): JSX.Element
     }, [props.value]);
 
     const onChangeHandler = e => {
+        const eValue = e.target.value;
+
         if (typeof props.value === "number")
         {
-            const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
+            const newValue: number = eValue && eValue >= 0 ? Number(eValue) : 0;
+            
             setValue(newValue.toString());
             props.updateText({fontSize: newValue});
         }
         else
         {
-            const newValue: string = e.target.value.toString();
+            const newValue: string = eValue.toString();
+
             setValue(newValue);
             props.updateText({font: newValue});
         }

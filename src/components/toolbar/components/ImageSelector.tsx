@@ -28,7 +28,10 @@ function ImageSelector(props: Props): JSX.Element {
         const img = new Image();
         img.src = url;
 
-        if (img.complete) callback(true);
+        if (img.complete)
+        {
+            callback(true);
+        }
         else 
         {
             img.onload = () => {
@@ -60,15 +63,18 @@ function ImageSelector(props: Props): JSX.Element {
         setPopUpName("Загрузка изображения...");
         setIsPopUp(true);
 
-        imageCompression(e.target.files[0], {maxSizeMB: 1, useWebWorker: true})
-            .then(function (compressedFile) {
-                setIsPopUp(false);
-                e.target.value = null;
-                fileReader.readAsDataURL(compressedFile);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        imageCompression(e.target.files[0], {
+            maxSizeMB: 1, useWebWorker: true
+        })
+        .then(compressedFile => {
+            setIsPopUp(false);
+            e.target.value = null;
+
+            fileReader.readAsDataURL(compressedFile);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     const addImageUrlHandler = () => {
@@ -80,17 +86,15 @@ function ImageSelector(props: Props): JSX.Element {
         };
 
         checkIfImageExists(url, (exists: boolean) => {
-            if (exists) 
-            {
-                setIsError(false);
-                props.isBackgroundImageSelector
-                    ? props.updateSlideProperty({backgroundImage: backgroundImage})
-                    : props.addArea({areaType: "imageUrl", path: url});
-            }
-            else
+            if (!exists)
             {
                 setIsError(true);
+                return;
             }
+            
+            setIsError(false);
+            props.isBackgroundImageSelector ? props.updateSlideProperty({backgroundImage: backgroundImage})
+                : props.addArea({areaType: "imageUrl", path: url});
         });
     }
 
