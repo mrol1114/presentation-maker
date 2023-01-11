@@ -179,6 +179,8 @@ function ControlPanel(props: Props): JSX.Element {
 
         let slidesContentArr = [...slidesContent.slice(1), prev];
 
+        console.log(slidesContentArr.length)
+
         await html2canvas(workboardSlide, {
             useCORS: true, 
             allowTaint: true,
@@ -186,7 +188,7 @@ function ControlPanel(props: Props): JSX.Element {
                 changeTextAreasToDivs(clonedDoc);
             }
         }).then(canvas => {
-            if (slidesContentArr.length <= 1) return;
+            if (slidesContentArr.length <= 1 && !slidesContent.length) return;
 
             const contentDataURL = canvas.toDataURL("image/jpeg");
 
