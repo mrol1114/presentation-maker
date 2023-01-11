@@ -1,4 +1,6 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
+
+import slidesGroupStyles from "./slidesGroup.module.css";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -29,8 +31,17 @@ function Area(props: Props): JSX.Element
     const areaBorderWidth: number = 10;
     const standartDivider: number = 9;
 
-    const sidebarSlideWidth: number = 210;
-    const sidebarSlideHeight: number = 115;
+    const defaultSidebarSlideWidth: number = 210;
+    const defaultSidebarSlideHeight: number = 115;
+    
+    const slidesGroup = document.getElementById("slides-group");
+    const firstSidebarSlide = slidesGroup?.children[0];
+    
+    const sidebarSlideWidth: number = firstSidebarSlide === undefined ? 
+    defaultSidebarSlideWidth : firstSidebarSlide.clientWidth;
+
+    const sidebarSlideHeight: number = firstSidebarSlide === undefined ? 
+    defaultSidebarSlideHeight : firstSidebarSlide.clientHeight;
 
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
 
