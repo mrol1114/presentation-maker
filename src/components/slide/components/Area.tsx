@@ -1,6 +1,5 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect} from "react";
 
-import slidesGroupStyles from "./slidesGroup.module.css";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
