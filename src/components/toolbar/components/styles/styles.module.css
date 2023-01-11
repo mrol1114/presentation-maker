@@ -207,7 +207,7 @@
     position: absolute;
     text-align: center;
     flex-direction: column;
-    background-color: white;
+    background-color: rgb(var(--white-color));
     overflow-y: scroll;
     border: 1px solid rgb(var(--dark-blue-color));
     border-radius: 5px;
