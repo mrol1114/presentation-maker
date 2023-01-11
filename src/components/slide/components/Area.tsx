@@ -74,7 +74,6 @@ function Area(props: Props): JSX.Element
 
         return () => {
             areaElement.removeEventListener("mousedown", onMouseDown);
-            document.removeEventListener("mouseup", onMouseUp);
         }
     }, [props.isControl, props.areaElement, props.areaIndex]);
 

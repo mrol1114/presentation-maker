@@ -56,7 +56,7 @@ function ControlPanel(props: Props): JSX.Element {
             discoveryDocs: discoveryDocs,
             scope: scopes
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.log(error);
         });
     }
@@ -75,9 +75,9 @@ function ControlPanel(props: Props): JSX.Element {
             supportDrives: true,
             multiselect: false,
             callbackFunction: (data) => {
-                if (!data.docs || data.docs[0].uploadState) return;
-
                 const doc = data.docs[0];
+
+                if (!data.docs || doc.uploadState) return;
 
                 if (doc.mimeType !== "application/json" || doc.sizeBytes > maxSizeBytes)
                 {
@@ -105,17 +105,22 @@ function ControlPanel(props: Props): JSX.Element {
                     fileId: doc.id,
                     alt: "media"
                 })
-                .then(function (res) {
+                .then((res) => {
                     setIsPopUp(false);
                     props.convertJsonToState(res.result as string);
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     setIsPopUp(false);
                     console.log(error);
                 });
             },
-        })
-    }
+        });
+    };
+
+    const importFromCloudHandler = () => {
+        handleClientLoad();
+        openGooglePicker();
+    };
 
     const renameHandler = () => {
         const newTitle = document.getElementsByTagName("input")[1].value;
@@ -125,27 +130,19 @@ function ControlPanel(props: Props): JSX.Element {
         }
     };
 
-    const importFromCloudHandler = () => {
-        handleClientLoad();
-        openGooglePicker();
-    };
-
     const uploadFromMyComputerHandler = () => {
-        const input = document.getElementById('sortpicture');
-        if (input === null) {
-            return;
-        }
-        input.click();
-        input.onchange = (e) => {
-            const file_data = input['files'][0];
-            const reader = new FileReader();
-            reader.readAsText(file_data);
-            reader.onload = function () {
-                const result = reader.result;
+        const input = document.getElementById("sortpicture");
 
-                if (typeof result === "string") {
-                    props.convertJsonToState(result);
-                }
+        if (!input) return;
+        
+        input.click();
+        input.onchange = () => {
+            const fileData = input["files"][0];
+            const fileReader = new FileReader();
+
+            fileReader.readAsText(fileData);
+            fileReader.onload = () => {
+                props.convertJsonToState(fileReader.result as string);
             };
         }
     };
