@@ -1,4 +1,6 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
+
+import slidesGroupStyles from "./slidesGroup.module.css";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -29,6 +31,18 @@ function Area(props: Props): JSX.Element
     const areaBorderWidth: number = 10;
     const standartDivider: number = 9;
 
+    const defaultSidebarSlideWidth: number = 210;
+    const defaultSidebarSlideHeight: number = 115;
+    
+    const slidesGroup = document.getElementById("slides-group");
+    const firstSidebarSlide = slidesGroup?.children[0];
+    
+    const sidebarSlideWidth: number = firstSidebarSlide === undefined ? 
+    defaultSidebarSlideWidth : firstSidebarSlide.clientWidth;
+
+    const sidebarSlideHeight: number = firstSidebarSlide === undefined ? 
+    defaultSidebarSlideHeight : firstSidebarSlide.clientHeight;
+
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
 
     const xDivider: number = workboardSlide && props.slideRef ? 
@@ -40,14 +54,15 @@ function Area(props: Props): JSX.Element
     const width = props.areaElement.width + areaBorderWidth * 2;
     const height = props.areaElement.height + areaBorderWidth * 2;
 
-    const widthScalingFactor = width / workboardSlide.clientWidth;
-    const heightScalingFactor = height / workboardSlide.clientWidth;
+    const widthScalingFactor = sidebarSlideWidth / workboardSlide.clientWidth;
+    const heightScalingFactor = sidebarSlideHeight / workboardSlide.clientHeight;
         
     const style = {
         marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
         marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
-        width: props.isCurrentSlide ? width : width * widthScalingFactor,
-        height: props.isCurrentSlide ? height : height * heightScalingFactor,
+        width: width,
+        height: height,
+        transform: props.isCurrentSlide ? "" : "scale(" + widthScalingFactor + "," + heightScalingFactor + ")", 
     };
 
     useEffect(() => {
