@@ -2,6 +2,8 @@ import type * as types from './types';
 
 const notSelectedIndex = -1;
 
+const maxLocalHistoryLength = 40;
+
 const defaultTextInfo: types.TextInfo = {
     type: 'text',
     color: 'black',
@@ -25,6 +27,7 @@ const defaultGraphicPrimitiveInfo: types.GraphicPrimitiveInfo = {
 
 export {
     notSelectedIndex,
+    maxLocalHistoryLength,
     defaultTextInfo,
     defaultGraphicPrimitiveInfo,
 };

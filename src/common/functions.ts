@@ -11,8 +11,6 @@ function changeTitle(presentationMaker: types.PresentationMaker, updatedTitle: s
     }
 }
 
-// загрузка, выгрузка
-
 function convertStateToJson(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     const json: string = JSON.stringify(presentationMaker);
     const blob = new Blob([json], {type: "text/plain"});
@@ -31,14 +29,12 @@ function convertStateToJson(presentationMaker: types.PresentationMaker): types.P
 }
 
 function convertJsonToState(json: string): types.PresentationMaker {
-    if (typeof json === "object") {
+    if (typeof json !== "string") {
         return json;
     }
 
     return JSON.parse(json);
 }
-
-// работа с локальной историей
 
 function undo(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     if (presentationMaker.currentPresentationElementsIndex <= 0) {
@@ -72,8 +68,6 @@ function redo(presentationMaker: types.PresentationMaker): types.PresentationMak
     };
 }
 
-// работа с группой слайдов
-
 function addSlide(presentationMaker: types.PresentationMaker): types.PresentationMaker {
     const newSlide: types.Slide = createElement.createSlide();
 
@@ -91,14 +85,18 @@ function addSlide(presentationMaker: types.PresentationMaker): types.Presentatio
         currentAreaIndex: consts.notSelectedIndex
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -106,7 +104,9 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
     const newSelectedSlidesIndexes: number[] = [...presentationMaker.presentationElements.selectedSlidesIndexes];
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.filter(
-        (_, index) => !newSelectedSlidesIndexes.includes(index) && index !== presentationMaker.presentationElements.currentSlideIndex);
+        (_, index) => !newSelectedSlidesIndexes.includes(index) && 
+        index !== presentationMaker.presentationElements.currentSlideIndex
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -117,14 +117,18 @@ function deleteSlides(presentationMaker: types.PresentationMaker): types.Present
         currentAreaIndex: consts.notSelectedIndex
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -142,9 +146,9 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
     });
 
     const selectedSlides: types.Slide[] = !presentationMaker.presentationElements.selectedSlidesIndexes.length ?
-        [currSlide] : presentationMaker.presentationElements.selectedSlidesIndexes.map((index) => {
-            return presentationMaker.presentationElements.slidesGroup[index];
-        });
+    [currSlide] : presentationMaker.presentationElements.selectedSlidesIndexes.map((index) => {
+        return presentationMaker.presentationElements.slidesGroup[index];
+    });
 
     newSlidesGroup.splice(insertPos, 0, ...selectedSlides);
 
@@ -153,18 +157,22 @@ function moveSlides(presentationMaker: types.PresentationMaker, insertPos: numbe
         slidesGroup: newSlidesGroup,
         currentSlideIndex: insertPos,
         selectedSlidesIndexes: newSlidesGroup.map((value, index) =>
-            selectedSlides.includes(value) ? index : consts.notSelectedIndex).filter(value => value !== consts.notSelectedIndex
-            )
+            selectedSlides.includes(value) ? index : 
+            consts.notSelectedIndex).filter(value => value !== consts.notSelectedIndex)
     }
+
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
 
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -174,19 +182,20 @@ function selectSlides(presentationMaker: types.PresentationMaker, selectedSlides
     }
 
     const slidesIndexes: number[] = [...selectedSlides];
-    if (presentationMaker.presentationElements.slidesGroup.length <= slidesIndexes.sort((int1: number, int2: number) => int2 - int1)[0]
-        || slidesIndexes.find((int: number) => int < 0)
-        || slidesIndexes.filter((value, index) => slidesIndexes.indexOf(value) !== index).length
-        || slidesIndexes.find(value => value === presentationMaker.presentationElements.currentSlideIndex)) {
+    if (presentationMaker.presentationElements.slidesGroup.length <= 
+    slidesIndexes.sort((int1: number, int2: number) => int2 - int1)[0]
+    || slidesIndexes.find((int: number) => int < 0)
+    || slidesIndexes.filter((value, index) => slidesIndexes.indexOf(value) !== index).length
+    || slidesIndexes.find(value => value === presentationMaker.presentationElements.currentSlideIndex)) {
         return presentationMaker;
     }
 
-    const currSlideIndex: number[] = presentationMaker.presentationElements.currentSlideIndex !== consts.notSelectedIndex
-        ? [presentationMaker.presentationElements.currentSlideIndex] : [];
+    const currSlideIndex: number[] = presentationMaker.presentationElements.currentSlideIndex !== consts.notSelectedIndex ? 
+    [presentationMaker.presentationElements.currentSlideIndex] : [];
 
-    const selectedSlidesIndexes: number[] = presentationMaker.presentationElements.selectedSlidesIndexes.length
-        ? [...presentationMaker.presentationElements.selectedSlidesIndexes.filter(value => !slidesIndexes.includes(value))]
-        : currSlideIndex;
+    const selectedSlidesIndexes: number[] = presentationMaker.presentationElements.selectedSlidesIndexes.length ? 
+    [...presentationMaker.presentationElements.selectedSlidesIndexes.filter(value => !slidesIndexes.includes(value))]
+    : currSlideIndex;
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -208,13 +217,16 @@ function unselectSlides(presentationMaker: types.PresentationMaker, unselectedSl
     }
 
     const slidesIndexes: number[] = [...unselectedSlides];
-    if (presentationMaker.presentationElements.slidesGroup.length <= unselectedSlides.sort((int1: number, int2: number) => int2 - int1)[0]
-        || slidesIndexes.find((int: number) => int < 0)) {
+
+    if (presentationMaker.presentationElements.slidesGroup.length <= 
+    unselectedSlides.sort((int1: number, int2: number) => int2 - int1)[0]
+    || slidesIndexes.find((int: number) => int < 0)) {
         return presentationMaker;
     }
 
     const newSelectedSlidesIndexes: number[] = presentationMaker.presentationElements.selectedSlidesIndexes.filter(
-        (index: number) => !slidesIndexes.includes(index));
+        (index: number) => !slidesIndexes.includes(index)
+    );
 
     const newCurrSlideIndex: number = newSelectedSlidesIndexes.length ? newSelectedSlidesIndexes[0] : slidesIndexes[0];
 
@@ -233,7 +245,7 @@ function unselectSlides(presentationMaker: types.PresentationMaker, unselectedSl
 
 function assignSlideIndex(presentationMaker: types.PresentationMaker, slideIndex: number): types.PresentationMaker {
     if (presentationMaker.presentationElements.slidesGroup.length === 0 || slideIndex < 0
-        || presentationMaker.presentationElements.slidesGroup.length <= slideIndex) {
+    || presentationMaker.presentationElements.slidesGroup.length <= slideIndex) {
         return presentationMaker;
     }
 
@@ -251,8 +263,6 @@ function assignSlideIndex(presentationMaker: types.PresentationMaker, slideIndex
     };
 }
 
-// работа с слайдом
-
 function updateSlideProperty(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
     if (presentationMaker.presentationElements.slidesGroup.length === 0) {
         return presentationMaker;
@@ -264,21 +274,26 @@ function updateSlideProperty(presentationMaker: types.PresentationMaker, propert
     const newSlide: types.Slide = updateElement.updateSlide(currentSlide, properties);
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (slide, index) => index === currentSlideIndex ? newSlide : slide);
+        (slide, index) => index === currentSlideIndex ? newSlide : slide
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -299,7 +314,8 @@ function addArea(presentationMaker: types.PresentationMaker, properties: Object)
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (slide, index) => index === currentSlideIndex ? newSlide : slide);
+        (slide, index) => index === currentSlideIndex ? newSlide : slide
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -309,14 +325,18 @@ function addArea(presentationMaker: types.PresentationMaker, properties: Object)
         selectedSlidesIndexes: []
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -330,12 +350,15 @@ function deleteAreas(presentationMaker: types.PresentationMaker): types.Presenta
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex];
     const newSlide: types.Slide = {
         ...curSlide,
-        areas: curSlide.areas.filter((_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index) &&
-            index !== curAreaIndex)
+        areas: curSlide.areas.filter(
+            (_, index) => !presentationMaker.presentationElements.selectedAreasIndexes.includes(index) 
+            && index !== curAreaIndex
+        )
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (slide, index) => index === curSlideIndex ? newSlide : slide);
+        (slide, index) => index === curSlideIndex ? newSlide : slide
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -344,14 +367,18 @@ function deleteAreas(presentationMaker: types.PresentationMaker): types.Presenta
         selectedAreasIndexes: []
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -363,16 +390,19 @@ function selectAreas(presentationMaker: types.PresentationMaker, selectedAreas: 
 
     const areasIndexes: number[] = [...selectedAreas];
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex];
+
     if (curSlide.areas.length <= areasIndexes.sort((int1: number, int2: number) => int2 - int1)[0]
-        || areasIndexes.find((int: number) => int < 0)
-        || areasIndexes.filter((value, index) => areasIndexes.indexOf(value) !== index).length
-        || areasIndexes.find(value => value === presentationMaker.presentationElements.currentAreaIndex)) {
+    || areasIndexes.find((int: number) => int < 0)
+    || areasIndexes.filter((value, index) => areasIndexes.indexOf(value) !== index).length
+    || areasIndexes.find(value => value === presentationMaker.presentationElements.currentAreaIndex)) {
         return presentationMaker;
     }
 
     const selectedAreasIndexes: number[] = presentationMaker.presentationElements.selectedAreasIndexes.length ?
-        [...presentationMaker.presentationElements.selectedAreasIndexes] :
-        (presentationMaker.presentationElements.currentAreaIndex !== -1 ? [presentationMaker.presentationElements.currentAreaIndex] : []);
+    [...presentationMaker.presentationElements.selectedAreasIndexes] : (
+        presentationMaker.presentationElements.currentAreaIndex !== -1 ? 
+        [presentationMaker.presentationElements.currentAreaIndex] : []
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -396,18 +426,19 @@ function unselectAreas(presentationMaker: types.PresentationMaker, selectedAreas
     const areasIndexes: number[] = [...selectedAreas];
     const curSlide: types.Slide = presentationMaker.presentationElements.slidesGroup[curSlideIndex];
     if (curSlide.areas.length <= areasIndexes.sort((int1: number, int2: number) => int2 - int1)[0]
-        || areasIndexes.find((int: number) => int < 0)) {
+    || areasIndexes.find((int: number) => int < 0)) {
         return presentationMaker;
     }
 
     const newSelectedAreasIndexes: number[] = presentationMaker.presentationElements.selectedAreasIndexes.filter(
-        (index: number) => !areasIndexes.includes(index));
+        (index: number) => !areasIndexes.includes(index)
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
-        currentAreaIndex: (newSelectedAreasIndexes.length - 1 > 0 || newSelectedAreasIndexes[newSelectedAreasIndexes.length - 1] === undefined) ?
-            consts.notSelectedIndex :
-            newSelectedAreasIndexes[newSelectedAreasIndexes.length - 1],
+        currentAreaIndex: (
+            newSelectedAreasIndexes.length - 1 > 0 || !newSelectedAreasIndexes[newSelectedAreasIndexes.length - 1]
+        ) ? consts.notSelectedIndex : newSelectedAreasIndexes[newSelectedAreasIndexes.length - 1],
         selectedAreasIndexes: newSelectedAreasIndexes.length > 1 ? newSelectedAreasIndexes : []
     }
 
@@ -441,8 +472,6 @@ function assignAreaIndex(presentationMaker: types.PresentationMaker, areaIndex: 
     };
 }
 
-// работа с областью
-
 function updateArea(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
     const currIdSlide: number = presentationMaker.presentationElements.currentSlideIndex;
     const currIdArea: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -462,21 +491,26 @@ function updateArea(presentationMaker: types.PresentationMaker, properties: Obje
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currIdSlide ? newSlide : value);
+        (value, index) => index === currIdSlide ? newSlide : value
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -491,10 +525,12 @@ function updateAreas(presentationMaker: types.PresentationMaker, properties: Obj
     const slidePosX: number = getProperty(properties, "slidePosX") as number;
     const slidePosY: number = getProperty(properties, "slidePosY") as number;
 
-    const currentSlide: types.Slide = { ...presentationMaker.presentationElements.slidesGroup[currSlideIndex] };
+    const currentSlide: types.Slide = {...presentationMaker.presentationElements.slidesGroup[currSlideIndex]};
 
     const updatedAreas: (types.UpdatedArea | undefined)[] = currentSlide.areas.map((area, index) => {
-        if (!areasSelect.find(value => value.index === index)) return;
+        if (!areasSelect.find(value => value.index === index)) {
+            return;
+        }
 
         return {
             index: index,
@@ -508,7 +544,9 @@ function updateAreas(presentationMaker: types.PresentationMaker, properties: Obj
         areas: currentSlide.areas.map((area, index) => {
             const areaSelect: types.AreaSelect | undefined = areasSelect.find(value => value.index === index);
 
-            if (!areaSelect) return area;
+            if (!areaSelect) {
+                return area;
+            }
 
             return updateElement.updateArea(area, { x: areaSelect.x - slidePosX, y: areaSelect.y - slidePosY });
         })
@@ -519,7 +557,9 @@ function updateAreas(presentationMaker: types.PresentationMaker, properties: Obj
         areas: currentSlide.areas.map((area, index) => {
             const updatedArea: types.UpdatedArea | undefined = updatedAreas.find(value => value && value.index === index);
 
-            if (!updatedArea) return area;
+            if (!updatedArea) {
+                return area;
+            }
 
             return updateElement.updateArea(area, { x: updatedArea.x, y: updatedArea.y });
         })
@@ -528,24 +568,30 @@ function updateAreas(presentationMaker: types.PresentationMaker, properties: Obj
     const earlyPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: presentationMaker.presentationElements.slidesGroup.map(
-            (slide, index) => index === currSlideIndex ? earlySlide : slide)
+            (slide, index) => index === currSlideIndex ? earlySlide : slide
+        )
     }
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: presentationMaker.presentationElements.slidesGroup.map(
-            (slide, index) => index === currSlideIndex ? newSlide : slide)
+            (slide, index) => index === currSlideIndex ? newSlide : slide
+        )
     }
+
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
 
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex),
             earlyPresentationElements,
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -584,7 +630,8 @@ function updateInDragAreas(presentationMaker: types.PresentationMaker, propertie
     }
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (slide, index) => index === currSlideIndex ? newSlide : slide);
+        (slide, index) => index === currSlideIndex ? newSlide : slide
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
@@ -597,8 +644,6 @@ function updateInDragAreas(presentationMaker: types.PresentationMaker, propertie
     };
 }
 
-// работа с текстом
-
 function updateText(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
@@ -608,7 +653,8 @@ function updateText(presentationMaker: types.PresentationMaker, properties: Obje
     }
 
     const currentAreaInfo: types.AreaContent | undefined =
-        presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains;
+    presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains;
+
     if (!currentAreaInfo || currentAreaInfo.type !== 'text') {
         return presentationMaker;
     }
@@ -621,25 +667,31 @@ function updateText(presentationMaker: types.PresentationMaker, properties: Obje
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex],
         areas: presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas.map(
-            (value, index) => index === currentAreaIndex ? newArea : value)
+            (value, index) => index === currentAreaIndex ? newArea : value
+        )
     };
 
     const newSlidesGroup = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currentSlideIndex ? newSlide : value);
+        (value, index) => index === currentSlideIndex ? newSlide : value
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -648,7 +700,7 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
 
     if (currentAreaIndex === consts.notSelectedIndex || currentSlideIndex === consts.notSelectedIndex
-        || presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
+    || presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
         return presentationMaker;
     }
 
@@ -660,7 +712,8 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex],
         areas: presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas.map(
-            (value, index) => index === currentAreaIndex ? newArea : value)
+            (value, index) => index === currentAreaIndex ? newArea : value
+        )
     };
 
     const newSlidesGroup = presentationMaker.presentationElements.slidesGroup.map(
@@ -671,25 +724,27 @@ function createText(presentationMaker: types.PresentationMaker): types.Presentat
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
-
-// работа с картинкой
 
 function createImage(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
 
     if (currentAreaIndex === consts.notSelectedIndex || currentSlideIndex === consts.notSelectedIndex
-        || presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
+    || presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
         return presentationMaker;
     }
 
@@ -700,33 +755,35 @@ function createImage(presentationMaker: types.PresentationMaker, properties: Obj
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex],
         areas: presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas.map(
-            (value, index) => index === currentAreaIndex ? newArea : value)
+            (value, index) => index === currentAreaIndex ? newArea : value
+        )
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currentSlideIndex ? newSlide : value);
+        (value, index) => index === currentSlideIndex ? newSlide : value
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
-// работа с графическим примитивом
-
-function updateGraphicPrimitive(
-    presentationMaker: types.PresentationMaker,
-    properties: Object): types.PresentationMaker {
+function updateGraphicPrimitive(presentationMaker: types.PresentationMaker, properties: Object): types.PresentationMaker {
     const currIdSlide: number = presentationMaker.presentationElements.currentSlideIndex;
     const currIdArea: number = presentationMaker.presentationElements.currentAreaIndex;
 
@@ -735,7 +792,8 @@ function updateGraphicPrimitive(
     }
 
     const areaContentInfo: types.AreaContent | undefined =
-        presentationMaker.presentationElements.slidesGroup[currIdSlide].areas[currIdArea].contains;
+    presentationMaker.presentationElements.slidesGroup[currIdSlide].areas[currIdArea].contains;
+
     if (!areaContentInfo || areaContentInfo.type !== 'primitive') {
         return presentationMaker;
     }
@@ -751,25 +809,31 @@ function updateGraphicPrimitive(
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currIdSlide],
         areas: presentationMaker.presentationElements.slidesGroup[currIdSlide].areas.map(
-            (value, index) => index === currIdArea ? newArea : value)
+            (value, index) => index === currIdArea ? newArea : value
+        )
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currIdSlide ? newSlide : value);
+        (value, index) => index === currIdSlide ? newSlide : value
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
@@ -777,8 +841,8 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
     const currentSlideIndex: number = presentationMaker.presentationElements.currentSlideIndex;
     const currentAreaIndex: number = presentationMaker.presentationElements.currentAreaIndex;
 
-    if (currentAreaIndex === consts.notSelectedIndex || currentSlideIndex === consts.notSelectedIndex
-        || presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
+    if (currentAreaIndex === consts.notSelectedIndex || currentSlideIndex === consts.notSelectedIndex || 
+    presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas[currentAreaIndex].contains) {
         return presentationMaker;
     }
 
@@ -795,25 +859,31 @@ function createGraphicPrimitive(presentationMaker: types.PresentationMaker, type
     const newSlide: types.Slide = {
         ...presentationMaker.presentationElements.slidesGroup[currentSlideIndex],
         areas: presentationMaker.presentationElements.slidesGroup[currentSlideIndex].areas.map(
-            (value, index) => index === currentAreaIndex ? newArea : value)
+            (value, index) => index === currentAreaIndex ? newArea : value
+        )
     };
 
     const newSlidesGroup: types.Slide[] = presentationMaker.presentationElements.slidesGroup.map(
-        (value, index) => index === currentSlideIndex ? newSlide : value);
+        (value, index) => index === currentSlideIndex ? newSlide : value
+    );
 
     const newPresentationElements: types.PresentationElements = {
         ...presentationMaker.presentationElements,
         slidesGroup: newSlidesGroup
     }
 
+    const startSlicePos: number = 
+        presentationMaker.localHistory.length <= consts.maxLocalHistoryLength ? 
+        0 : presentationMaker.localHistory.length - consts.maxLocalHistoryLength;
+
     return {
         ...presentationMaker,
         localHistory: [
-            ...presentationMaker.localHistory.slice(0, presentationMaker.currentPresentationElementsIndex + 1),
+            ...presentationMaker.localHistory.slice(startSlicePos, presentationMaker.currentPresentationElementsIndex + 1),
             newPresentationElements
         ],
         presentationElements: newPresentationElements,
-        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1
+        currentPresentationElementsIndex: presentationMaker.currentPresentationElementsIndex + 1 - startSlicePos
     };
 }
 
