@@ -29,6 +29,9 @@ function Area(props: Props): JSX.Element
     const areaBorderWidth: number = 10;
     const standartDivider: number = 9;
 
+    const sidebarSlideWidth: number = 210;
+    const sidebarSlideHeight: number = 115;
+
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
 
     const xDivider: number = workboardSlide && props.slideRef ? 
@@ -40,14 +43,15 @@ function Area(props: Props): JSX.Element
     const width = props.areaElement.width + areaBorderWidth * 2;
     const height = props.areaElement.height + areaBorderWidth * 2;
 
-    const widthScalingFactor = width / workboardSlide.clientWidth;
-    const heightScalingFactor = height / workboardSlide.clientWidth;
+    const widthScalingFactor = sidebarSlideWidth / workboardSlide.clientWidth;
+    const heightScalingFactor = sidebarSlideHeight / workboardSlide.clientHeight;
         
     const style = {
         marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
         marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
-        width: props.isCurrentSlide ? width : width * widthScalingFactor,
-        height: props.isCurrentSlide ? height : height * heightScalingFactor,
+        width: width,
+        height: height,
+        transform: props.isCurrentSlide ? "" : "scale(" + widthScalingFactor + "," + heightScalingFactor + ")", 
     };
 
     useEffect(() => {
