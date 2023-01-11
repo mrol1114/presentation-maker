@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -7,6 +6,8 @@ import type * as types from "../../../common/types";
 import areaStyles from "./area.module.css";
 import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
+import AreaService from "../../../common/service/areaService";
+import SlidesGroupService from "../../../common/service/slidesGroupService";
 
 const mapDispatch = {
     selectAreas: areaActions.selectAreas,
@@ -27,40 +28,19 @@ type Props = PropsFromRedux & {
 
 function Area(props: Props): JSX.Element
 {
-    const areaBorderWidth: number = 10;
-    const standartDivider: number = 9;
-
-    const defaultSidebarSlideWidth: number = 210;
-    const defaultSidebarSlideHeight: number = 115;
-    
-    const slidesGroup = document.getElementById("slides-group");
-    const firstSidebarSlide = slidesGroup?.children[0];
-    
-    const sidebarSlideWidth: number = firstSidebarSlide === undefined ? 
-    defaultSidebarSlideWidth : firstSidebarSlide.clientWidth;
-
-    const sidebarSlideHeight: number = firstSidebarSlide === undefined ? 
-    defaultSidebarSlideHeight : firstSidebarSlide.clientHeight;
-
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
 
-    const xDivider: number = workboardSlide && props.slideRef ? 
-        workboardSlide.clientWidth / props.slideRef.offsetWidth : standartDivider;
+    const xDivider: number = AreaService.getDividerX(workboardSlide, props.slideRef);
+    const yDivider: number = AreaService.getDividerY(workboardSlide, props.slideRef);
 
-    const yDivider: number = workboardSlide && props.slideRef ? 
-        workboardSlide.clientHeight / props.slideRef.offsetHeight : standartDivider;
-
-    const width = props.areaElement.width + areaBorderWidth * 2;
-    const height = props.areaElement.height + areaBorderWidth * 2;
-
-    const widthScalingFactor = sidebarSlideWidth / workboardSlide.clientWidth;
-    const heightScalingFactor = sidebarSlideHeight / workboardSlide.clientHeight;
+    const widthScalingFactor = SlidesGroupService.slideWidth / workboardSlide.clientWidth;
+    const heightScalingFactor = SlidesGroupService.slideHeight / workboardSlide.clientHeight;
         
     const style = {
         marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
         marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
-        width: width,
-        height: height,
+        width: AreaService.getWidth(props.areaElement.width),
+        height: AreaService.getHeight(props.areaElement.height),
         transform: props.isCurrentSlide ? "" : "scale(" + widthScalingFactor + "," + heightScalingFactor + ")", 
     };
 

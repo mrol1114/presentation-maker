@@ -76,6 +76,9 @@ function getIsSelectSlidesCheck(e,
 }
 
 export default {
+    slideWidth,
+    slideHeight,
+    
     updateSlidesSelect,
     getInsertPositionToMove,
     getIsSelectSlidesCheck,
