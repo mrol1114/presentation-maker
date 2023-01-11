@@ -29,6 +29,9 @@ type Props = PropsFromRedux & {
 
 function useWorkboard(props: Props) 
 {
+    const resizeDivider: number = 1.778;
+    const distanceFromEdgeOfWorkboardToSlide: number = 150;
+
     const areaBorderWidth: number = 10;
     const resizeRightIndent: number = 25;
     const resizeTopIndent: number = 11;
@@ -82,6 +85,24 @@ function useWorkboard(props: Props)
                 areaSlidesGroup.classList.remove(areaStyles["area-wrapper-selected"]);
             }
         });
+    }
+
+    const updateWorkboardSize = () => {
+        const workboard = document.querySelectorAll("#workboard")[0];
+        const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
+
+        const workboardSlideStyles = (workboardSlide as HTMLElement).style;
+
+        if (workboardSlide.clientWidth / resizeDivider < workboard.clientHeight - distanceFromEdgeOfWorkboardToSlide)
+        {
+            workboardSlideStyles.width = "100%";
+            workboardSlideStyles.height = (workboardSlide.clientWidth / resizeDivider).toString() + "px";
+        }
+        else
+        {
+            workboardSlideStyles.height = "100%";
+            workboardSlideStyles.width = (workboardSlide.clientHeight * resizeDivider).toString() + "px";
+        }
     }
 
     useEffect(() => {
@@ -146,6 +167,12 @@ function useWorkboard(props: Props)
                 props.assignAreaIndex(consts.notSelectedIndex);
             }
         };
+
+        updateWorkboardSize();
+
+        window.onresize = () => {
+            updateWorkboardSize();
+        }
 
         updateAreasSelect();
 
