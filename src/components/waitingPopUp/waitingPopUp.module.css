@@ -29,7 +29,7 @@
     align-items: center;
     border: 2px solid rgb(var(--black-color));
     border-radius: 20px;
-    background-color: white;
+    background-color: rgb(var(--white-color));
     width: 750px;
     height: 600px;
     font: 400 35px 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
