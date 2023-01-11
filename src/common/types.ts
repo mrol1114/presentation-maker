@@ -87,23 +87,6 @@ type Primitive =
     "triangle" |
     "rectangle"
 
-type SaveObj = {
-    content: Content,
-    place: Place 
-}
-
-type Pdf = {
-
-}
-
-type Content = 
-    Pdf |
-    JSON
-
-type Place = 
-    'dropbox' |
-    'google'
-
 export type {
     PresentationMaker,
     PresentationElements,
