@@ -11,11 +11,18 @@
     background-color: rgb(var(--silver-color), 0.2);
 }
 
-.workboard__slide
+.workboard__slide,
+.workboard__without-slide
 {
     width: 100%;
     max-width: 1920px;
     max-height: 1080px;
+    min-width: 219px;
+    min-height: 125px;
+}
+
+.workboard__slide
+{
     background-color: rgb(var(--white-color));
     border: 1px solid rgb(var(--almost-black-color), 0.7);
     box-shadow: 0px 3px 7px 0px rgba(var(--black-color), 0.5);
@@ -23,9 +30,6 @@
 
 .workboard__without-slide
 {
-    width: 100%;
-    max-width: 1920px;
-    max-height: 1080px;
     border: 4px dotted rgb(var(--almost-black-color), 0.7);
     border-radius: 20px;
     box-shadow: none;

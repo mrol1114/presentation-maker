@@ -1,4 +1,5 @@
 import React from "react";
+import GraphicPrimitiveService from "../../../../../common/service/graphicPrimitiveService";
 import type * as types from "../../../../../common/types";
 import { connect } from "react-redux";
 
@@ -12,12 +13,8 @@ type Props = {
 
 function RectangleComponent(props: Props): JSX.Element
 {
-    const average: number = 100;
-
-    const width: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.width) > 0 ? 
-        average - props.graphicPrimitiveElement.strokeWidth * average / props.width : 1;
-    const height: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.height) > 0 ?
-        average - props.graphicPrimitiveElement.strokeWidth * average / props.height : 1;
+    const width: number = GraphicPrimitiveService.getRectangleWidth(props.graphicPrimitiveElement.strokeWidth, props.width);
+    const height: number = GraphicPrimitiveService.getRectangleHeight(props.graphicPrimitiveElement.strokeWidth, props.height);
 
     return (
         <svg width="100%" height="100%">

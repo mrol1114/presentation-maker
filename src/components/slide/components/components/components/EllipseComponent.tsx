@@ -1,4 +1,5 @@
 import React from "react";
+import GraphicPrimitiveService from "../../../../../common/service/graphicPrimitiveService";
 import type * as types from "../../../../../common/types";
 import { connect } from "react-redux";
 
@@ -12,12 +13,8 @@ type Props = {
 
 function EllipseComponent(props: Props): JSX.Element
 {
-    const average: number = 50;
-
-    const valueX: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.width) > 0 ? 
-        average - props.graphicPrimitiveElement.strokeWidth * average / props.width : 1;
-    const valueY: number = (average - props.graphicPrimitiveElement.strokeWidth * average / props.height) > 0 ?
-        average - props.graphicPrimitiveElement.strokeWidth * average / props.height : 1;
+    const valueX: number = GraphicPrimitiveService.getEllipseValueX(props.graphicPrimitiveElement.strokeWidth, props.width);
+    const valueY: number = GraphicPrimitiveService.getEllipseValueY(props.graphicPrimitiveElement.strokeWidth, props.height);
 
     return (
         <svg width="100%" height="100%">

@@ -84,21 +84,6 @@ function Toolbar(props: Props): JSX.Element
             workboard.removeEventListener("mousedown", mouseDownHandler);
         }
     });
-    
-    const addSlideHandler = () => 
-    {
-        props.addSlide();
-    }
-
-    const undoHandler = () => 
-    {
-        props.undo();
-    }
-
-    const redoHandler = () => 
-    {
-        props.redo();
-    }
 
     const backgroundImageHandler = () => 
     {
@@ -134,13 +119,22 @@ function Toolbar(props: Props): JSX.Element
         props.addArea({areaType: "primitive", primitiveType: "triangle"});
     }
 
-    const textFontButtonHandler = () =>
-    {
-        setMenuIsHidden(!menuIsHidden);
+    const textFontHandler = (action: string) => {
+        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
+
+        if (!area.contains || area.contains?.type !== "text") return;
+
+        if (action === "reduce")
+        {
+            props.updateText({fontSize: area.contains.fontSize + 1});
+        }
+        else if (action === "increase" && area.contains.fontSize > 0)
+        {
+            props.updateText({fontSize: area.contains.fontSize - 1});
+        }
     }
 
-    const reduceFontSizeHandler = () =>
-    {
+    const textDecorationHandler = (action: string) => {
         const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
 
         if (!area.contains || area.contains?.type !== "text")
@@ -148,66 +142,28 @@ function Toolbar(props: Props): JSX.Element
             return;
         }
 
-        props.updateText({fontSize: area.contains.fontSize + 1});
-    }
-
-    const increaseFontSizeHandler = () =>
-    {
-        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
-
-        if (!area.contains || area.contains?.type !== "text" || area.contains.fontSize - 1 < 0)
-        {
-            return;
+        switch (action) {
+            case "bold":
+                props.updateText({bold: !area.contains.bold});
+                break;
+            case "italic":
+                props.updateText({italic: !area.contains.italic});
+                break;
+            case "underlined":
+                props.updateText({underlined: !area.contains.underlined});
+                break;
         }
-
-        props.updateText({fontSize: area.contains.fontSize - 1});
-    }
-
-    const textBoldHandler = () =>
-    {
-        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
-
-        if (!area.contains || area.contains?.type !== "text")
-        {
-            return;
-        }
-
-        props.updateText({bold: !area.contains.bold});
-    }
-
-    const textItalicHandler = () =>
-    {
-        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
-
-        if (!area.contains || area.contains?.type !== "text")
-        {
-            return;
-        }
-
-        props.updateText({italic: !area.contains.italic});
-    }
-
-    const textUnderlinedHandler = () =>
-    {
-        const area = props.slidesGroup[props.currSlideIndex].areas[props.currAreaIndex];
-
-        if (!area.contains || area.contains?.type !== "text")
-        {
-            return;
-        }
-
-        props.updateText({underlined: !area.contains.underlined});
     }
 
     return (
         <div className={toolbarStyles["toolbar"]}>
             <div className={toolbarStyles["toolbar__slide-tools"]}>
                 <Button additionalClass={toolbarStyles["add-slide"] + " " + toolbarStyles["icon"]}
-                    onClick={addSlideHandler} />
+                    onClick={() => props.addSlide()} />
                 <Button additionalClass={toolbarStyles["undo"] + " " + toolbarStyles["icon"]}
-                    onClick={undoHandler} />
+                    onClick={() => props.undo()} />
                 <Button additionalClass={toolbarStyles["redo"] + " " + toolbarStyles["icon"]}
-                    onClick={redoHandler} />
+                    onClick={() => props.redo()} />
                 <Button additionalClass={toolbarStyles["background-image"] + " " + toolbarStyles["icon"]}
                     onClick={backgroundImageHandler} />
                 <ColorSelector type="background" styleName="background-color-button" />
@@ -227,20 +183,20 @@ function Toolbar(props: Props): JSX.Element
             toolbarStyles["toolbar__text-tools-inactive"]}>
                 <InputComponent additionalClass={toolbarStyles["text-font"]} value={textFont} />
                 <Button additionalClass={toolbarStyles["font"] + " " + toolbarStyles["icon"]}
-                    onClick={textFontButtonHandler} />
+                    onClick={() => setMenuIsHidden(!menuIsHidden)} />
                 <TextFont isHidden={menuIsHidden} textFont={textFont} />
                 <Button additionalClass={toolbarStyles["increase-font-size"] + " " + toolbarStyles["icon"]}
-                    onClick={increaseFontSizeHandler} />
+                    onClick={() => textFontHandler("increase")} />
                 <InputComponent additionalClass={toolbarStyles["text-font-size"]} value={textFontSize} />
                 <Button additionalClass={toolbarStyles["reduce-font-size"] + " " + toolbarStyles["icon"]}
-                    onClick={reduceFontSizeHandler} />
+                    onClick={() => textFontHandler("reduce")} />
                 <ColorSelector type="text" styleName="text-color-button" />
                 <Button additionalClass={toolbarStyles["bold"] + " " + toolbarStyles["icon"]}
-                    onClick={textBoldHandler} />
+                    onClick={() => textDecorationHandler("bold")} />
                 <Button additionalClass={toolbarStyles["italic"] + " " + toolbarStyles["icon"]}
-                    onClick={textItalicHandler} />
+                    onClick={() => textDecorationHandler("italic")} />
                 <Button additionalClass={toolbarStyles["underlined"] + " " + toolbarStyles["icon"]}
-                    onClick={textUnderlinedHandler} />
+                    onClick={() => textDecorationHandler("underlined")} />
                 <ColorSelector type="textStroke" styleName="text-stroke-color-button" />
                 <StrokeWidth value={textStrokeWidth} type={"text"} />
             </div>

@@ -32,28 +32,42 @@ function Workspace(props: Props): JSX.Element
     const deleteSelected = () => {
         const updatedPresentationElements = props.presentationElements;
 
-        (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex ||
-        updatedPresentationElements.selectedAreasIndexes.length > 0) 
-        ? props.deleteAreas() : props.deleteSlides();
+        (updatedPresentationElements.currentAreaIndex !== consts.notSelectedIndex 
+        || updatedPresentationElements.selectedAreasIndexes.length > 0) 
+            ? props.deleteAreas() : props.deleteSlides();
     }
 
-    const keyDownCheck = (key: string) => {
-        if (key === "Control") setIsControl(true);
-        else if (key === "Delete") deleteSelected();
+    const onKeyDown = e => {
+        switch (e.key.toLowerCase()) {
+            case "control":
+                setIsControl(true);
+                break;
+            case "delete":
+                deleteSelected();
+                break;
+            case "z":
+                if (isControl)
+                {
+                    props.undo();
+                }
+                break;
+            case "y":
+                if (isControl)
+                {
+                    props.redo();
+                }
+                break;
+        }
+    }
 
-        if (key === "z" && isControl) props.undo();
-        else if (key === "y" && isControl) props.redo();
+    const onKeyUp = e => {
+        if (e.key === "Control")
+        {
+            setIsControl(false);
+        }
     }
 
     useEffect(() => {
-        function onKeyDown(e) {
-            keyDownCheck(e.key);
-        };
-
-        function onKeyUp(e) {
-            if (e.key === "Control") setIsControl(false);
-        };
-
         document.addEventListener("keydown", onKeyDown);
         document.addEventListener("keyup", onKeyUp);
 

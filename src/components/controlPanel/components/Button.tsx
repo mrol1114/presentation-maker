@@ -11,7 +11,7 @@ type Props = {
 
 function Button(props: Props): JSX.Element
 {
-    const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const buttonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         props.onClick();
     };
 

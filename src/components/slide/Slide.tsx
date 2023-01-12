@@ -19,6 +19,7 @@ type Props = PropsFromRedux & {
     index: number,
     isCurrent: boolean,
     isControl: boolean,
+    isFullscreenMode: boolean
 };
 
 function Slide(props: Props): JSX.Element
@@ -60,6 +61,7 @@ function Slide(props: Props): JSX.Element
                 isCurrentSlide={props.isCurrent} 
                 slideRef={slideRef.current} 
                 isControl={props.isControl} 
+                isFullscreenMode={props.isFullscreenMode}
             />
         ) : null;
     }).filter(value => value);

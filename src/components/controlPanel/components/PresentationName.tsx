@@ -26,8 +26,8 @@ function PresentationName(props: Props): JSX.Element
 
         const nameMessage = document.querySelectorAll("#name-message")[0];
 
-        value !== props.title ? nameMessage.classList.add(styles["active"]) :
-            nameMessage.classList.remove(styles["active"]);
+        value !== props.title ? nameMessage.classList.add(styles["message-active"]) :
+            nameMessage.classList.remove(styles["message-active"]);
     }, [value, title, props.title]);
 
     return (

@@ -26,7 +26,9 @@ function StrokeWidth(props: Props): JSX.Element
 
     const onChangeHandler = e =>
     {
-        const newValue: number = e.target.value && e.target.value >= 0 ? Number(e.target.value) : 0;
+        const eValue = e.target.value;
+        const newValue: number = eValue && eValue >= 0 ? Number(eValue) : 0;
+
         setValue(newValue.toString());
         if (props.type === "text")
         {

@@ -1,20 +1,17 @@
 .area-wrapper
 {
-    position: absolute;
-    display: flex;
     justify-content: center;
     align-items: center;
-    border: 0px dashed rgb(var(--blue-color), 0.7);
 }
 
 .area-wrapper:hover
 {
-    border-color: rgb(var(--blue-color), 0.8);
     cursor: pointer;
 }
 
 .area-wrapper:active
 {
+    border-color: rgb(var(--blue-color), 0.7);
     cursor: move;
 }
 
@@ -22,9 +19,16 @@
 {
     display: flex;
     position: absolute;
-    transform: scale(0.11, 0.11);
     transform-origin: 0 0;
-    border: 0px dashed rgb(var(--blue-color), 0.7);
+}
+
+.area-wrapper,
+.area-wrapper-scale
+{
+    display: flex;
+    position: absolute;
+    border: 10px dashed transparent;
+    caret-color: transparent;
 }
 
 .dragged
@@ -34,7 +38,7 @@
 
 .area-wrapper-selected
 {
-    border-width: 10px;
+    border-color: rgb(var(--blue-color), 0.7);
     resize: both;
     overflow: hidden;
     min-width: 30px;
