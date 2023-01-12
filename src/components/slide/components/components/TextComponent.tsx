@@ -21,6 +21,7 @@ function TextComponent(props: Props): JSX.Element
 
     const style = {
         color: props.textElement.color,
+        caretColor: props.textElement.color,
         fontFamily: props.textElement.font,
         fontSize: props.textElement.fontSize,
         borderWidth: Number(props.textElement.strokeWidth),
