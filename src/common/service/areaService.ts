@@ -50,7 +50,6 @@ function getTransform(isCurrentSlide: boolean, workboardSlide: Element) {
 }
 
 function getWidthScalingFactorFullscreen(workboardSlideWidth: number): number {
-    console.log(window.screen.width, workboardSlideWidth)
     return window.screen.width / workboardSlideWidth;
 }
 
