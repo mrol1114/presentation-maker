@@ -16,6 +16,7 @@
     height: 100%;
     overflow: hidden;
     outline: none;
+    resize: none;
     border-style: solid;
     background-color: rgb(var(--white-color), 0);
 }
