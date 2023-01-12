@@ -38,6 +38,8 @@ function changeTextAreasToDivs(clonedDoc: Document) {
         div.setAttribute("class", textArea.getAttribute("class") as string);
         div.setAttribute("style", textArea.getAttribute("style") as string);
 
+        div.style.whiteSpace = "pre";
+
         div.innerHTML = textArea.innerHTML;
 
         textArea.replaceWith(div);

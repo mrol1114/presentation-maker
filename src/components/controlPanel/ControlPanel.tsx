@@ -89,7 +89,10 @@ function ControlPanel(props: Props): JSX.Element {
                     props.convertJsonToState(res.result as string);
                 })
                 .catch((error) => {
-                    setIsPopUp(false);
+                    setPopUpName("Произошла ошибка");
+                    setTimeout(() => {
+                        setIsPopUp(false);
+                    }, 1800);
                     console.log(error);
                 });
             },
