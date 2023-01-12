@@ -43,6 +43,7 @@ function TextComponent(props: Props): JSX.Element
             className={styles["text"]} 
             onChange={onChangeHandler} 
             style={style}
+            spellCheck={false}
             placeholder="Введите текст"
             value={props.textElement.text}
         />
