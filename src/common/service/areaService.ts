@@ -57,6 +57,14 @@ function getHeightScalingFactorFullscreen(workboardSlideHeight: number): number 
     return window.screen.height / workboardSlideHeight;
 }
 
+function getFontSize(
+    isFullscreenMode: boolean, 
+    textElement: types.TextInfo, 
+    scalingFactorFullscreen: number
+): number {
+    return isFullscreenMode ? textElement.fontSize * scalingFactorFullscreen : textElement.fontSize;
+}
+
 export default {
     getWidth,
     getHeight,
@@ -64,5 +72,6 @@ export default {
     getMarginTop,
     getTransform,
     getWidthScalingFactorFullscreen,
-    getHeightScalingFactorFullscreen
+    getHeightScalingFactorFullscreen,
+    getFontSize,
 }

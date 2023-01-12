@@ -93,7 +93,7 @@ function Area(props: Props): JSX.Element
         <div id={props.areaElement.id} style={style}
         className={props.isCurrentSlide ? areaStyles["area-wrapper"] : areaStyles["area-wrapper-scale"]}>
             { props.areaElement.contains?.type === "text" && 
-                <TextComponent textElement={props.areaElement.contains}/>
+                <TextComponent textElement={props.areaElement.contains} isFullscreenMode={props.isFullscreenMode} widthScalingFactorFullscreen={widthScalingFactorFullscreen}/>
             }
 
             { props.areaElement.contains?.type === "primitive" && 
