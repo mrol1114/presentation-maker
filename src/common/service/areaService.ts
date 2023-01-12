@@ -23,7 +23,7 @@ function getMarginLeft(
     const xDivider: number = workboardSlide && slideRef ? 
         workboardSlide.clientWidth / slideRef.offsetWidth : standartDivider;
     
-    return isFullscreenMode ? (areaElement.x * widthScalingFactorFullscreen) : 
+    return isFullscreenMode ? (areaElement.x * widthScalingFactorFullscreen * 1.4) : 
         (isCurrentSlide ? areaElement.x : areaElement.x / xDivider);
 }
 
@@ -38,7 +38,7 @@ function getMarginTop(
     const yDivider: number = workboardSlide && slideRef ? 
         workboardSlide.clientHeight / slideRef.offsetHeight : standartDivider;
 
-    return isFullscreenMode ? (areaElement.y * heightScalingFactorFullscreen) :
+    return isFullscreenMode ? (areaElement.y * heightScalingFactorFullscreen * 1.4) :
         (isCurrentSlide ? areaElement.y : areaElement.y / yDivider);
 }
 
@@ -50,6 +50,7 @@ function getTransform(isCurrentSlide: boolean, workboardSlide: Element) {
 }
 
 function getWidthScalingFactorFullscreen(workboardSlideWidth: number): number {
+    console.log(window.screen.width, workboardSlideWidth)
     return window.screen.width / workboardSlideWidth;
 }
 

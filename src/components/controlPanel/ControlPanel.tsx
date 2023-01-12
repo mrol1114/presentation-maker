@@ -53,9 +53,9 @@ function ControlPanel(props: Props): JSX.Element {
             supportDrives: true,
             multiselect: false,
             callbackFunction: (data) => {
-                const doc = data.docs[0];
+                if (!data.docs || data.docs[0].uploadState) return;
 
-                if (!data.docs || doc.uploadState) return;
+                const doc = data.docs[0];
 
                 if (doc.mimeType !== "application/json" || 
                 doc.sizeBytes > ControlPanelService.maxFileSizeBytes)
