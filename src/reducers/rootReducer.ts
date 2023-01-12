@@ -25,14 +25,12 @@ let initialState: types.PresentationMaker = {
 
 const rootReducer = createReducer(initialState, (builder) => 
     builder
-    //local history
     .addCase(redo, (state, action) => {
         return functions.redo(state);
     })
     .addCase(undo, (state, action) => {
         return functions.undo(state);
     })
-    //slide
     .addCase(slideActions.deleteSlides, (state, action) => {
         return functions.deleteSlides(state);
     })
@@ -51,7 +49,6 @@ const rootReducer = createReducer(initialState, (builder) =>
     .addCase(slideActions.updateSlideProperty, (state, action) => {
         return functions.updateSlideProperty(state, action.payload);
     })
-    //area
     .addCase(areaActions.deleteAreas, (state, action) => {
         return functions.deleteAreas(state);
     })
@@ -73,21 +70,18 @@ const rootReducer = createReducer(initialState, (builder) =>
     .addCase(areaActions.updateArea, (state, action) => {
         return functions.updateArea(state, action.payload);
     })
-    //convert
     .addCase(convertStateToJson, (state, action) => {
         return functions.convertStateToJson(state);
     })
     .addCase(convertJsonToState, (state, action) => {
         return functions.convertJsonToState(action.payload);
     })
-    //areaContent
     .addCase(areaContentActions.updateText, (state, action) => {
         return functions.updateText(state, action.payload);
     })
     .addCase(areaContentActions.updateGraphicPrimitive, (state, action) => {
         return functions.updateGraphicPrimitive(state, action.payload);
     })
-    // title
     .addCase(changeTitle, (state, action) => {
         return functions.changeTitle(state, action.payload);
     })
