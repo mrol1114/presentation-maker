@@ -32,7 +32,7 @@ function Fullscreen(props: Props): JSX.Element
     }, [isFullscreen, currentShownSlideIndex]);
 
     const slides = props.slidesGroup.map((slideElement, index) => {
-        return <Slide isControl={false} isCurrent={true} slideElement={slideElement} index={index} />;
+        return <Slide isControl={false} isCurrent={true} slideElement={slideElement} index={index} isFullscreenMode={true} />;
     });
 
     const onMouseClick = e => {

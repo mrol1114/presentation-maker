@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import GraphicPrimitiveComponent from "./components/GraphicPrimitiveComponent";
 import TextComponent from "./components/TextComponent";
 import ImageComponent from "./components/ImageComponent";
@@ -7,7 +7,6 @@ import areaStyles from "./area.module.css";
 import * as areaActions from "../../../actions/areas/areasActions";
 import { connect, ConnectedProps } from "react-redux";
 import AreaService from "../../../common/service/areaService";
-import SlidesGroupService from "../../../common/service/slidesGroupService";
 
 const mapDispatch = {
     selectAreas: areaActions.selectAreas,
@@ -23,25 +22,41 @@ type Props = PropsFromRedux & {
     areaIndex: number,
     isCurrentSlide: boolean,
     slideRef: HTMLDivElement|null,
-    isControl: boolean
+    isControl: boolean,
+    isFullscreenMode: boolean
 };
 
 function Area(props: Props): JSX.Element
 {
     const workboardSlide: Element = document.querySelectorAll("#workboard-slide")[0];
 
-    const xDivider: number = AreaService.getDividerX(workboardSlide, props.slideRef);
-    const yDivider: number = AreaService.getDividerY(workboardSlide, props.slideRef);
+    const widthScalingFactorFullscreen: number = AreaService.getWidthScalingFactorFullscreen(workboardSlide.clientWidth);
+    const heightScalingFactorFullscreen: number = AreaService.getHeightScalingFactorFullscreen(workboardSlide.clientHeight);
 
-    const widthScalingFactor = SlidesGroupService.slideWidth / workboardSlide.clientWidth;
-    const heightScalingFactor = SlidesGroupService.slideHeight / workboardSlide.clientHeight;
-        
+    const marginLeft: number = AreaService.getMarginLeft(
+        props.isFullscreenMode, 
+        props.areaElement, 
+        widthScalingFactorFullscreen,
+        props.isCurrentSlide,
+        workboardSlide,
+        props.slideRef
+    );
+
+    const marginTop: number = AreaService.getMarginTop(
+        props.isFullscreenMode, 
+        props.areaElement, 
+        heightScalingFactorFullscreen,
+        props.isCurrentSlide,
+        workboardSlide,
+        props.slideRef
+    )
+
     const style = {
-        marginLeft: props.isCurrentSlide ? props.areaElement.x : props.areaElement.x / xDivider,
-        marginTop: props.isCurrentSlide ? props.areaElement.y : props.areaElement.y / yDivider,
-        width: AreaService.getWidth(props.areaElement.width),
-        height: AreaService.getHeight(props.areaElement.height),
-        transform: props.isCurrentSlide ? "" : "scale(" + widthScalingFactor + "," + heightScalingFactor + ")", 
+        marginLeft: marginLeft,
+        marginTop: marginTop,
+        width: AreaService.getWidth(props.areaElement.width, props.isFullscreenMode, widthScalingFactorFullscreen),
+        height: AreaService.getHeight(props.areaElement.height, props.isFullscreenMode, heightScalingFactorFullscreen),
+        transform: AreaService.getTransform(props.isCurrentSlide, workboardSlide)
     };
 
     useEffect(() => {
@@ -52,8 +67,11 @@ function Area(props: Props): JSX.Element
         function onMouseDown() {
             document.addEventListener("mouseup", onMouseUp);
 
-            props.isControl ? props.selectAreas([props.areaIndex]) : 
-                props.assignAreaIndex(props.areaIndex);
+            if (!props.isFullscreenMode)
+            {
+                props.isControl ? props.selectAreas([props.areaIndex]) : 
+                    props.assignAreaIndex(props.areaIndex);
+            }
         }
 
         function onMouseUp() {

@@ -90,7 +90,12 @@ function SlidesGroup(props: Props): JSX.Element
         return (
             <li key={slideElement.id} id={slideElement.id} className={props.currSlideIndex === index ? 
             slidesGroupStyles["slide-wrapper-current"] : slidesGroupStyles["slide-wrapper"]}>
-                <Slide slideElement={slideElement} index={index} isCurrent={false} isControl={props.isControl} />
+                <Slide slideElement={slideElement} 
+                    index={index} 
+                    isCurrent={false} 
+                    isControl={props.isControl} 
+                    isFullscreenMode={false} 
+                />
             </li>
         );
     });

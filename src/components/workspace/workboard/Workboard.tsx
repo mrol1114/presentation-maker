@@ -145,6 +145,7 @@ function Workboard(props: Props): JSX.Element {
                         index={props.currSlideIndex} 
                         isCurrent={true} 
                         isControl={props.isControl}
+                        isFullscreenMode={false}
                     />
                 }
             </div>
